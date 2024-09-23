@@ -1,0 +1,146 @@
+.calendar-icon {
+  --calendar-icon-compliant-bg: #00cc00;
+  --calendar-icon-overdue-bg: #cc0000;
+  --calendar-icon-due-bg: #737373;
+
+  --calendar-icon-calendar-bg: var(--calendar-icon-compliant-bg);
+
+  position: relative;
+  font-size: 0.35rem;
+  width: 7em;
+
+  &.due {
+    --calendar-icon-calendar-bg: var(--calendar-icon-due-bg);
+  }
+
+  &.overdue {
+    --calendar-icon-calendar-bg: var(--calendar-icon-overdue-bg);
+  }
+
+  time.icon {
+    font-size: 1em;
+    display: block;
+    position: relative;
+    width: 7em;
+    height: 7em;
+    background-color: #fff;
+    border-radius: 0.6em;
+    box-shadow: 0 1px 0 var(--calendar-icon-calendar-bg), 0 2px 0 #fff,
+    0 3px 0 var(--calendar-icon-calendar-bg), 0 4px 0 #fff,
+    0 5px 0 var(--calendar-icon-calendar-bg),
+    0 0 0 1px var(--calendar-icon-calendar-bg);
+    overflow: hidden;
+
+    * {
+      display: block;
+      width: 100%;
+      font-size: 1em;
+      font-weight: bold;
+      font-style: normal;
+      text-align: center;
+    }
+
+    .month {
+      position: absolute;
+      top: 0;
+      padding: 0.4em 0;
+      color: #fff;
+      background-color: var(--calendar-icon-calendar-bg);
+      border-bottom: 1px dashed var(--calendar-icon-calendar-bg);
+      box-shadow: 0 2px 0 var(--calendar-icon-calendar-bg);
+    }
+
+    .weekday {
+      position: absolute;
+      bottom: 0.3em;
+      color: var(--calendar-icon-calendar-bg);
+    }
+
+    .day {
+      font-size: 2.5em;
+      letter-spacing: -0.05em;
+      padding-top: 1em;
+      color: var(--calendar-icon-calendar-bg);
+    }
+  }
+
+  &.due .compliance-icon {
+    display: none;
+  }
+
+  .checkmark,
+  &.compliant .compliance-icon {
+    font-size: 0.5em;
+    display: inline-block;
+    width: 5.5em;
+    height: 5.5em;
+    background: var(--calendar-icon-calendar-bg);
+    border-radius: 50%;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    &:before {
+      content: "";
+      position: absolute;
+      width: 0.75em;
+      height: 2.25em;
+      background-color: #fff;
+      left: 2.75em;
+      top: 1.5em;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      width: 0.75em;
+      height: 0.75em;
+      background-color: #fff;
+      left: 2em;
+      top: 3em;
+    }
+  }
+
+  .overdue-icon,
+  &.overdue .compliance-icon {
+    display: block;
+    width: 2.5em;
+    height: 2.5em;
+    background-color: red;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-radius: 0.375em;
+    box-shadow: 0.125em 0.125em 0.25em 0 white;
+
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      width: 2.25em;
+      height: 0.25em;
+      background-color: white;
+      border-radius: 0.125em;
+      top: 1em;
+      box-shadow: 0 0 0.125em 0 #ccc;
+    }
+
+    &:before {
+      -webkit-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      transform: rotate(45deg);
+      left: 0.125em;
+    }
+
+    &:after {
+      -webkit-transform: rotate(-45deg);
+      -moz-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      right: 0.125em;
+    }
+  }
+}

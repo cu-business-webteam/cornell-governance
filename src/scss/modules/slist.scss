@@ -1,0 +1,22 @@
+.slist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin: 10px;
+    padding: 15px;
+    border: 1px solid #dfdfdf;
+    background: #f5f5f5;
+
+    &.hint {
+      border: 1px solid #ffc49a;
+      background: #feffb4;
+    }
+
+    &.active {
+      border: 1px solid #ffa5a5;
+      background: #ffe7e7;
+    }
+  }
+}

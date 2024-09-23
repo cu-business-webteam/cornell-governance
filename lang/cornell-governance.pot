@@ -1,0 +1,574 @@
+# Copyright (C) 2023 Curtiss Grymala
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Cornell Business: In-Page Governance 2022.12\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cornell/governance\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-04-26T13:03:42+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: cornell/governance\n"
+
+#. Plugin Name of the plugin
+msgid "Cornell Business: In-Page Governance"
+msgstr ""
+
+#. Description of the plugin
+msgid "Allows tracking and adding notes about the content, purpose, audiences, etc of individual pages"
+msgstr ""
+
+#. Author of the plugin
+msgid "Curtiss Grymala"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Admin.php:146
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:64
+msgid "Commit Message"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Capability.php:29
+msgid "Which capability should be used to determine who can change governance information on a page?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Change_Form_URL.php:29
+msgid "What is the URL of the form that users can fill out to submit requests for changes?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Initial_Prompt.php:23
+msgid "How many days before a review is due should the first prompt message be sent?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Managing_Office.php:28
+msgid "What is the name of the office that manages Governance for your organization?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Managing_Office.php:32
+#: lib/cornell/governance/classes/Plugin.php:124
+#: lib/cornell/governance/classes/Plugin.php:252
+#: lib/cornell/governance/classes/Plugin.php:268
+msgid "MarCom"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Message_Content.php:28
+msgid "What message should be sent when it is time for a page to be reviewed?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Message_Content.php:60
+msgid "The following pages that you manage on the Cornell websites are due to be reviewed: "
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Post_Types.php:32
+msgid "On which post types should the governance information be displayed?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Secondary_Prompt.php:23
+msgid "How many days before a review is due should the second prompt message be sent?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Fields/Tertiary_Prompt.php:23
+msgid "How many days before a review is due should the third and final prompt message be sent?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Menu.php:102
+msgid "Cornell Business: Governance"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Menu.php:103
+msgid "Governance"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Menu.php:141
+msgid "Governance Reports"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Base.php:150
+msgid "The nonce could not be verified for some reason"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Base.php:156
+msgid "We are in the autosave portion"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Base.php:163
+msgid "The current user does not appear to have the appropriate cap"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Base.php:190
+msgid "There was an unknown error saving the post meta"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Commit_Message.php:25
+msgid "What changes are you making to this page?"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Completed_Review.php:23
+msgid "I am confirming that I have completed the page review tasks for this review cycle."
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Editor.php:23
+msgid "Editor"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Goals.php:24
+msgid "Page Goal"
+msgstr ""
+
+#. translators: The placeholder is a formatted date showing when the piece of content was reviewed most recently
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Last_Review.php:30
+msgid "Last Reviewed: %s"
+msgstr ""
+
+#. translators: The placeholder is a formatted date indicating when the next governance review is due on this piece of content
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Last_Review.php:47
+msgid "Your next review is due by %s"
+msgstr ""
+
+#. translators: The placeholder is a plugin setting with the name of the managing office, e.g., "Marketing Liaison"
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Liaison.php:25
+msgid "%s Liaison"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Liaison.php:29
+msgid "-- Select a User --"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Notes_Notes.php:24
+msgid "Relevant documentation"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Primary_Audience.php:23
+msgid "Primary Audience (only 1)"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Primary_Audience.php:27
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Secondary_Audience.php:27
+msgid "-- Select an Audience --"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Problem.php:24
+msgid "What problem are we trying to solve for the user?"
+msgstr ""
+
+#. translators: The placeholder is a URL pointing to the form used to request changes to governance information for this piece of content
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Request_Changes.php:25
+msgid "<a href=\"%1$s\">Request changes to page governance settings</a>"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Review_Cycle.php:24
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:117
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:127
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Review_Cycle.php:88
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Review_Cycle.php:96
+msgid "Review Cycle"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Review_Cycle.php:61
+msgid "Every 3 months: January, April, July, October"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Review_Cycle.php:62
+msgid "Every 6 months: November, May"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Review_Cycle.php:63
+msgid "Every 12 months: June"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Save_Info.php:23
+msgid "Submit"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Save_Notes.php:23
+msgid "Update Governance Documentation"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Secondary_Audience.php:23
+msgid "Secondary Audience (only 1)"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Steward.php:24
+msgid "Primary Page Steward"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Supervisor.php:24
+msgid "Office or supervisor email address"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Tasks.php:24
+msgid "On-page tasks"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Tasks.php:38
+msgid "Add New Task"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Fields/Tasks.php:39
+msgid "Remove This Task"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Info.php:39
+msgid "Page Governance Information"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Info.php:139
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Notes.php:121
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Revisions.php:152
+msgid "<p class=\"note\">You will not be able to set up governance information until you have saved this piece of content for the first time</p>"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Info.php:166
+msgid "Responsibility"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Info.php:169
+msgid "Review"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Notes.php:26
+msgid "Page Notes"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Notes.php:113
+msgid "Recent Commit Messages"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Revisions.php:27
+msgid "Page Revision Information"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Meta_Boxes/Revisions.php:172
+msgid "Latest commit message: "
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Settings.php:78
+msgid "Cornell Page Governance Settings"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Settings.php:85
+msgid "Email Prompt Settings"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Settings.php:133
+#: lib/cornell/governance/classes/Admin/Settings.php:134
+msgid "Governance Settings"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Settings.php:151
+msgid "Page Governance"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Settings.php:184
+msgid "General settings for the Cornell Governance plugin"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Settings.php:197
+msgid "Email message timing"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Base.php:183
+msgid "Search:"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Page_List.php:37
+msgid "Cornell Governance: Page Status List"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Page_List.php:38
+msgid "Page Status"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Page_List.php:41
+msgid "View a sortable list of all governable content on this site, along with various governance information about each piece of content"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Page_List.php:88
+#: lib/cornell/governance/classes/Admin/Submenus/Reports.php:201
+#: lib/cornell/governance/classes/Admin/Submenus/Steward_Dashboard.php:132
+#: lib/cornell/governance/classes/Admin/Submenus/Unreviewed.php:89
+msgid "Pages"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports.php:50
+msgid "Cornell Governance: Page Reports"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports.php:51
+msgid "Page Reports"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports.php:53
+msgid "A series of reports on various aspects of governance throughout the site."
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:97
+msgid "Compliance Status"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:108
+msgid "There are currently no pages available for this report"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:119
+msgid "Overdue"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:120
+msgid "Due in the next 7 days"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:121
+msgid "Due in the next 30 days"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:122
+msgid "Due in the next 60 days"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Compliance_Status.php:123
+msgid "Fully compliant"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Non_Compliant.php:93
+msgid "Critically Non-Compliant Pages"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Non_Compliant.php:98
+msgid "<strong>Congratulations!</strong> There are currently no items that are overdue."
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Non_Compliant.php:115
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:63
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Unreviewed_Table.php:61
+msgid "ID"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Non_Compliant.php:116
+msgid "Title"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Non_Compliant.php:117
+msgid "Due Date"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Non_Compliant.php:118
+msgid "Steward"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Primary_Audience.php:110
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Primary_Audience.php:134
+msgid "Content by Primary Audience"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Primary_Audience.php:114
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:67
+msgid "Primary Audience"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Review_Cycle.php:90
+msgid "Every 3 Months"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Review_Cycle.php:91
+msgid "Every 6 Months"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Review_Cycle.php:92
+msgid "Every 12 Months"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Reports/Review_Cycle.php:125
+msgid "Review Cycle Breakdown"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Steward_Dashboard.php:38
+msgid "Cornell Governance: Steward Dashboard"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Steward_Dashboard.php:39
+msgid "Your Pages"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Steward_Dashboard.php:42
+msgid "A series of reports specifically about content that you currently own or manage."
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:46
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Unreviewed_Table.php:46
+msgid "Author"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:47
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Unreviewed_Table.php:47
+msgid "Page Title"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:48
+msgid "Last Reviewed"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:49
+msgid "Next Review Due"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:50
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Unreviewed_Table.php:48
+msgid "Modified"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:65
+msgid "Supervisor"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:66
+msgid "Liaison"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:68
+msgid "Secondary Audience"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:301
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Unreviewed_Table.php:198
+msgid "[No Specified Title]"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:366
+msgid "There are no pages that match the specified criteria"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Page_List_Table.php:368
+msgid "There are no pages to display"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Unreviewed_Table.php:244
+msgid "There are no unreviewed pages that match the specified criteria"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Tables/Unreviewed_Table.php:246
+msgid "There are no unreviewed pages"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Unreviewed.php:38
+msgid "Cornell Governance: Unreviewed Pages"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Unreviewed.php:39
+msgid "Unreviewed Pages"
+msgstr ""
+
+#: lib/cornell/governance/classes/Admin/Submenus/Unreviewed.php:42
+msgid "A list of all governable content on this site that has not been reviewed for governance purposes, yet."
+msgstr ""
+
+#: lib/cornell/governance/classes/Plugin.php:235
+msgid "The Page Governance Information associated with this piece of content"
+msgstr ""
+
+#: lib/cornell/governance/classes/Taxonomies/Audience.php:72
+#: lib/cornell/governance/classes/Taxonomies/Audience.php:99
+msgid "Audiences"
+msgstr ""
+
+#: lib/cornell/governance/classes/Taxonomies/Audience.php:100
+msgid "Audience"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:63
+msgid "%s"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:65
+msgid "All %s"
+msgstr ""
+
+#. translators: The placeholder is the singular name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:67
+msgid "Edit %s"
+msgstr ""
+
+#. translators: The placeholder is the singular name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:69
+msgid "View %s"
+msgstr ""
+
+#. translators: The placeholder is the singular name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:71
+msgid "Update %s name"
+msgstr ""
+
+#. translators: The placeholder is the singular name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:73
+msgid "Add new %s"
+msgstr ""
+
+#. translators: The placeholder is the singular name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:75
+msgid "New %s name"
+msgstr ""
+
+#. translators: The placeholder is the singular name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:77
+msgid "Parent %s"
+msgstr ""
+
+#. translators: The placeholder is the singular name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:79
+msgid "Parent %s:"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:81
+msgid "Search %s"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:83
+msgid "Popular %s"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:85
+msgid "Separate %s with commas"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:87
+msgid "Add or remove %s"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:89
+msgid "Choose from the most used %s"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:91
+msgid "No %s found"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:93
+msgid "No %s"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:95
+msgid "%s list navigation"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:97
+msgid "%s list"
+msgstr ""
+
+#. translators: The placeholder is the plural name of the taxonomy
+#: lib/cornell/governance/classes/Taxonomies/Base.php:99
+msgid "Back to %s"
+msgstr ""

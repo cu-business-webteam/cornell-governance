@@ -1,0 +1,302 @@
+:root {
+  --cornell-red: #b31b1b;
+}
+
+.acf-fields {
+  .field-note {
+    background: rgba(0, 255, 0, .1);
+    font-size: 1.3em;
+
+    p {
+      font-size: 1em;
+    }
+  }
+}
+
+.cornell-governance-metabox {
+  border: 1px solid #e2e2e2;
+  position: relative;
+
+  label,
+  p.static-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: .5rem;
+
+    &:has(input) {
+      font-weight: normal;
+    }
+  }
+
+  fieldset {
+    border: 1px solid #e2e2e2;
+    border-top: none;
+    border-right: none;
+    margin-left: -1px;
+
+    legend {
+      font-weight: bolder;
+      padding: 1rem 1rem .5rem;
+    }
+  }
+
+  .field-note {
+    font-style: italic;
+    font-size: .9em;
+
+    &.timestamp-container {
+      text-align: right;
+
+      label {
+        font-weight: normal;
+      }
+    }
+  }
+
+  .cornell-governance-grid {
+    display: grid;
+    grid-template-columns: repeat( 2, minmax(0, 1fr) );
+
+    &.one-two {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    &.two-one {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
+  }
+
+  .cornell-governance-field {
+    border: none;
+    border-top: 1px solid #e2e2e2;
+    display: block;
+    padding: 1rem;
+    margin: -1px 0 0;
+
+    input {
+      width: 100%;
+
+      &[type="radio"],
+      &[type="checkbox"] {
+        width: auto;
+        display: inline-block;
+      }
+    }
+
+    &.cornell-governance-textarea {
+      .text-label,
+      .input-value {
+        display: block;
+        margin: 0 0 .5rem;
+      }
+
+      textarea {
+        display: block;
+        width: 100%;
+        height: 8rem;
+      }
+
+      &.cornell-governance-commit-message textarea {
+        height: 2rem;
+      }
+    }
+
+    &.cornell-governance-confirm {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      label {
+        display: block;
+        margin: 0 0 0 1rem;
+      }
+
+      input {
+        display: block;
+        width: auto;
+      }
+    }
+
+    &.cornell-governance-button {
+      button {
+        display: block;
+        margin: 0 auto;
+      }
+    }
+
+    &.cornell-governance-request-changes {
+      text-align: center;
+      margin-top: 1rem;
+
+      /*p {
+        font-size: 1.5em;
+      }*/
+    }
+  }
+
+  .cornell-governance-save-box {
+    margin: .5rem;
+    border: 2px solid var(--cornell-red);
+
+    .cornell-governance-field {
+      border-top: none;
+    }
+  }
+
+  .cornell-governance-page-info-tasks label:has(input[type="checkbox"]) {
+    &.done {
+      text-decoration: line-through;
+    }
+  }
+
+  .compliance-status-fieldset {
+    .cornell-governance-grid {
+      grid-template-columns: minmax(0, max-content) minmax(0, 2fr);
+      justify-items: stretch;
+      align-items: start;
+    }
+
+    @import "modules/calendar-icon";
+
+    .calendar-icon {
+      margin: 2rem;
+    }
+  }
+
+  .progress-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .7);
+
+    @import "modules/loader";
+  }
+
+  .cornell-governance-message-title {
+    font-weight: 600;
+  }
+
+  .cornell-governance-save-info-instructions {
+    color: #8b0000;
+  }
+}
+
+.governance-menu-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+
+  .governance-box {
+    padding: 1rem;
+    margin: 0;
+    border: 1px solid #666;
+  }
+}
+
+#adminmenu .wp-submenu li:has(a[href="admin.php?page=cornell-governance-page-meta"]) {
+  display: none;
+
+  &.current {
+    display: block;
+  }
+}
+
+.info-meta {
+  .page-meta-section {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    summary {
+      color: #1d2327;
+      font-size: 1.3em;
+      margin: 1em 0;
+      font-weight: bolder;
+    }
+
+    dl {
+      display: grid;
+      grid-template-columns: max-content auto;
+      gap: 0;
+
+      dt, dd {
+        border: 1px solid #666;
+        padding: .5rem;
+        border-bottom: none;
+        margin: 0;
+
+        &:last-of-type {
+          border-bottom: 1px solid #666;
+        }
+      }
+
+      dt {
+        font-weight: bolder;
+      }
+
+      dd {
+        border-left: none;
+      }
+    }
+
+    .commit-messages li > div,
+    .notes-details {
+      padding: 1rem;
+      background: #e2e2e2;
+      margin: 1rem auto;
+    }
+  }
+}
+
+@import "modules/slist";
+@import "modules/repeater";
+@import "modules/update-notice";
+@import "cornell-governance/documentation";
+@import "modules/imageLightbox";
+
+.governance-tooltip-container {
+  @import "modules/tooltip";
+}
+
+.governance_page_cornell-governance-settings {
+  @import "cornell-governance/admin-settings";
+}
+
+#cornell-governance-compliance-widget {
+  @import "cornell-governance/dashboard-widget";
+}
+
+.cornell-governance-email-testing {
+  fieldset {
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #e2e2e2;
+
+    legend {
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin: 0 0 .5rem;
+    }
+
+    ul, ul > li {
+      list-style: disc;
+      margin: 0 0 .5rem .5rem;
+      padding: 0 0 .5rem .5rem;
+    }
+  }
+}
+
+.cornell-governance-steward-tooltip[data-purpose="tooltip-container"] {
+  text-align: right;
+
+  [role="tooltip"] {
+    text-align: left;
+    margin-top: 3rem;
+    width: 200%;
+    z-index: +1;
+  }
+}

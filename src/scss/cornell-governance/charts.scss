@@ -1,0 +1,82 @@
+.cornell-governance-data-charts, .governance-menu-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 1rem;
+
+  .governance-chart, .governance-box {
+    padding: 1rem;
+    margin: 0;
+    border: 1px solid #666;
+
+    details {
+      margin: 1rem auto;
+      background: #e2e2e2;
+      padding: 1rem;
+
+      dl {
+        display: grid;
+        grid-template-columns: max-content auto;
+        gap: 0;
+
+        dt, dd {
+          border: 1px solid #666;
+          padding: .5rem;
+          border-bottom: none;
+          margin: 0;
+
+          &:last-of-type {
+            border-bottom: 1px solid #666;
+          }
+        }
+
+        dt {
+          font-weight: bolder;
+        }
+
+        dd {
+          border-left: none;
+        }
+      }
+    }
+
+    table {
+      display: table;
+      text-align: left;
+      width: 100%;
+
+      &.non-compliant-page-list {
+        background: #ff8080;
+
+        a {
+          color: #103656;
+
+          &:hover,
+          &:focus {
+            color: #0B385B;
+          }
+        }
+      }
+
+      caption {
+        text-align: center;
+        margin: .5rem auto;
+        font-weight: 500;
+      }
+
+      tr {
+        display: table-row;
+        vertical-align: center;
+        padding: 0;
+        margin: 0;
+
+        th,
+        td {
+          display: table-cell;
+          text-align: left;
+          padding: .25rem;
+          border: 1px solid #e2e2e2;
+        }
+      }
+    }
+  }
+}

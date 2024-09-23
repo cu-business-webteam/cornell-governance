@@ -1,0 +1,72 @@
+.cornell-governance-data-charts, .governance-menu-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.cornell-governance-data-charts .governance-chart, .cornell-governance-data-charts .governance-box, .governance-menu-boxes .governance-chart, .governance-menu-boxes .governance-box {
+  padding: 1rem;
+  margin: 0;
+  border: 1px solid #666;
+}
+.cornell-governance-data-charts .governance-chart details, .cornell-governance-data-charts .governance-box details, .governance-menu-boxes .governance-chart details, .governance-menu-boxes .governance-box details {
+  margin: 1rem auto;
+  background: #e2e2e2;
+  padding: 1rem;
+}
+.cornell-governance-data-charts .governance-chart details dl, .cornell-governance-data-charts .governance-box details dl, .governance-menu-boxes .governance-chart details dl, .governance-menu-boxes .governance-box details dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 0;
+}
+.cornell-governance-data-charts .governance-chart details dl dt, .cornell-governance-data-charts .governance-chart details dl dd, .cornell-governance-data-charts .governance-box details dl dt, .cornell-governance-data-charts .governance-box details dl dd, .governance-menu-boxes .governance-chart details dl dt, .governance-menu-boxes .governance-chart details dl dd, .governance-menu-boxes .governance-box details dl dt, .governance-menu-boxes .governance-box details dl dd {
+  border: 1px solid #666;
+  padding: 0.5rem;
+  border-bottom: none;
+  margin: 0;
+}
+.cornell-governance-data-charts .governance-chart details dl dt:last-of-type, .cornell-governance-data-charts .governance-chart details dl dd:last-of-type, .cornell-governance-data-charts .governance-box details dl dt:last-of-type, .cornell-governance-data-charts .governance-box details dl dd:last-of-type, .governance-menu-boxes .governance-chart details dl dt:last-of-type, .governance-menu-boxes .governance-chart details dl dd:last-of-type, .governance-menu-boxes .governance-box details dl dt:last-of-type, .governance-menu-boxes .governance-box details dl dd:last-of-type {
+  border-bottom: 1px solid #666;
+}
+.cornell-governance-data-charts .governance-chart details dl dt, .cornell-governance-data-charts .governance-box details dl dt, .governance-menu-boxes .governance-chart details dl dt, .governance-menu-boxes .governance-box details dl dt {
+  font-weight: bolder;
+}
+.cornell-governance-data-charts .governance-chart details dl dd, .cornell-governance-data-charts .governance-box details dl dd, .governance-menu-boxes .governance-chart details dl dd, .governance-menu-boxes .governance-box details dl dd {
+  border-left: none;
+}
+.cornell-governance-data-charts .governance-chart table, .cornell-governance-data-charts .governance-box table, .governance-menu-boxes .governance-chart table, .governance-menu-boxes .governance-box table {
+  display: table;
+  text-align: left;
+  width: 100%;
+}
+.cornell-governance-data-charts .governance-chart table.non-compliant-page-list, .cornell-governance-data-charts .governance-box table.non-compliant-page-list, .governance-menu-boxes .governance-chart table.non-compliant-page-list, .governance-menu-boxes .governance-box table.non-compliant-page-list {
+  background: #ff8080;
+}
+.cornell-governance-data-charts .governance-chart table.non-compliant-page-list a, .cornell-governance-data-charts .governance-box table.non-compliant-page-list a, .governance-menu-boxes .governance-chart table.non-compliant-page-list a, .governance-menu-boxes .governance-box table.non-compliant-page-list a {
+  color: #103656;
+}
+.cornell-governance-data-charts .governance-chart table.non-compliant-page-list a:hover, .cornell-governance-data-charts .governance-chart table.non-compliant-page-list a:focus, .cornell-governance-data-charts .governance-box table.non-compliant-page-list a:hover, .cornell-governance-data-charts .governance-box table.non-compliant-page-list a:focus, .governance-menu-boxes .governance-chart table.non-compliant-page-list a:hover, .governance-menu-boxes .governance-chart table.non-compliant-page-list a:focus, .governance-menu-boxes .governance-box table.non-compliant-page-list a:hover, .governance-menu-boxes .governance-box table.non-compliant-page-list a:focus {
+  color: #0B385B;
+}
+.cornell-governance-data-charts .governance-chart table caption, .cornell-governance-data-charts .governance-box table caption, .governance-menu-boxes .governance-chart table caption, .governance-menu-boxes .governance-box table caption {
+  text-align: center;
+  margin: 0.5rem auto;
+  font-weight: 500;
+}
+.cornell-governance-data-charts .governance-chart table tr, .cornell-governance-data-charts .governance-box table tr, .governance-menu-boxes .governance-chart table tr, .governance-menu-boxes .governance-box table tr {
+  display: table-row;
+  vertical-align: center;
+  padding: 0;
+  margin: 0;
+}
+.cornell-governance-data-charts .governance-chart table tr th,
+.cornell-governance-data-charts .governance-chart table tr td, .cornell-governance-data-charts .governance-box table tr th,
+.cornell-governance-data-charts .governance-box table tr td, .governance-menu-boxes .governance-chart table tr th,
+.governance-menu-boxes .governance-chart table tr td, .governance-menu-boxes .governance-box table tr th,
+.governance-menu-boxes .governance-box table tr td {
+  display: table-cell;
+  text-align: left;
+  padding: 0.25rem;
+  border: 1px solid #e2e2e2;
+}
+
+/*# sourceMappingURL=charts.css.map */

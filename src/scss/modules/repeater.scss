@@ -1,0 +1,39 @@
+.repeater-input-container {
+  display: block;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  position: relative;
+
+  input {
+    padding-right: 32px;
+  }
+
+  button.repeater-remove-row {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    display: block;
+    background: none;
+    margin: 5px;
+    padding: 0;
+
+    span {
+      text-indent: -9999rem;
+      display: block;
+      margin: 0;
+      padding: 0;
+      height: 0;
+      width: 0;
+      overflow: hidden;
+    }
+
+    &:after {
+      content: "\f15d";
+      font-family: 'Dashicons';
+      font-size: 18px;
+      color: darkred;
+    }
+  }
+}

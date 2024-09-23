@@ -1,0 +1,48 @@
+{
+  "name": "cornell/governance",
+  "description": "Cornell's In-Page Governance Plugin",
+  "version": "0.4.6",
+  "authors": [
+    {
+      "name": "Curtiss Grymala",
+      "email": "cg685@cornell.edu"
+    }
+  ],
+  "config": {
+    "vendor-dir": "vendor",
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.4"
+    }
+  },
+  "type": "project",
+  "license": "Proprietary",
+  "minimum-stability": "dev",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*"
+      ]
+    }
+  ],
+  "require": {
+    "php": "^7.4|>=8.2",
+    "erusev/parsedown": "dev-master",
+    "symfony/dotenv": "5.4.x-dev",
+    "salesforce/handlebars-php": "3.*"
+  },
+  "extra": {
+    "installer-paths": {
+      "vendor/{$name}": [
+        "type:wordpress-plugin"
+      ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Cornell\\Governance\\": "lib/cornell/governance/classes"
+    }
+  }
+}

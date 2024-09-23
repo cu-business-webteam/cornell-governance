@@ -1,0 +1,31 @@
+.cornell-governance-notice {
+  position: absolute;
+  bottom: 2rem;
+  top: auto;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  width: 80%;
+  min-width: 300px;
+  margin: 0 auto !important;
+  /* We also need to update the JS timing */
+  -webkit-animation: fadeout 6s linear forwards;
+  animation: fadeout 6s linear forwards;
+
+  &.updated {
+    border-color: black;
+    background: #008020;
+    color: white;
+    font-weight: bold;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  0%, 50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes fadeout {
+  0%, 50% { opacity: 1; }
+  100% { opacity: 0; }
+}

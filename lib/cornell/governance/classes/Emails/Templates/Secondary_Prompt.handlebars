@@ -1,0 +1,71 @@
+<div>
+    {{#if user}}
+        <p>Greetings, {{user}}!</p>
+    {{else}}
+        <p>Greetings!</p>
+    {{/if}}
+
+    <p>You are receiving this email because you are the assigned web steward for the following page(s). These pages on the
+        {{site_name}} website will require your review within the next
+        {{prompt-times.secondary}} days.</p>
+
+    <table width="100%" cellspacing="0" cellpadding="1" style="width: 100%; border: 1px solid #000; background: #e2e2e2; padding: 6px; border-collapse: collapse">
+        <thead>
+        <tr style="border-collapse: collapse; padding: 0; margin: 0;">
+            <th width="40%" style="width: 50%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Page Title
+            </th>
+            <th width="20%" style="width: 15%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Last Reviewed
+            </th>
+            <th width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Due Date
+            </th>
+            <th width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Edit Link
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each report}}
+            <tr style="border-collapse: collapse; padding: 0; margin: 0;">
+                <td width="40%" style="width: 40%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    <a href="{{this.permalink}}">{{this.post_title}}</a>
+                </td>
+                <td width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.last_reviewed}}
+                </td>
+                <td width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.due_date}}
+                </td>
+                <td width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    <a href="{{this.edit_link}}">Edit this page</a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+    <p>For reference, here is the same list of pages in a numbered list, rather than a table:</p>
+
+    <ol>
+        {{#each report}}
+            <li><a href="{{this.permalink}}">{{this.post_title}}</a> - Last reviewed on {{this.last_reviewed}} - Due on {{this.due_date}} (<a href="{{this.edit_link}}">Edit this page</a>)</li>
+        {{/each}}
+    </ol>
+
+    <p><b><i>What happens next?</i></b></p>
+
+    <p>Once you review and update the page, the page is in compliance until the next due date in the review cycle and no other action needs to be taken. If the page is not reviewed, the following next steps will be taken to ensure pages are in compliance.</p>
+
+    <ul>
+        <li>{{prompt-words.tertiary-uc}} ({{prompt-times.tertiary}}) days from the due date emails will also go out to the secondary contact email address, and the MarCom staff member(s) assigned to support these pages notifying them of the list of pages pending review.</li>
+        <li>On the due date, if any pages haven’t been reviewed, emails will go to all parties. They will continue to be sent <font color="red"><b>daily</b></font> while pages remain out of compliance.</li>
+        <li>Reports showing out-of-compliance pages are sent to the appropriate deans.</li>
+        <li>Pages that remain out of compliance will be considered for deletion.</li>
+    </ul>
+
+    <p><b>This is an automatic email. Please do not reply directly to this email.</b></p>
+
+    <p>Thank you for your attention in this matter.</p>
+</div>

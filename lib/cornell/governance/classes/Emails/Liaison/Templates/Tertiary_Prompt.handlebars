@@ -1,0 +1,82 @@
+<div>
+    {{#if user}}
+        <p>Greetings, {{user}}!</p>
+    {{else}}
+        <p>Greetings!</p>
+    {{/if}}
+
+    <p>You are receiving this email because you are the MarCom liaison for the following pages on the {{site_name}} website that will require review by the indicated web page stewards or a replacement within the <b><font color="red">next
+        {{prompt-times.tertiary}} days.</font></b></p>
+
+    <p>Please note that the page steward has already received emails at the {{prompt-times.initial}} and {{prompt-times.secondary}} day marks notifying them of the deadline.</p>
+
+    <table width="100%" cellspacing="0" cellpadding="1" style="width: 100%; border: 1px solid #000; background: #e2e2e2; padding: 6px; border-collapse: collapse">
+        <thead>
+        <tr style="border-collapse: collapse; padding: 0; margin: 0;">
+            <th width="40%" style="width: 40%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Page Title
+            </th>
+            <th width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Page Steward
+            </th>
+            <th width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Last Reviewed
+            </th>
+            <th width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Due Date
+            </th>
+            <th width="10%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Edit Link
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each report}}
+            <tr style="border-collapse: collapse; padding: 0; margin: 0;">
+                <td width="40%" style="width: 40%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    <a href="{{this.permalink}}">{{this.post_title}}</a>
+                </td>
+                <td width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.author_email}}
+                </td>
+                <td width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.last_reviewed}}
+                </td>
+                <td width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.due_date}}
+                </td>
+                <td width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    <a href="{{this.edit_link}}">Edit this page</a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+    <p>For reference, here is the same list of pages in a numbered list, rather than a table:</p>
+
+    <ol>
+        {{#each report}}
+            <li><a href="{{this.permalink}}">{{this.post_title}}</a> - Last reviewed on {{this.last_reviewed}} - Due on {{this.due_date}} (<a href="{{this.edit_link}}">Edit this page</a>)</li>
+        {{/each}}
+    </ol>
+
+    <p><b><i>What happens next?</i></b></p>
+
+    <ul>
+        <li>On the due date, if any pages haven’t been reviewed, notification emails will go to the steward as shown, the secondary contact email, and the MarCom liaison. They will continue to be sent <b><font color="red">daily</font></b> while pages remain out of compliance.</li>
+        <li>Reports showing out-of-compliance pages are sent to the appropriate deans.</li>
+        <li>Pages that remain out of compliance will be considered for deletion.</li>
+    </ul>
+
+    <p>Read the article “What’s Expected of Me?” for clarity on your next steps. Thank you for your attention in this matter.</p>
+
+    <p><b>This is an automatic email. Please do not reply directly to this email.</b></p>
+
+    <p>Helpful resources:</p>
+    <ul>
+        <li><a href="https://wp.business.cornell.edu/">take web training</a></li>
+        <li><a href="https://help.marcom.business.cornell.edu/">find answers to your questions in the MarCom Knowledge Base</a></li>
+        <li><a href="https://intranet.business.cornell.edu/marcom/work-with-us/get-started/">open a web ticket</a></li>
+    </ul>
+</div>

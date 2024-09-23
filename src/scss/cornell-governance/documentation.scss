@@ -1,0 +1,43 @@
+.cornell-governance-documentation {
+  border: 1px solid #666;
+  margin: 1rem;
+  padding: 1rem;
+  background: white;
+
+  ul {
+    list-style: initial;
+    margin: 1rem 0 0 1rem;
+    padding: 0 0 0 1rem;
+  }
+
+  ol:has( li > a > img + em ) {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li:has( a > img + em ) {
+    text-align: center;
+    padding: 1rem;
+    margin: 1rem;
+    background: #e2e2e2;
+    border: 1px solid #666;
+
+    img {
+      border: 1px solid #666;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    em {
+      text-align: center;
+      display: block;
+      margin: .5rem auto 1rem;
+    }
+  }
+}

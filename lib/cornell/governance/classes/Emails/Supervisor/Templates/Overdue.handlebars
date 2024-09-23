@@ -1,0 +1,75 @@
+<div>
+    {{#if user}}
+        <p>Greetings, {{user}}!</p>
+    {{else}}
+        <p>Greetings!</p>
+    {{/if}}
+
+    <p>You are receiving this email because the following page(s) are in your department or group. These pages on the
+        {{site_name}} website require immediate review.</p>
+
+    <p>Please note that the page steward has already received emails at the {{prompt-times.initial}}, {{prompt-times.secondary}}, {{prompt-times.tertiary}} and date due marks notifying them of the deadline.</p>
+
+    <table width="100%" cellspacing="0" cellpadding="1" style="width: 100%; border: 1px solid #000; background: #e2e2e2; padding: 6px; border-collapse: collapse">
+        <thead>
+        <tr style="border-collapse: collapse; padding: 0; margin: 0;">
+            <th width="40%" style="width: 40%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Page Title
+            </th>
+            <th width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Page Steward
+            </th>
+            <th width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Last Reviewed
+            </th>
+            <th width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Due Date
+            </th>
+            <th width="10%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                Edit Link
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each report}}
+            <tr style="border-collapse: collapse; padding: 0; margin: 0;">
+                <td width="40%" style="width: 40%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    <a href="{{this.permalink}}">{{this.post_title}}</a>
+                </td>
+                <td width="20%" style="width: 20%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.author_email}}
+                </td>
+                <td width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.last_reviewed}}
+                </td>
+                <td width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    {{this.due_date}}
+                </td>
+                <td width="10%" style="width: 10%; border: 1px solid #000; padding: 6px; margin: 0;">
+                    <a href="{{this.edit_link}}">Edit this page</a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+    <p>For reference, here is the same list of pages in a numbered list, rather than a table:</p>
+
+    <ol>
+        {{#each report}}
+            <li><a href="{{this.permalink}}">{{this.post_title}}</a> - Last reviewed on {{this.last_reviewed}} - Due on {{this.due_date}} (<a href="{{this.edit_link}}">Edit this page</a>)</li>
+        {{/each}}
+    </ol>
+
+    <p><b><i>What happens next?</i></b></p>
+
+    <ul>
+        <li>Emails will continue to be sent <font color="red"><b>daily</b></font> while pages remain out of compliance.</li>
+        <li>Once a page has been reviewed everyone will receive an email notification confirming the successful completion of the review cycle.</li>
+        <li>Pages that remain out of compliance will be considered for deletion.</li>
+    </ul>
+
+    <p><b>This is an automatic email. Please do not reply directly to this email.</b></p>
+
+    <p>Thank you for your attention in this matter.</p>
+</div>

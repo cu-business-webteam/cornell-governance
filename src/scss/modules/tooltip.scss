@@ -1,0 +1,92 @@
+&[data-purpose="tooltip-container"] {
+  position: relative;
+
+  [role="tooltip"] {
+    visibility: hidden;
+    position: absolute;
+    top: auto;
+    left: auto;
+    margin-top: 1rem;
+    background: #e2e2e2;
+    color: black;
+    padding: 2rem;
+    border: 1px solid #666;
+
+    &.open {
+      visibility: visible;
+    }
+
+    .tooltip-closer {
+      position: absolute;
+      right: .5rem;
+      top: .5rem;
+      background: transparent;
+      color: black;
+      border: none;
+      font-size: .3rem;
+
+      display: block;
+      width: 2.5em;
+      height: 2.5em;
+      border-radius: 0.375em;
+
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        width: 2.25em;
+        height: 0.25em;
+        background-color: #000;
+        border-radius: 0.125em;
+        top: 1em;
+      }
+
+      &:before {
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        transform: rotate(45deg);
+        left: 0.125em;
+      }
+
+      &:after {
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        right: 0.125em;
+      }
+    }
+  }
+
+  &.cornell-governance-inline-tooltip {
+    .governance-tooltip-opener, .governance-tooltip-opener::after {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .governance-tooltip-opener {
+      display: inline-block;
+      text-indent: -9999rem;
+      overflow: hidden;
+      border: none;
+      background: none;
+      margin: 1rem 0;
+      position: absolute;
+      right: 1rem;
+      top: auto;
+      padding: 0;
+
+      &::after {
+        content: "?";
+        background: var(--cornell-red);
+        color: #fff;
+        font-size: 1rem;
+        text-align: center;
+        text-indent: 0;
+        display: block;
+        border-radius: 1rem;
+        padding: 0;
+        margin: -1.1rem 0 0;
+      }
+    }
+  }
+}

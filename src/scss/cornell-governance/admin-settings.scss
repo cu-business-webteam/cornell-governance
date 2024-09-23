@@ -1,0 +1,22 @@
+.wrap {
+  .cornell-governance-admin-field {
+    .repeater-field-set {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      > li {
+        display: grid;
+        grid-template-columns: minmax(0,max-content) minmax(0,1fr);
+        gap: 1rem;
+        padding: .5rem 0;
+        margin: 0;
+        list-style: none;
+
+        input {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
