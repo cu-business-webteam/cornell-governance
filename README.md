@@ -4,7 +4,7 @@
 **Tags:** governance, notes, admin  
 **Requires at least:** 6.4  
 **Tested up to:** 6.5.3  
-**Stable tag:** 0.4.6  
+**Stable tag:** 0.4.7  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
@@ -232,6 +232,10 @@ _Unreviewed Pages Report_
     _An example of the Compliance Widget on the Dashboard for the current user_](assets/screenshot-5.png)
 
 ## Changelog
+
+### 0.4.7
+
+* Updated NPM packages to resolve security issues in dependent packages
 
 ### 0.4.6
 

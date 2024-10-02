@@ -1,8 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-var __webpack_exports__ = {};
 
-;// CONCATENATED MODULE: ./src/js/modules/slist.js
+;// ./src/js/modules/slist.js
 /**
  * Adapted from CodeBoxx sample
  * @see https://code-boxx.com/drag-drop-sortable-list-javascript/#:~:text=In%20the%20simplest%20design%2C%20drag-and-drop%20in%20HTML%20and,%28%22drop%22%29.ondrop%20%3D%20%28%29%20%3D%3E%20%7B%20DO%20SOMETHING%20%7D%3B
@@ -90,7 +89,7 @@ class sortableList {
   }
 }
 /* harmony default export */ const slist = (sortableList);
-;// CONCATENATED MODULE: ./src/js/modules/repeater.js
+;// ./src/js/modules/repeater.js
 
 class CBRepeater {
   constructor() {
@@ -204,7 +203,7 @@ class CBRepeater {
   }
 }
 /* harmony default export */ const repeater = (CBRepeater);
-;// CONCATENATED MODULE: ./src/js/modules/updateNotice.js
+;// ./src/js/modules/updateNotice.js
 class updateNotice {
   constructor() {}
   setOuterContainer(el) {
@@ -233,7 +232,7 @@ class updateNotice {
   }
 }
 /* harmony default export */ const modules_updateNotice = (updateNotice);
-;// CONCATENATED MODULE: ./src/js/modules/imageLightbox.js
+;// ./src/js/modules/imageLightbox.js
 class imageLightbox {
   /**
    * Construct our lightbox module
@@ -402,7 +401,7 @@ class imageLightbox {
   }
 }
 /* harmony default export */ const modules_imageLightbox = (imageLightbox);
-;// CONCATENATED MODULE: ./src/js/cornell-governance/documentation.js
+;// ./src/js/cornell-governance/documentation.js
 
 class governanceDocs {
   constructor() {
@@ -415,7 +414,7 @@ class governanceDocs {
   }
 }
 /* harmony default export */ const documentation = (governanceDocs);
-;// CONCATENATED MODULE: ./src/js/modules/tooltip.js
+;// ./src/js/modules/tooltip.js
 class governanceTooltip {
   /**
    * Instantiate our tooltip element
@@ -510,7 +509,7 @@ class governanceTooltip {
   }
 }
 /* harmony default export */ const modules_tooltip = (governanceTooltip);
-;// CONCATENATED MODULE: ./src/js/cornell-governance-admin.js
+;// ./src/js/cornell-governance-admin.js
 
 
 

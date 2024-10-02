@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin
 Requires at least: 6.4
 Tested up to: 6.5.3
-Stable tag: 0.4.6
+Stable tag: 0.4.7
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -89,6 +89,10 @@ _Unreviewed Pages Report_
 
 
 == Changelog ==
+
+=== 0.4.7 ===
+
+* Updated NPM packages to resolve security issues in dependent packages
 
 === 0.4.6 ===
 
@@ -190,6 +194,7 @@ _Unreviewed Pages Report_
 
 == Upgrade Notice ==
 
+* 0.4.7 - Fixes NPM security vulnerabilities
 * 0.4.6 - Added `CORNELL_GOVERNANCE_EMAIL_CC` and `CORNELL_GOVERNANCE_EMAIL_BCC` constants
 * 0.4.5 - Make default email templates more generic
 * 0.4.4 - Dispatches email message when page steward completes page review

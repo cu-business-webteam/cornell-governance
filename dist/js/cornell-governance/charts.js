@@ -1,8 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-var __webpack_exports__ = {};
 
-;// CONCATENATED MODULE: ./node_modules/@kurkle/color/dist/color.esm.js
+;// ./node_modules/@kurkle/color/dist/color.esm.js
 /*!
  * @kurkle/color v0.3.2
  * https://github.com/kurkle/color#readme
@@ -593,9 +592,9 @@ function index_esm(input) {
 
 
 
-;// CONCATENATED MODULE: ./node_modules/chart.js/dist/chunks/helpers.segment.js
+;// ./node_modules/chart.js/dist/chunks/helpers.segment.js
 /*!
- * Chart.js v4.4.2
+ * Chart.js v4.4.4
  * https://www.chartjs.org
  * (c) 2024 Chart.js Contributors
  * Released under the MIT License
@@ -1784,6 +1783,9 @@ function _longestText(ctx, font, arrayOfThings, cache) {
 /**
  * Clears the entire canvas.
  */ function clearCanvas(canvas, ctx) {
+    if (!ctx && !canvas) {
+        return;
+    }
     ctx = ctx || canvas.getContext('2d');
     ctx.save();
     // canvas.width and canvas.height do not consider the canvas transform,
@@ -2386,7 +2388,7 @@ function createContext(parentContext, context) {
 const readKey = (prefix, name)=>prefix ? prefix + _capitalize(name) : name;
 const needsSubResolver = (prop, value)=>isObject(value) && prop !== 'adapters' && (Object.getPrototypeOf(value) === null || value.constructor === Object);
 function _cached(target, prop, resolve) {
-    if (Object.prototype.hasOwnProperty.call(target, prop)) {
+    if (Object.prototype.hasOwnProperty.call(target, prop) || prop === 'constructor') {
         return target[prop];
     }
     const value = resolve();
@@ -2832,7 +2834,7 @@ const useOffsetPos = (x, y, target)=>(x > 0 || y > 0) && (!target || !target.sha
 function getContainerSize(canvas, width, height) {
     let maxWidth, maxHeight;
     if (width === undefined || height === undefined) {
-        const container = _getParentNode(canvas);
+        const container = canvas && _getParentNode(canvas);
         if (!container) {
             width = canvas.clientWidth;
             height = canvas.clientHeight;
@@ -3341,9 +3343,9 @@ function styleChanged(style, prevStyle) {
 
 //# sourceMappingURL=helpers.segment.js.map
 
-;// CONCATENATED MODULE: ./node_modules/chart.js/dist/chart.js
+;// ./node_modules/chart.js/dist/chart.js
 /*!
- * Chart.js v4.4.2
+ * Chart.js v4.4.4
  * https://www.chartjs.org
  * (c) 2024 Chart.js Contributors
  * Released under the MIT License
@@ -3796,15 +3798,18 @@ function applyStack(stack, value, dsIndex, options = {}) {
     }
     return value;
 }
-function convertObjectDataToArray(data) {
+function convertObjectDataToArray(data, meta) {
+    const { iScale , vScale  } = meta;
+    const iAxisKey = iScale.axis === 'x' ? 'x' : 'y';
+    const vAxisKey = vScale.axis === 'x' ? 'x' : 'y';
     const keys = Object.keys(data);
     const adata = new Array(keys.length);
     let i, ilen, key;
     for(i = 0, ilen = keys.length; i < ilen; ++i){
         key = keys[i];
         adata[i] = {
-            x: key,
-            y: data[key]
+            [iAxisKey]: key,
+            [vAxisKey]: data[key]
         };
     }
     return adata;
@@ -3996,7 +4001,8 @@ class DatasetController {
         const data = dataset.data || (dataset.data = []);
         const _data = this._data;
         if (isObject(data)) {
-            this._data = convertObjectDataToArray(data);
+            const meta = this._cachedMeta;
+            this._data = convertObjectDataToArray(data, meta);
         } else if (_data !== data) {
             if (_data) {
                 unlistenArrayEvents(_data, this);
@@ -4827,8 +4833,10 @@ class BarController extends DatasetController {
         const metasets = iScale.getMatchingVisibleMetas(this._type).filter((meta)=>meta.controller.options.grouped);
         const stacked = iScale.options.stacked;
         const stacks = [];
+        const currentParsed = this._cachedMeta.controller.getParsed(dataIndex);
+        const iScaleValue = currentParsed && currentParsed[iScale.axis];
         const skipNull = (meta)=>{
-            const parsed = meta.controller.getParsed(dataIndex);
+            const parsed = meta._parsed.find((item)=>item[iScale.axis] === iScaleValue);
             const val = parsed && parsed[meta.vScale.axis];
             if (isNullOrUndef(val) || isNaN(val)) {
                 return true;
@@ -4967,7 +4975,7 @@ class BarController extends DatasetController {
         const ilen = rects.length;
         let i = 0;
         for(; i < ilen; ++i){
-            if (this.getParsed(i)[vScale.axis] !== null) {
+            if (this.getParsed(i)[vScale.axis] !== null && !rects[i].hidden) {
                 rects[i].draw(this._ctx);
             }
         }
@@ -6096,7 +6104,7 @@ function binarySearch(metaset, axis, value, intersect) {
     const rangeMethod = axis === 'x' ? 'inXRange' : 'inYRange';
     let intersectsItem = false;
     evaluateInteractionItems(chart, axis, position, (element, datasetIndex, index)=>{
-        if (element[rangeMethod](position[axis], useFinalPosition)) {
+        if (element[rangeMethod] && element[rangeMethod](position[axis], useFinalPosition)) {
             items.push({
                 element,
                 datasetIndex,
@@ -6795,7 +6803,7 @@ function createProxyAndListen(chart, type, listener) {
         return getMaximumSize(canvas, width, height, aspectRatio);
     }
  isAttached(canvas) {
-        const container = _getParentNode(canvas);
+        const container = canvas && _getParentNode(canvas);
         return !!(container && container.isConnected);
     }
 }
@@ -8854,7 +8862,7 @@ function needContext(proxy, names) {
     return false;
 }
 
-var version = "4.4.2";
+var version = "4.4.4";
 
 const KNOWN_POSITIONS = [
     'top',
@@ -9386,8 +9394,8 @@ class chart_Chart {
         let i;
         if (this._resizeBeforeDraw) {
             const { width , height  } = this._resizeBeforeDraw;
-            this._resize(width, height);
             this._resizeBeforeDraw = null;
+            this._resize(width, height);
         }
         this.clear();
         if (this.width <= 0 || this.height <= 0) {
@@ -10026,7 +10034,8 @@ class ArcElement extends Element {
         ], useFinalPosition);
         const rAdjust = (this.options.spacing + this.options.borderWidth) / 2;
         const _circumference = valueOrDefault(circumference, endAngle - startAngle);
-        const betweenAngles = _circumference >= TAU || _angleBetween(angle, startAngle, endAngle);
+        const nonZeroBetween = _angleBetween(angle, startAngle, endAngle) && startAngle !== endAngle;
+        const betweenAngles = _circumference >= TAU || nonZeroBetween;
         const withinRadius = _isBetween(distance, innerRadius + rAdjust, outerRadius + rAdjust);
         return betweenAngles && withinRadius;
     }
@@ -12247,6 +12256,9 @@ const positioners = {
                 ++count;
             }
         }
+        if (count === 0 || xSet.size === 0) {
+            return false;
+        }
         const xAverage = [
             ...xSet
         ].reduce((a, b)=>a + b) / xSet.size;
@@ -14203,7 +14215,7 @@ class RadialLinearScale extends LinearScaleBase {
                 ctx.strokeStyle = color;
                 ctx.setLineDash(optsAtIndex.borderDash);
                 ctx.lineDashOffset = optsAtIndex.borderDashOffset;
-                offset = this.getDistanceFromCenterForValue(opts.ticks.reverse ? this.min : this.max);
+                offset = this.getDistanceFromCenterForValue(opts.reverse ? this.min : this.max);
                 position = this.getPointPosition(i, offset);
                 ctx.beginPath();
                 ctx.moveTo(this.xCenter, this.yCenter);
@@ -14805,7 +14817,7 @@ const registerables = [
 
 //# sourceMappingURL=chart.js.map
 
-;// CONCATENATED MODULE: ./node_modules/chart.js/auto/auto.js
+;// ./node_modules/chart.js/auto/auto.js
 
 
 chart_Chart.register(...registerables);
@@ -14813,7 +14825,7 @@ chart_Chart.register(...registerables);
 
 /* harmony default export */ const auto = ((/* unused pure expression or super */ null && (Chart)));
 
-;// CONCATENATED MODULE: ./src/js/cornell-governance/charts.js
+;// ./src/js/cornell-governance/charts.js
 
 chartConfig = chartConfig || {};
 let governanceCharts = {};
