@@ -8,16 +8,11 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Message;
+	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Steward' ) ) {
-		class Steward extends Message {
-			/**
-			 * @var Steward $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Steward $instance;
-
+		abstract class Steward extends Message {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-steward',
@@ -28,7 +23,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				);
 
 				$cap = Plugin::instance()->get_capability();
-				if ( ! current_user_can( $cap ) ) {
+				if ( ! Helpers::user_can( 0,  $cap ) ) {
 					$this->is_readonly = true;
 				}
 
@@ -50,22 +45,6 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				$email = get_the_author_meta( 'email', $author );
 
 				$this->text = sprintf( '%s &lt;%s&gt;', $displayname, $email );
-			}
-
-			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Steward
-			 * @since   0.1
-			 */
-			public static function instance(): Steward {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
 			}
 		}
 	}

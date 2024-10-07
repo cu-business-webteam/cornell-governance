@@ -9,6 +9,7 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Input;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Notes_Timestamp' ) ) {
 		class Notes_Timestamp extends Input {

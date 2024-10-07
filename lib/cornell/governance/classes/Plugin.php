@@ -21,7 +21,7 @@ namespace Cornell\Governance {
 			 * @var string $version holds the version number for the plugin
 			 * @access public
 			 */
-			public static string $version = '0.4.7';
+			public static string $version = '0.4.8';
 			/**
 			 * @var string $capability the WP capability required to access settings
 			 * @access private

@@ -9,6 +9,7 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Tooltip;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Review_Cycle_Instructions' ) ) {
 		class Review_Cycle_Instructions extends Tooltip {

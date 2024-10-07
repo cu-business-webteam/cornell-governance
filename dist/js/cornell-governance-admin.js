@@ -509,7 +509,76 @@ class governanceTooltip {
   }
 }
 /* harmony default export */ const modules_tooltip = (governanceTooltip);
+;// ./src/js/modules/tabs.js
+class governanceTabs {
+  constructor(el) {
+    this.container = el;
+    this.tabs = this.container.querySelectorAll(':scope > [role="tab"]');
+    this.tabFocus = 0;
+    this.changeTabs = this.toggleTab.bind(this);
+    this.init();
+  }
+  init() {
+    this.tabs.forEach(tab => {
+      tab.addEventListener("click", this.changeTabs);
+    });
+    this.container.addEventListener("keydown", e => {
+      // Move right
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        this.tabs[this.tabFocus].setAttribute("tabindex", -1);
+        if (e.key === "ArrowRight") {
+          this.tabFocus++;
+          // If we're at the end, go to the start
+          if (this.tabFocus >= this.tabs.length) {
+            tabFocus = 0;
+          }
+          // Move left
+        } else if (e.key === "ArrowLeft") {
+          this.tabFocus--;
+          // If we're at the start, move to the end
+          if (this.tabFocus < 0) {
+            this.tabFocus = this.tabs.length - 1;
+          }
+        }
+        this.tabs[this.tabFocus].setAttribute("tabindex", 0);
+        this.tabs[this.tabFocus].focus();
+      }
+    });
+  }
+  toggleTab(e) {
+    e.preventDefault();
+    const targetTab = e.target;
+    const tabList = targetTab.parentNode;
+    const tabGroup = tabList.parentNode;
+
+    // Remove all current selected tabs
+    tabList.querySelectorAll(':scope > [aria-selected="true"]').forEach(t => t.setAttribute("aria-selected", false));
+
+    // Set this tab as selected
+    targetTab.setAttribute("aria-selected", true);
+
+    // Hide all tab panels
+    tabGroup.querySelectorAll(':scope > [role="tabpanel"]').forEach(p => p.setAttribute("hidden", true));
+
+    // Show the selected panel
+    tabGroup.querySelector(`#${targetTab.getAttribute("aria-controls")}`).removeAttribute("hidden");
+  }
+}
+/* harmony default export */ const tabs = (governanceTabs);
+;// ./src/js/modules/HTMLParser.js
+class HTMLParser {
+  constructor(html) {
+    this.html = html;
+    this.parser = new DOMParser();
+  }
+  parseHTML() {
+    return this.parser.parseFromString(this.html, 'text/html');
+  }
+}
+/* harmony default export */ const modules_HTMLParser = (HTMLParser);
 ;// ./src/js/cornell-governance-admin.js
+
+
 
 
 
@@ -534,6 +603,7 @@ class CornellGovernanceAdmin {
     this.saveInfoClick = this.saveInfo.bind(this);
     this.saveNotesClick = this.saveNotes.bind(this);
     this.finishedSave = this.savedMeta.bind(this);
+    this.updateDataAfterSave = this.afterSave.bind(this);
     this.saveError = this.errorOnSave.bind(this);
     this.updateTimestamp = this.setTimestamp.bind(this);
     this.somethingChanged = false;
@@ -541,8 +611,11 @@ class CornellGovernanceAdmin {
     this.confirmLeave = this.abandonChanges.bind(this);
     this.saveToDo = this.saveTaskCheck.bind(this);
     if (document.querySelectorAll('.cornell-governance-save-info').length >= 1) {
-      document.querySelector('.cornell-governance-save-info button:not(.governance-tooltip-opener)').addEventListener('click', e => {
-        this.saveInfoClick(e);
+      const buttons = document.querySelectorAll('.cornell-governance-save-info button:not(.governance-tooltip-opener)');
+      buttons.forEach(button => {
+        button.addEventListener('click', e => {
+          this.saveInfoClick(e);
+        });
       });
     }
     if (document.querySelectorAll('.cornell-governance-save-notes').length >= 1) {
@@ -550,25 +623,34 @@ class CornellGovernanceAdmin {
         this.saveNotesClick(e);
       });
     }
-    const inputs = document.querySelectorAll('.postbox:not(#cornell-governance-page-revisions) .cornell-governance-metabox input, .postbox:not(#cornell-governance-page-revisions) .cornell-governance-metabox select, .postbox:not(#cornell-governance-page-revisions) .cornell-governance-metabox textarea');
+    const inputs = document.querySelectorAll('.postbox:not(#cornell-governance-page-revisions) .cornell-governance-metabox :is(input, select, textarea)');
     inputs.forEach(input => {
       input.addEventListener('change', this.inputChanged);
     });
     if (document.querySelectorAll('ol.repeater-field-set').length >= 1) {
       this.repeater = new repeater();
-      const repeaterButtons = document.querySelectorAll('.postbox:not(#cornell-governance-page-revisions) .cornell-governance-metabox button.repeater-remove-row, .postbox:not(#cornell-governance-page-revisions) .cornell-governance-metabox button.repeater-add-row');
+      const repeaterButtons = document.querySelectorAll('.postbox:not(#cornell-governance-page-revisions) .cornell-governance-metabox :is(button.repeater-remove-row, button.repeater-add-row)');
       repeaterButtons.forEach(input => {
         input.addEventListener('click', this.inputChanged);
       });
-    } else if (document.querySelectorAll('.cornell-governance-page-info-tasks input[type="checkbox"]').length >= 1) {
-      document.querySelectorAll('.cornell-governance-page-info-tasks input[type="checkbox"]').forEach(checkbox => {
+    }
+    if (document.querySelectorAll(':is(.cornell-governance-page-info-tasks, .cornell-governance-page-info-tasks-readonly) input[type="checkbox"]').length >= 1) {
+      document.querySelectorAll(':is(.cornell-governance-page-info-tasks, .cornell-governance-page-info-tasks-readonly) input[type="checkbox"]').forEach(checkbox => {
+        this.toggleConfirm(checkbox);
         checkbox.addEventListener('change', this.saveToDo);
       });
+    } else if (document.querySelectorAll(':is(.cornell-governance-page-info-tasks, .cornell-governance-page-info-tasks-readonly):not(:has(input))').length >= 1) {
+      this.toggleConfirm(document.querySelectorAll(':is(.cornell-governance-page-info-tasks, .cornell-governance-page-info-tasks-readonly):not(:has(input)) li')[0]);
     }
     this.tooltips = [];
     const tooltips = document.querySelectorAll('.governance-tooltip-container');
     tooltips.forEach(tooltip => {
       this.tooltips.push(new modules_tooltip(tooltip));
+    });
+    this.tabLists = [];
+    const tabLists = document.querySelectorAll('.cornell-governance-metabox .inside [role="tablist"]');
+    tabLists.forEach(tabList => {
+      this.tabLists.push(new tabs(tabList));
     });
     this.updateNotice = new modules_updateNotice();
   }
@@ -590,6 +672,7 @@ class CornellGovernanceAdmin {
     this.saveInfo(e, {
       'save-action': 'completed-tasks'
     });
+    this.toggleConfirm(checkbox);
   }
   abandonChanges(e) {
     document.querySelector('#cornell-governance-page-info').scrollIntoView();
@@ -603,7 +686,12 @@ class CornellGovernanceAdmin {
     if (atts.hasOwnProperty('save-action')) {
       formData.set('save-action', atts['save-action']);
     }
-    const fields = form.querySelectorAll("input, textarea, select");
+    let isReadOnly = false;
+    this.log(this.activeFormTab);
+    if (this.activeFormTab.querySelectorAll('[name$="-readonly"]').length >= 1) {
+      isReadOnly = true;
+    }
+    const fields = form.querySelectorAll(':is(input, select, textarea, button):not([role="tabpanel"][hidden] *)');
     fields.forEach(field => {
       if (null === field.getAttribute('name')) {
         return;
@@ -613,8 +701,12 @@ class CornellGovernanceAdmin {
           return;
         }
       }
-      this.log('We are going to append ' + field.value + ' as the value of ' + field.getAttribute('name'));
-      formData.append(field.getAttribute("name"), field.value);
+      let value = field.value;
+      if ('BUTTON' === field.tagName) {
+        value = field.innerText;
+      }
+      this.log('We are going to append ' + value + ' as the value of ' + field.getAttribute('name'));
+      formData.append(field.getAttribute("name"), value);
     });
     const request = new Request(atts.ajax_url, {
       method: "POST",
@@ -627,8 +719,13 @@ class CornellGovernanceAdmin {
       }
       return response.json();
     }).then(text => {
+      let json = text.data;
       this.log(text);
       this.finishedSave(target);
+      return json;
+    }).then(json => {
+      this.log(json);
+      this.updateDataAfterSave(target, json);
     }).catch(error => {
       this.log(error);
       this.saveError(error);
@@ -640,6 +737,10 @@ class CornellGovernanceAdmin {
     let container = e.target.closest('.postbox');
     let head = container.querySelector('.hndle');
     this.currentBox = container.querySelector('.cornell-governance-metabox');
+    this.activeFormTab = this.currentBox;
+    if (this.currentBox.querySelectorAll('[role="tabpanel"]').length >= 1) {
+      this.activeFormTab = this.currentBox.querySelector('[role="tabpanel"]:not([hidden])');
+    }
     this.currentBoxText = head.innerText;
     this.timestampField = this.currentBox.querySelector('.cornell-governance-timestamp');
     this.timestampField.querySelector('input[type=hidden]').value = this.getCurrentDateTime();
@@ -664,6 +765,53 @@ class CornellGovernanceAdmin {
     window.removeEventListener('beforeunload', this.confirmLeave);
     this.log('The request appears to have finished loading');
     this.t = setTimeout(this.removeOverlay.bind(this), 2000, target);
+  }
+  afterSave(target, json) {
+    if (json.hasOwnProperty('compliance-fieldset')) {
+      const fieldsets = document.querySelectorAll('.compliance-status-fieldset');
+      fieldsets.forEach(fieldset => {
+        let parsed = null;
+        if (fieldset.querySelectorAll('input[type="radio"]').length >= 1) {
+          const parser = new modules_HTMLParser(json['compliance-fieldset'].liaison);
+          parsed = parser.parseHTML();
+        } else {
+          const parser = new modules_HTMLParser(json['compliance-fieldset'].steward);
+          parsed = parser.parseHTML();
+        }
+        const fieldsetParent = fieldset.closest('.cornell-governance-grid');
+        const taskList = fieldsetParent.querySelector('.cornell-governance-tasks');
+        if (taskList) {
+          if (json.hasOwnProperty('task-list-checkboxes') && taskList.querySelectorAll('input[type="checkbox"]').length >= 1) {
+            const taskParser = new modules_HTMLParser(json['task-list-checkboxes']);
+            const parsedTasks = taskParser.parseHTML();
+            taskList.replaceWith(parsedTasks.querySelector('.cornell-governance-tasks'));
+          } else {
+            const allTasks = taskList.querySelectorAll('input[type="checkbox"]');
+            if (allTasks.length >= 1) {
+              allTasks.forEach(task => {
+                task.checked = false;
+                task.closest('label').classList.remove('done');
+              });
+            }
+          }
+        }
+        fieldset.replaceWith(parsed.querySelector('.compliance-status-fieldset'));
+      });
+    } else if (json.hasOwnProperty('task-list-checkboxes')) {
+      const taskLists = document.querySelectorAll('.cornell-governance-tasks');
+      if (taskLists.length <= 0) {
+        return;
+      }
+      taskLists.forEach(list => {
+        const tasks = list.querySelectorAll('input[type="checkbox"]');
+        if (tasks.length <= 0) {
+          return;
+        }
+        const taskParser = new modules_HTMLParser(json['task-list-checkboxes']);
+        const parsedTasks = taskParser.parseHTML();
+        list.replaceWith(parsedTasks.querySelector('.cornell-governance-tasks'));
+      });
+    }
   }
   errorOnSave(error) {
     this.log(error);
@@ -764,16 +912,51 @@ class CornellGovernanceAdmin {
     return formattedDateTime;
   }
   showSaveInfoInstructions() {
-    if (document.querySelectorAll('.cornell-governance-save-info-instructions').length <= 0) {
+    if (document.querySelectorAll('.cornell-governance-save-box').length <= 0) {
       return;
     }
-    document.querySelector('.cornell-governance-save-info-instructions').style.display = 'block';
+    document.querySelector('.cornell-governance-save-box').style.display = 'block';
   }
   hideSaveInfoInstructions() {
-    if (document.querySelectorAll('.cornell-governance-save-info-instructions').length <= 0) {
+    if (document.querySelectorAll('.cornell-governance-save-box').length <= 0) {
       return;
     }
-    document.querySelector('.cornell-governance-save-info-instructions').style.display = 'none';
+    document.querySelector('.cornell-governance-save-box').style.display = 'none';
+  }
+  toggleConfirm(checkbox) {
+    const tasklist = checkbox.closest('.cornell-governance-tasks');
+    if (tasklist.querySelectorAll('input[type="checkbox"]:not(:checked)').length >= 1) {
+      this.hideConfirm(tasklist);
+    } else if (tasklist.querySelectorAll('input[type="checkbox"]').length <= 0) {
+      // There do not appear to be any tasks, so there is nothing to review
+      this.hideConfirm(tasklist);
+    } else {
+      this.showConfirm(tasklist);
+    }
+  }
+  showConfirm(tasklist) {
+    if (document.querySelectorAll('.cornell-governance-confirm-page-review').length <= 0) {
+      return;
+    }
+    let tabPanel = document.querySelector('#cornell-governance-page-info');
+    if (document.querySelectorAll('#cornell-governance-page-info [role="tabpanel"]').length >= 1) {
+      tabPanel = tasklist.closest('[role="tabpanel"]');
+    }
+    const saveButton = tabPanel.querySelector('.cornell-governance-confirm-page-review');
+    const reviewFieldset = saveButton.closest('fieldset');
+    reviewFieldset.style.display = 'block';
+  }
+  hideConfirm(tasklist) {
+    if (document.querySelectorAll('.cornell-governance-confirm-page-review').length <= 0) {
+      return;
+    }
+    let tabPanel = document.querySelector('#cornell-governance-page-info');
+    if (document.querySelectorAll('#cornell-governance-page-info [role="tabpanel"]').length >= 1) {
+      tabPanel = tasklist.closest('[role="tabpanel"]');
+    }
+    const saveButton = tabPanel.querySelector('.cornell-governance-confirm-page-review');
+    const reviewFieldset = saveButton.closest('fieldset');
+    reviewFieldset.style.display = 'none';
   }
 }
 document.addEventListener('DOMContentLoaded', () => {

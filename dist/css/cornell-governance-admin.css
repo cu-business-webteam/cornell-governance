@@ -283,8 +283,58 @@
 .cornell-governance-metabox .cornell-governance-message-title {
   font-weight: 600;
 }
+.cornell-governance-metabox .cornell-governance-mark-for-deletion-instructions + .cornell-governance-mark-for-deletion,
+.cornell-governance-metabox .cornell-governance-completed-review-instructions + .cornell-governance-completed-review {
+  border-top: none;
+}
 .cornell-governance-metabox .cornell-governance-save-info-instructions {
   color: #8b0000;
+}
+.cornell-governance-metabox .components-button {
+  align-items: center;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  border-radius: 2px;
+  box-sizing: border-box;
+  color: var(--wp-components-color-foreground, #1e1e1e);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  height: 36px;
+  margin: 0;
+  padding: 6px 12px;
+  text-decoration: none;
+  transition: box-shadow 0.1s linear;
+}
+.cornell-governance-metabox .components-button.is-primary {
+  background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+  color: var(--wp-components-color-accent-inverted, #fff);
+  outline: 1px solid rgba(0, 0, 0, 0);
+  text-decoration: none;
+  text-shadow: none;
+  white-space: nowrap;
+}
+.cornell-governance-metabox .tabs [role=tablist] {
+  padding-left: 1rem;
+}
+.cornell-governance-metabox .tabs [role=tablist] button[role=tab] {
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0 0;
+  display: inline-block;
+  border: 1px solid #e2e2e2;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  background: transparent;
+  cursor: pointer;
+}
+.cornell-governance-metabox .tabs [role=tablist] button[role=tab][aria-selected=true] {
+  background: #e2e2e2;
+  border: 1px solid black;
+  border-bottom: none;
 }
 
 .governance-menu-boxes {

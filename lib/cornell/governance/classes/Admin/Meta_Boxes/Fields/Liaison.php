@@ -8,16 +8,11 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Select;
+	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Liaison' ) ) {
-		class Liaison extends Select {
-			/**
-			 * @var Liaison $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Liaison $instance;
-
+		abstract class Liaison extends Select {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-liaison',
@@ -30,27 +25,11 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				);
 
 				$cap = Plugin::instance()->get_capability();
-				if ( ! current_user_can( $cap ) ) {
+				if ( ! Helpers::user_can( 0,  $cap ) ) {
 					$this->is_readonly = true;
 				}
 
 				parent::__construct( $atts );
-			}
-
-			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Liaison
-			 * @since   0.1
-			 */
-			public static function instance(): Liaison {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
 			}
 
 			/**

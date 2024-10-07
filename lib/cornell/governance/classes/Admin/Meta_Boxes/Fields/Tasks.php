@@ -15,13 +15,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Tasks' ) ) {
-		class Tasks extends Repeater {
-			/**
-			 * @var Tasks $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Tasks $instance;
-
+		abstract class Tasks extends Repeater {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-tasks',
@@ -37,7 +31,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				);
 
 				$cap = Plugin::instance()->get_capability();
-				if ( ! current_user_can( $cap ) ) {
+				if ( ! Helpers::user_can( 0,  $cap ) ) {
 					$this->is_readonly = true;
 				}
 
@@ -46,22 +40,6 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				$this->add_text    = __( 'Add New Task', 'cornell/governance' );
 				$this->remove_text = __( 'Remove This Task', 'cornell/governance' );
 				$this->short_name = __( 'Task', 'cornell/governance' );
-			}
-
-			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Tasks
-			 * @since   0.1
-			 */
-			public static function instance(): Tasks {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
 			}
 
 			/**
@@ -104,6 +82,41 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 						implode( "\n\r", $options )
 					);
 				}
+			}
+
+			/**
+			 * Retrieve and return a plain ordered list of tasks without checkboxes
+			 *
+			 * @access public
+			 * @since  0.4.8
+			 * @return string the HTML for the ordered list
+			 */
+			public function get_plain_list(): string {
+				$options    = array();
+
+				foreach ( $this->get_options() as $val => $label ) {
+					$options[] = sprintf( '
+<li>
+	<span class="text-label%2$s">%1$s</span>
+</li>',
+						$label,
+						in_array( $val, $this->get_completed() ) ? ' done' : ''
+					);
+				}
+
+				return sprintf( '<fieldset class="%1$s">
+	<legend>%3$s</legend>
+	<p class="field-note">%5$s</p>
+	<ol class="%2$s">
+		%4$s
+	</ol>
+</fieldset>',
+					implode( ' ', $this->classes ),
+					$this->id,
+					$this->label,
+					implode( "\n\r", $options ),
+					__( 'When this page needs to be reviewed, these tasks will be selectable', 'cornell/governance' )
+				);
 			}
 
 			/**

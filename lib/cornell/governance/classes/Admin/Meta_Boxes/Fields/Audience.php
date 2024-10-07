@@ -9,6 +9,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Select;
 	use Cornell\Governance\Admin\Meta_Boxes\Info;
+	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Audience' ) ) {
@@ -23,7 +24,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				}
 
 				$cap = Plugin::instance()->get_capability();
-				if ( ! current_user_can( $cap ) ) {
+				if ( ! Helpers::user_can( 0,  $cap ) ) {
 					$this->is_readonly = true;
 				}
 

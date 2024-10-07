@@ -8,16 +8,11 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Radio_Group;
+	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Review_Cycle' ) ) {
-		class Review_Cycle extends Radio_Group {
-			/**
-			 * @var Review_Cycle $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Review_Cycle $instance;
-
+		abstract class Review_Cycle extends Radio_Group {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-review-cycle',
@@ -28,27 +23,11 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				);
 
 				$cap = Plugin::instance()->get_capability();
-				if ( ! current_user_can( $cap ) ) {
+				if ( ! Helpers::user_can( 0,  $cap ) ) {
 					$this->is_readonly = true;
 				}
 
 				parent::__construct( $atts );
-			}
-
-			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Review_Cycle
-			 * @since   0.1
-			 */
-			public static function instance(): Review_Cycle {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
 			}
 
 			/**

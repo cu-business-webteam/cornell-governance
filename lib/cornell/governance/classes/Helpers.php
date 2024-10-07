@@ -445,6 +445,47 @@ namespace Cornell\Governance {
 				 */
 				return apply_filters( 'get_edit_post_link', $link, $post->ID, $context );
 			}
+
+			/**
+			 * Determines whether a specific user has a specific capability
+			 *
+			 * @param int|\WP_User $user - the user being checked
+			 * @param string $cap - the capability being tested
+			 *
+			 * @access public
+			 * @since 1.0.26
+			 * @return bool whether or not the user has the specified capability
+			 */
+			public static function user_can( $user=0, string $cap='' ): bool {
+				if ( empty( $user ) ) {
+					return current_user_can( $cap );
+				}
+
+				return user_can( $user, $cap );
+			}
+
+			/**
+			 * Retrieve a sample user that does not have the required capability set by the plugin
+			 *
+			 * @access public
+			 * @since  1.0.26
+			 * @return null|\WP_User the sample user
+			 */
+			public static function get_sample_author(): ?\WP_User {
+				$users = get_users( array(
+					'capability__in' => array(
+						'edit_posts',
+					),
+					'capability__not_in' => Plugin::instance()->get_capability(),
+					'number' => 1
+				) );
+
+				if ( is_array( $users ) ) {
+					return $users[0];
+				}
+
+				return null;
+			}
 		}
 	}
 }

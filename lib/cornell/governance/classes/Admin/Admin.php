@@ -273,6 +273,13 @@ namespace Cornell\Governance\Admin {
 					return;
 				}
 
+				if ( ! array_key_exists( 'last-review', $data ) ) {
+					$data['last-review'] = 0;
+				}
+				if ( ! array_key_exists( 'review-cycle', $data ) ) {
+					$data['review-cycle'] = 12;
+				}
+
 				$due  = Helpers::calculate_next_review_date( $data['last-review'], $data['review-cycle'] );
 
 				if ( $due <= $now ) {

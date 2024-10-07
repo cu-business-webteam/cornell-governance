@@ -108,6 +108,9 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 						'\\Fields'
 					), '', self::$namespace ) . '\\' . $this->meta_box;
 				$key   = str_replace( $class::instance()->get_field_id() . '-', '', $this->id );
+				if ( stristr( $key, '-readonly' ) ) {
+					$key = str_replace( '-readonly', '', $key );
+				}
 
 				if ( array_key_exists( $key, $class::instance()->meta ) ) {
 					return $class::instance()->meta[ $key ];

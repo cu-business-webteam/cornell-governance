@@ -9,16 +9,11 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Message;
+	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Save_Info_Instructions' ) ) {
-		class Save_Info_Instructions extends Message {
-			/**
-			 * @var Save_Info_Instructions $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Save_Info_Instructions $instance;
-
+		abstract class Save_Info_Instructions extends Message {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-save-instructions',
@@ -37,22 +32,6 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			}
 
 			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Save_Info_Instructions
-			 * @since   0.1
-			 */
-			public static function instance(): Save_Info_Instructions {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
-			}
-
-			/**
 			 * Generate the input HTML
 			 *
 			 * @access public
@@ -60,7 +39,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return string the input HTML
 			 */
 			public function get_input(): string {
-				if ( ! current_user_can( Plugin::instance()->get_capability() ) ) {
+				if ( ! Helpers::user_can( 0,  Plugin::instance()->get_capability() ) ) {
 					return '';
 				}
 

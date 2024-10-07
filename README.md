@@ -4,7 +4,7 @@
 **Tags:** governance, notes, admin  
 **Requires at least:** 6.4  
 **Tested up to:** 6.5.3  
-**Stable tag:** 0.4.7  
+**Stable tag:** 0.4.8  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
@@ -123,6 +123,7 @@ If you would like to build custom templates, you can do so by including them in 
 
   - {theme directory}/cornell-governance/templates/
     - Compliant.handlebars
+    - Deletion.handlebars
     - Due.handlebars
     - Initial_Prompt.handlebars
     - Overdue.handlebars
@@ -233,6 +234,22 @@ _Unreviewed Pages Report_
 
 ## Changelog
 
+### 0.4.8
+
+New Features:
+
+* Add tabbed interface allowing Liaisons to act as Stewards on their own pages
+* Add checkbox allowing Steward to mark a page for deletion
+    * Add email message and template for deletion notification
+
+Bug fixes:
+
+* Stop Stewards from being able to confirm page review unless they’ve checked off all page tasks
+* Fix bug that allowed Editors to confirm page review even if they were not the Steward for the page
+* Automatically refresh governance information when changes are made:
+    * Refresh compliance date and icon when page is reviewed
+    * Refresh task list for Steward role when tasks are added through the Liaison role
+
 ### 0.4.7
 
 * Updated NPM packages to resolve security issues in dependent packages
@@ -341,6 +358,7 @@ _Unreviewed Pages Report_
 
 ## Upgrade Notice
 
+* 0.4.8 - Fixes multiple bugs; allows Liaisons to review their own pages
 * 0.4.6 - Added `CORNELL_GOVERNANCE_EMAIL_CC` and `CORNELL_GOVERNANCE_EMAIL_BCC` constants
 * 0.4.5 - Make default email templates more generic
 * 0.4.4 - Dispatches email message when page steward completes page review

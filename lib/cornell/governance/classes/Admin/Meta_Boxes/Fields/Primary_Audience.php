@@ -8,15 +8,10 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Select;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Primary_Audience' ) ) {
-		class Primary_Audience extends Audience {
-			/**
-			 * @var Primary_Audience $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Primary_Audience $instance;
-
+		abstract class Primary_Audience extends Audience {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-primary-audience',
@@ -27,22 +22,6 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 					'attributes' => array( 'placeholder' => __( '-- Select an Audience --', 'cornell/governance' ) ),
 				);
 				parent::__construct( $atts );
-			}
-
-			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Primary_Audience
-			 * @since   0.1
-			 */
-			public static function instance(): Primary_Audience {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
 			}
 		}
 	}

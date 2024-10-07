@@ -63,6 +63,28 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 				/*add_action( 'save_post', array( $this, 'save' ), 11, 3 );*/
+
+				$screen = get_current_screen();
+				if ( ! is_null( $screen ) ) {
+					$screen_id = $screen->id;
+
+					add_filter( "postbox_classes_{$screen_id}_{$this->id}", array( $this, 'meta_box_classes' ) );
+				}
+			}
+
+			/**
+			 * Add a generic class to this meta box
+			 *
+			 * @param array $classes the existing list of classes
+			 *
+			 * @access public
+			 * @return array the updated array of classes
+			 * @since  1.0.16
+			 */
+			public function meta_box_classes( array $classes ): array {
+				$classes[] = 'cornell-governance-metabox';
+
+				return $classes;
 			}
 
 			/**
@@ -197,15 +219,18 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			public function save( int $post_id, \WP_Post $post, bool $update ) {
 				$nonce = $this->id . '-nonce';
 				if ( ! wp_verify_nonce( $_REQUEST[ $nonce ], $this->id ) ) {
+					Helpers::log( 'We could not verify the nonce for this page' );
 					return new \WP_Error( 'no-nonce', __( 'The nonce could not be verified for some reason', 'cornell/governance' ) );
 				}
 
 				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+					Helpers::log( 'It appears that we are auto-saving' );
 					return new \WP_Error( 'autosave', __( 'We are in the autosave portion', 'cornell/governance' ) );
 				}
 
 				// We should check user permissions here
 				if ( ! current_user_can( Plugin::instance()->get_capability() ) ) {
+					Helpers::log( 'It does not appear that the current user has permission to update Governance information' );
 					return new \WP_Error( 'no-access', __( 'The current user does not appear to have the appropriate cap', 'cornell/governance' ) );
 				}
 
@@ -219,8 +244,17 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				// We should sanitize data here
 				foreach ( $this->fields as $key => $field ) {
 					if ( array_key_exists( $this->id . '-' . $key, $_REQUEST ) ) {
-						$class        = self::$namespace . '\\Fields\\' . $field;
+						$class = self::$namespace . '\\Fields\\Writable\\' . $field;
+
+						if ( ! class_exists( $class ) ) {
+							$class = self::$namespace . '\\Fields\\' . $field;
+						}
+
+						Helpers::log( 'Preparing to evaluate the new value of: ' . $key );
+						Helpers::log( 'That value should be: ' . $_REQUEST[ $this->id . '-' . $key ] );
 						$data[ $key ] = $class::instance()->validate( $_REQUEST[ $this->id . '-' . $key ] );
+					} else {
+						Helpers::log( 'We could not find ' . $this->id . '-' . $key . ' in the REQUEST array' );
 					}
 				}
 
@@ -229,10 +263,18 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					$data['last-review'] = $meta['last-review'];
 				}
 
-				/* If this is the info meta box, and the user has specifically indicated they've completed the review, reset the last-review time */
-				if ( array_key_exists( 'cornell-governance-page-completed-review', $_REQUEST ) && 1 == $_REQUEST['cornell-governance-page-completed-review'] ) {
-					$data['last-review'] = time();
+				if ( is_array( $data ) && ! array_key_exists( 'initial-setup', $data ) && is_array( $meta ) && array_key_exists( 'initial-setup', $meta ) ) {
+					$data['initial-setup'] = $meta['initial-setup'];
 				}
+
+				/* If this is the info meta box, and the user has specifically indicated they've completed the review, reset the last-review time */
+				/*if ( array_key_exists( 'cornell-governance-page-completed-review', $_REQUEST ) && 1 == $_REQUEST['cornell-governance-page-completed-review'] ) {
+					$data['last-review'] = time();
+				}*/
+
+				/*if ( array_key_exists( 'cornell-governance-page-info-mark-for-deletion', $_REQUEST ) && 1 == $_REQUEST['cornell-governance-page-info-mark-for-deletion'] ) {
+					$data['mark-for-deletion'] = 1;
+				}*/
 
 				/* Since we don't have a specific field for initial setup meta, we need to add it manually to keep it in the DB */
 				if ( is_array( $data ) && is_array( $_REQUEST ) ) {
@@ -240,7 +282,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 						$data['initial-setup'] = array();
 						foreach ( $_REQUEST['cornell-governance-page-info-initial-setup'] as $key => $val ) {
 							if ( is_numeric( $val ) ) {
-								$data['initial-setup'][$key] = $val;
+								$data['initial-setup'][ $key ] = $val;
 							}
 						}
 					}
@@ -250,8 +292,10 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$success = update_post_meta( $post_id, $this->meta_key, $data );
 
 				if ( false === $success ) {
+					Helpers::log( __( 'There was an unknown error saving the post meta', 'cornell/governance' ) );
 					return new \WP_Error( 'no-save', __( 'There was an unknown error saving the post meta', 'cornell/governance' ) );
 				} else if ( is_wp_error( $success ) ) {
+					Helpers::log( 'It appears that we successfully saved the following data: ' . print_r( $data, true ) );
 					return $success;
 				}
 

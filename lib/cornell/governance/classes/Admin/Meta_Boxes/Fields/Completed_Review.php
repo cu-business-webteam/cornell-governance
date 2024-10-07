@@ -8,15 +8,10 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Confirm;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Completed_Review' ) ) {
-		class Completed_Review extends Confirm {
-			/**
-			 * @var Completed_Review $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Completed_Review $instance;
-
+		abstract class Completed_Review extends Confirm {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-completed-review',
@@ -27,22 +22,6 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				);
 
 				parent::__construct( $atts );
-			}
-
-			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Completed_Review
-			 * @since   0.1
-			 */
-			public static function instance(): Completed_Review {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
 			}
 		}
 	}

@@ -178,9 +178,45 @@
     font-weight: 600;
   }
 
+  .cornell-governance-mark-for-deletion-instructions + .cornell-governance-mark-for-deletion,
+  .cornell-governance-completed-review-instructions + .cornell-governance-completed-review {
+    border-top: none;
+  }
+
   .cornell-governance-save-info-instructions {
     color: #8b0000;
   }
+
+  .components-button {
+    align-items: center;
+    -webkit-appearance: none;
+    background: none;
+    border: 0;
+    border-radius: 2px;
+    box-sizing: border-box;
+    color: var(--wp-components-color-foreground, #1e1e1e);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    height: 36px;
+    margin: 0;
+    padding: 6px 12px;
+    text-decoration: none;
+    transition: box-shadow .1s linear;
+
+    &.is-primary {
+      background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+      color: var(--wp-components-color-accent-inverted, #fff);
+      outline: 1px solid #0000;
+      text-decoration: none;
+      text-shadow: none;
+      white-space: nowrap;
+    }
+  }
+
+  @import "modules/tabs";
 }
 
 .governance-menu-boxes {

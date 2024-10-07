@@ -9,15 +9,10 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Tooltip;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Steward_Tooltip' ) ) {
-		class Steward_Tooltip extends Tooltip {
-			/**
-			 * @var Steward_Tooltip $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Steward_Tooltip $instance;
-
+		abstract class Steward_Tooltip extends Tooltip {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-steward-tooltip',
@@ -33,22 +28,6 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				);
 
 				parent::__construct( $atts );
-			}
-
-			/**
-			 * Returns the instance of this class.
-			 *
-			 * @access  public
-			 * @return  Steward_Tooltip
-			 * @since   0.1
-			 */
-			public static function instance(): Steward_Tooltip {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
-
-				return self::$instance;
 			}
 
 			/**

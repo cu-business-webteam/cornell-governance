@@ -9,6 +9,7 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Info;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Repeater' ) ) {
 		abstract class Repeater extends Input {
@@ -139,6 +140,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 */
 			public function validate( $value ) {
 				if ( ! is_array( $value ) ) {
+					Helpers::log('There does not appear to be any value associated with this repeater field');
 					return array();
 				}
 
@@ -160,6 +162,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 							break;
 					}
 				}
+
+				Helpers::log('The validated value of this repeater field looks like: ' . print_r( $new_value, true ) );
 
 				return $new_value;
 			}

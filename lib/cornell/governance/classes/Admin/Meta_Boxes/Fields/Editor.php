@@ -8,6 +8,7 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Input;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Editor' ) ) {
 		class Editor extends Input {

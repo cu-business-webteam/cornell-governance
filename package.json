@@ -1,13 +1,13 @@
 {
   "name": "cornell-governance",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "dependencies": {
     "babel-loader": "^9.2.1",
     "normalize.css": "^8.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.4",
+    "@babel/core": "^7.25.7",
+    "@babel/preset-env": "^7.25.7",
     "chart.js": "^4.4.4",
     "clean-css-cli": "^5.6.3",
     "concat": "^1.0.3",

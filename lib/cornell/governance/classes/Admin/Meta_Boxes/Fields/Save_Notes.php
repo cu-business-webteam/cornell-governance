@@ -8,6 +8,7 @@ namespace {
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Button;
+	use Cornell\Governance\Helpers;
 
 	if ( ! class_exists( 'Save_Notes' ) ) {
 		class Save_Notes extends Button {
