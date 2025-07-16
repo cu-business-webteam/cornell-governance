@@ -52,7 +52,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 
 				foreach ( $this->get_options() as $val => $label ) {
 					if ( $this->get_input_value() === $val ) {
-						$value_text[] = $label;
+						$value_text[] = $label . ' &lt;' . $val . '&gt;';
 					}
 					$options[] = sprintf( '<option value="%s"%s>%s</option>', $val, selected( $this->get_input_value(), $val, false ), $label );
 				}

@@ -216,7 +216,7 @@ namespace Cornell\Governance {
 					'post_type'  => Plugin::instance()->get_post_types(),
 					'meta_query' => array(
 						array(
-							'key'     => 'cornell/governance/information',
+							'key'     => Plugin::INFO_META_KEY,
 							'compare' => 'EXISTS',
 						),
 					),
@@ -251,7 +251,7 @@ namespace Cornell\Governance {
 				if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
 					global $post;
 
-					$data = get_post_meta( get_the_ID(), 'cornell/governance/information', true );
+					$data = get_post_meta( get_the_ID(), Plugin::INFO_META_KEY, true );
 
 					if ( /*! array_key_exists( 'last-review', $data ) || */ ! array_key_exists( 'review-cycle', $data ) ) {
 						continue;
@@ -364,7 +364,7 @@ namespace Cornell\Governance {
 			 */
 			protected function get_pages(): array {
 				global $wpdb;
-				$query   = $wpdb->prepare( "SELECT * FROM {$wpdb->postmeta} WHERE meta_key=%s", Info::instance()->get_meta_key() );
+				$query   = $wpdb->prepare( "SELECT * FROM {$wpdb->postmeta} WHERE meta_key=%s", Plugin::INFO_META_KEY );
 				$results = $wpdb->get_results( $query );
 				if ( is_wp_error( $results ) || ! is_array( $results ) ) {
 					return array();
@@ -967,8 +967,8 @@ namespace Cornell\Governance {
 			 * @since  0.1
 			 */
 			protected function get_email( $user ) {
-				/*if ( defined( 'CORNELL_DEBUG' ) && CORNELL_DEBUG && defined( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) {
-					return is_email( CORNELL_GOVERNANCE_EMAIL_TO );
+				/*if ( ! empty( Config::instance()->get_var( 'CORNELL_DEBUG' ) ) && Config::instance()->get_var( 'CORNELL_DEBUG' ) && ! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) ) {
+					return is_email( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) );
 				}*/
 
 				if ( is_numeric( $user ) ) {
@@ -988,16 +988,16 @@ namespace Cornell\Governance {
 					}
 
 					if ( ! empty( $name ) ) {
-						if ( defined( 'CORNELL_DEBUG' ) && CORNELL_DEBUG && defined( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) {
-							return sprintf( '%1$s <%2$s>', $name, is_email( CORNELL_GOVERNANCE_EMAIL_TO ) );
+						if ( ! empty( Config::instance()->get_var( 'CORNELL_DEBUG' ) ) && Config::instance()->get_var( 'CORNELL_DEBUG' ) && ! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) ) {
+							return sprintf( '%1$s <%2$s>', $name, is_email( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) );
 						} else if ( is_email( $user ) ) {
 							return sprintf( '%1$s <%2$s>', $name, is_email( $user ) );
 						}
 					}
 				}
 
-				if ( defined( 'CORNELL_DEBUG' ) && CORNELL_DEBUG && defined( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) {
-					return sprintf( '%1$s <%2$s>', $user, is_email( CORNELL_GOVERNANCE_EMAIL_TO ) );
+				if ( ! empty( Config::instance()->get_var( 'CORNELL_DEBUG' ) ) && Config::instance()->get_var( 'CORNELL_DEBUG' ) && ! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) ) {
+					return sprintf( '%1$s <%2$s>', $user, is_email( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) );
 				} else {
 					return is_email( $user );
 				}

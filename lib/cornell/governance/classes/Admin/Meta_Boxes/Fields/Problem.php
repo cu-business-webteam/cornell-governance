@@ -16,7 +16,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-problem',
-					'label' => __( 'What problem are we trying to solve for the user?', 'cornell/governance' ),
+					'label' => __( 'Purpose/Problems Solved', 'cornell/governance' ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-textarea', 'cornell-governance-problem' ),
 					'default' => '',
 					'meta_box' => 'Info',

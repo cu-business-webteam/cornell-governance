@@ -1,4 +1,43 @@
 const fs = require('fs');
+const {replaceInFile,replaceInFileSync} = require('replace-in-file');
+
+function updateVersionNumber() {
+    const versionNumber = fs.readFileSync('./.version').toString();
+
+    console.log( 'The new version number is ' + versionNumber );
+
+    const replacements = [
+        {
+            files: [
+                './package.json',
+                './composer.json',
+            ],
+            from: /"version": "([\d|\.]+)",/,
+            to: '"version": "' + versionNumber + '",',
+            countMatches: true
+        },
+        {
+            files: './README.md',
+            from: /Stable tag: ([\d|\.]+)/g,
+            to: 'Stable tag: ' + versionNumber,
+            countMatches: true
+        },
+        {
+            files: './cornell-governance.php',
+            from: /Version: ([\d|\.]+)/g,
+            to: 'Version: ' + versionNumber,
+            countMatches: true
+        },
+        {
+            files: './lib/cornell/governance/classes/Plugin.php',
+            from: /public static string \$version = '([\d|\.]+)';/g,
+            to: "public static string $version = '" + versionNumber + "';",
+            countMatches: true
+        }
+    ];
+
+    replacements.map( options => console.log(replaceInFileSync(options)));
+}
 
 function deleteAllGitFiles(path) {
     if (fs.existsSync(path)) {
@@ -26,6 +65,14 @@ function deleteAllGitFiles(path) {
         }
     }
 }
+
+console.log("Preparing to update version number...");
+
+updateVersionNumber();
+
+console.log("Finished updating version number");
+
+
 
 console.log("Cleaning working tree...");
 

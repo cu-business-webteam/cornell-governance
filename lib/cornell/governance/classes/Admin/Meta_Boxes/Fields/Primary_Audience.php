@@ -15,7 +15,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-primary-audience',
-					'label' => __( 'Primary Audience (only 1)', 'cornell/governance' ),
+					'label' => __( 'Primary Audience (required)', 'cornell/governance' ),
 					'classes' => array( 'cornell-governance-primary-audience' ),
 					'default' => '',
 					'meta_box' => 'Info',

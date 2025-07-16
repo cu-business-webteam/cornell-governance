@@ -52,9 +52,15 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 				/**
 				 * TODO: Add a list of compliant pages (to show a max of 5 with a link to the full list)
 				 */
-				add_filter( 'cornell/governance/reports/current-user', function() { return get_current_user_id(); } );
+				add_filter( 'cornell/governance/reports/current-user', function () {
+					return get_current_user_id();
+				} );
 				Non_Compliant::instance()->display();
 				Due_For_Review::instance()->display();
+				printf( '<p><a href="%s" class="large">%s</a></p>',
+					admin_url( 'admin.php?page=cornell-governance-steward-dashboard' ),
+					__( 'View your full pages report', 'cornell/governance' )
+				);
 			}
 		}
 	}

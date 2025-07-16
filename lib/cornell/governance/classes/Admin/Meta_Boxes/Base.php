@@ -49,6 +49,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			private static string $namespace;
 
 			/**
+			 * @var \WP_Screen|null the current screen being accessed
+			 * @access protected
+			 */
+			protected ?\WP_Screen $current_screen = null;
+
+			/**
 			 * Construct our Input object
 			 *
 			 * @param array $atts the input attributes
@@ -64,9 +70,10 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 				/*add_action( 'save_post', array( $this, 'save' ), 11, 3 );*/
 
-				$screen = get_current_screen();
-				if ( ! is_null( $screen ) ) {
-					$screen_id = $screen->id;
+				$this->current_screen = get_current_screen();
+
+				if ( ! is_null( $this->current_screen ) ) {
+					$screen_id = $this->current_screen->id;
 
 					add_filter( "postbox_classes_{$screen_id}_{$this->id}", array( $this, 'meta_box_classes' ) );
 				}
@@ -99,28 +106,6 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			}
 
 			/**
-			 * Retrieve and return the current post ID
-			 *
-			 * @access protected
-			 * @return int the post ID
-			 * @since  2023.05
-			 */
-			protected function get_post_ID(): int {
-				$post_id = 0;
-				if ( isset( $_REQUEST['post'] ) ) {
-					$post_id = $_REQUEST['post'];
-				} else if ( isset( $GLOBALS['post'] ) ) {
-					if ( is_numeric( $GLOBALS['post'] ) ) {
-						$post_id = $GLOBALS['post'];
-					} else if ( is_a( $GLOBALS['post'], '\WP_Post' ) ) {
-						$post_id = $GLOBALS['post']->ID;
-					}
-				}
-
-				return intval( $post_id );
-			}
-
-			/**
 			 * Retrieves the meta key
 			 *
 			 * @access public
@@ -140,6 +125,35 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			 */
 			public function get_field_id(): string {
 				return $this->id;
+			}
+
+			/**
+			 * Open a new fieldset
+			 *
+			 * @param string|array $class the CSS class names for the fieldset
+			 * @param string $legend the text for the fieldset legend
+			 *
+			 * @access protected
+			 * @since  0.5.0
+			 * @return string the HTML for the fieldset opening
+			 */
+			protected function fieldset_open( $class, string $legend ): string {
+				if ( is_array( $class ) ) {
+					$class = implode( ' ', $class );
+				}
+
+				return sprintf( '<fieldset class="%1$s"><legend>%2$s</legend>', $class, $legend );
+			}
+
+			/**
+			 * Build and return the closing tags for an open fieldset
+			 *
+			 * @access protected
+			 * @since  0.5.0
+			 * @return string the HTML tags
+			 */
+			protected function fieldset_close(): string {
+				return '</fieldset>';
 			}
 
 			/**
@@ -218,19 +232,25 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			 */
 			public function save( int $post_id, \WP_Post $post, bool $update ) {
 				$nonce = $this->id . '-nonce';
-				if ( ! wp_verify_nonce( $_REQUEST[ $nonce ], $this->id ) ) {
-					Helpers::log( 'We could not verify the nonce for this page' );
-					return new \WP_Error( 'no-nonce', __( 'The nonce could not be verified for some reason', 'cornell/governance' ) );
+				if ( ! array_key_exists( $nonce, $_REQUEST ) || ! wp_verify_nonce( $_REQUEST[ $nonce ], $this->id ) ) {
+					$nonce = $this->id . '-readonly-nonce';
+					if ( ! array_key_exists( $nonce, $_REQUEST ) || ! wp_verify_nonce( $_REQUEST[ $nonce ], $this->id ) ) {
+						Helpers::log( 'We could not verify the nonce for this page' );
+
+						return new \WP_Error( 'no-nonce', __( 'The nonce could not be verified for some reason', 'cornell/governance' ) );
+					}
 				}
 
 				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 					Helpers::log( 'It appears that we are auto-saving' );
+
 					return new \WP_Error( 'autosave', __( 'We are in the autosave portion', 'cornell/governance' ) );
 				}
 
 				// We should check user permissions here
 				if ( ! current_user_can( Plugin::instance()->get_capability() ) ) {
 					Helpers::log( 'It does not appear that the current user has permission to update Governance information' );
+
 					return new \WP_Error( 'no-access', __( 'The current user does not appear to have the appropriate cap', 'cornell/governance' ) );
 				}
 
@@ -240,6 +260,9 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$data = array();
 				$meta = get_post_meta( $post_id, $this->meta_key, true );
+				if ( ! is_array( $meta ) || empty( $meta ) ) {
+					$meta = array();
+				}
 
 				// We should sanitize data here
 				foreach ( $this->fields as $key => $field ) {
@@ -288,14 +311,18 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					}
 				}
 
+				$data = array_merge( $meta, $data );
+
 				// We should save the data here
 				$success = update_post_meta( $post_id, $this->meta_key, $data );
 
 				if ( false === $success ) {
 					Helpers::log( __( 'There was an unknown error saving the post meta', 'cornell/governance' ) );
+
 					return new \WP_Error( 'no-save', __( 'There was an unknown error saving the post meta', 'cornell/governance' ) );
 				} else if ( is_wp_error( $success ) ) {
 					Helpers::log( 'It appears that we successfully saved the following data: ' . print_r( $data, true ) );
+
 					return $success;
 				}
 

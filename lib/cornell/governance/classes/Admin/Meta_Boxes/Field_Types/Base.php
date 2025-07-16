@@ -37,7 +37,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 * @var string $namespace the current namespace name
 			 * @access private
 			 */
-			private static string $namespace;
+			protected static string $namespace;
 
 			/**
 			 * Construct our Input object
@@ -89,13 +89,14 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 */
 			protected function get_input_readonly( $value ): string {
 				return sprintf( '
-				<div class="%1$s">
+				<div class="%1$s" id="%4$s">
 	<strong class="text-label">%2$s</strong>
 	<div class="input-value">%3$s</div>
 </div>',
 					implode( ' ', $this->classes ),
 					$this->label,
-					$value
+					$value,
+					$this->id
 				);
 			}
 
@@ -103,16 +104,25 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 * Retrieve the value of the input
 			 */
 			public function get_input_value() {
+				if ( strstr( $this->id, 'page-notes' ) ) {
+					$this->meta_box = 'Notes';
+				}
+
 				$class = str_replace( array(
 						'\\Field_Types',
-						'\\Fields'
+						'\\Fields',
+						'\\Writable',
+						'\\Readonly'
 					), '', self::$namespace ) . '\\' . $this->meta_box;
+
 				$key   = str_replace( $class::instance()->get_field_id() . '-', '', $this->id );
 				if ( stristr( $key, '-readonly' ) ) {
 					$key = str_replace( '-readonly', '', $key );
 				}
 
-				if ( array_key_exists( $key, $class::instance()->meta ) ) {
+				\Cornell\Governance\Helpers::log('Attempting to retrieve an input value from ' . $key . ' as part of ' . $class );
+
+				if ( array_key_exists( $key, $class::instance()->meta ) && ! is_null( $class::instance()->meta[ $key ] ) ) {
 					return $class::instance()->meta[ $key ];
 				} else if ( isset( $_REQUEST[ $this->id ] ) ) {
 					return $_REQUEST[ $this->id ];

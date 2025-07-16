@@ -39,7 +39,7 @@ namespace Cornell\Governance\Admin {
 			$this->namespace = __NAMESPACE__;
 			$this->classes = array(
 				'Meta_Boxes\Info',
-				'Meta_Boxes\Notes',
+				/*'Meta_Boxes\Notes',*/
 				'Meta_Boxes\Revisions',
 			);
 

@@ -1,0 +1,17 @@
+{{#unless compliant}}
+    <aside class="cornell-governance-compliance-widget cornell-governance-frontend-widget cornell-governance-status-{{compliance-status}}">
+        <div class="cornell-governance-compliance-widget-container">
+            <a href="{{edit-link}}">
+                {{#if overdue}}
+                    This page is currently out of compliance and requires immediate Governance review
+                {{/if}}
+                {{#if due}}
+                    This page is due for Governance review in the next {{review-days}} days
+                {{/if}}
+                {{#if almostdue}}
+                    This page will be due for Governance review in the next {{review-days}} days
+                {{/if}}
+            </a>
+        </div>
+    </aside>
+{{/unless}}

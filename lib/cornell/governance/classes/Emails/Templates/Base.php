@@ -148,7 +148,7 @@ namespace Cornell\Governance\Emails\Templates {
 
 				$data = array();
 				foreach ( $report_data as $ID => $due ) {
-					$meta        = get_post_meta( $ID, 'cornell/governance/information', true );
+					$meta        = get_post_meta( $ID, \Cornell\Governance\Plugin::INFO_META_KEY, true );
 					$last_review = array_key_exists( 'last-review', $meta ) ? Helpers::format_date( $meta['last-review'] ) : 'N/A';
 					$post = get_post( $ID );
 					$edit_link = Helpers::get_edit_post_link( $ID, false );

@@ -22,7 +22,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-request-changes',
-					'label' => sprintf( '<a href="%1$s">%2$s</a>', Plugin::instance()->build_change_form_url(), Plugin::instance()->get_change_form_var( 'link_text' ) ),
+					'label' => sprintf( '<a href="%1$s" target="change-request">%2$s</a>', Plugin::instance()->build_change_form_url(), Plugin::instance()->get_change_form_var( 'link_text' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-message', 'cornell-governance-request-changes' ),
 					'default' => '',
 					'meta_box' => 'Info',

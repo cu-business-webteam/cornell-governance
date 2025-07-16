@@ -40,7 +40,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 */
 			protected function get_audiences(): array {
 				return get_terms( array(
-					'taxonomy' => 'audience',
+					'taxonomy' => \Cornell\Governance\Taxonomies\Audience::HANDLE,
 					'hide_empty' => false,
 					'orderby' => 'name',
 				) );
@@ -52,7 +52,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return array the array of options
 			 */
 			public function get_options(): array {
-				$options = array( '' => __( '-- Please select an audience --', 'cornell-governance' ) );
+				$options = array( '' => __( '-- Please select an audience --', 'cornell/governance' ) );
 				foreach ( $this->get_audiences() as $audience ) {
 					$options[$audience->slug] = $audience->name;
 				}

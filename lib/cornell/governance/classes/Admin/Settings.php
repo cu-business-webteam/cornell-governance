@@ -77,42 +77,79 @@ namespace Cornell\Governance\Admin {
 					'cornell-governance-settings',
 					__( 'Cornell Page Governance Settings', 'cornell/governance' ),
 					array( $this, 'do_settings_section' ),
-					'cornell-governance'
+					'cornell-governance',
+					array(
+						'before_section' => sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d">', 1 ),
+						'after_section'  => '</div>',
+					)
+				);
+
+				add_settings_section(
+					'cornell-governance-settings-archive',
+					__( 'Wayback Integration', 'cornell/governance' ),
+					array( $this, 'do_wayback_settings_section' ),
+					'cornell-governance',
+					array(
+						'before_section' => sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d" hidden>', 2 ),
+						'after_section'  => '</div>',
+					)
 				);
 
 				add_settings_section(
 					'cornell-governance-settings-change-form',
 					__( 'Change Form Settings', 'cornell/governance' ),
 					array( $this, 'do_change_settings_section' ),
-					'cornell-governance'
+					'cornell-governance',
+					array(
+						'before_section' => sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d" hidden>', 3 ),
+						'after_section'  => '</div>',
+					)
 				);
 
 				add_settings_section(
 					'cornell-governance-settings-prompts',
 					__( 'Email Prompt Settings', 'cornell/governance' ),
 					array( $this, 'do_prompt_settings_section' ),
-					'cornell-governance'
+					'cornell-governance',
+					array(
+						'before_section' => sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d" hidden>', 4 ),
+						'after_section'  => '</div>',
+					)
 				);
 
-				foreach (
-					array(
-						'Capability',
-						'Managing_Office',
-						'Post_Types',
-						'Default_Tasks',
-						/*'Message_Content',*/
-					) as $c
-				) {
+				$general = array(
+					'Capability',
+					'Managing_Office',
+					'Post_Types',
+					'Default_Tasks',
+					/*'Message_Content',*/
+					'Mark_For_Deletion',
+					'Frontend_Compliance',
+				);
+
+				$archive = array(
+					'Archive_Active',
+					'Archive_URL_Search',
+					'Archive_URL_Replace',
+					'Archive_Log_Limit',
+				);
+
+				foreach ( $general as $c ) {
 					$class = self::$namespace . '\\Fields\\' . $c;
 					$class::instance();
 				}
 
+				/*foreach ( $archive as $c ) {
+					$class = self::$namespace . '\\Fields\\' . $c;
+					$class::instance();
+				}*/
+
 				foreach (
 					array(
-                        'Change_Form_Active',
-                        'Change_Form_Link_Text',
+						'Change_Form_Active',
+						'Change_Form_Link_Text',
 						'Change_Form_URL',
-                        'Change_Form_Props',
+						'Change_Form_Props',
 					) as $c
 				) {
 					$class = self::$namespace . '\\Fields\\' . $c;
@@ -121,6 +158,7 @@ namespace Cornell\Governance\Admin {
 
 				foreach (
 					array(
+						'Email_Active',
 						'Initial_Prompt',
 						'Secondary_Prompt',
 						'Tertiary_Prompt'
@@ -170,8 +208,11 @@ namespace Cornell\Governance\Admin {
                     <h2><?php _e( 'Page Governance', 'cornell/governance' ) ?></h2>
                     <form action="options.php" method="POST">
 						<?php settings_fields( 'cornell-governance' ) ?>
+						<?php echo '<div class="tabs cornell-governance-tablist">'; ?>
+						<?php $this->do_tab_handles(); ?>
 						<?php do_settings_sections( 'cornell-governance' ) ?>
-						<?php submit_button() ?>
+						<?php echo '</div>'; ?>
+						<?php submit_button( __( 'Save All Settings', 'cornell/governance' ) ); ?>
                     </form>
                 </div>
 				<?php
@@ -204,17 +245,31 @@ namespace Cornell\Governance\Admin {
 			}
 
 			/**
-			 * Output the Settings Section for change form options
-             *
-             * @param array $args Display arguments
-             *
-             * @access public
-             * @return void
-             * @since  0.1
+			 * Output the Settings Section for the Wayback integration
+			 *
+			 * @param array $args Display arguments
+			 *
+			 * @access public
+			 * @return void
+			 * @since  0.6.2
 			 */
-            public function do_change_settings_section( array $args ) {
-                _e( 'Change Form Options', 'cornell/governance' );
-            }
+			public function do_wayback_settings_section( array $args ): void {
+				_e( '<p>Settings for Wayback Machine integration and the Internet Archive</p>', 'cornell/governance' );
+                _e( '<p><em>The Wayback Machine integration is still under development, and is experimental. Please use caution when activating this feature.</em></p>', 'cornell/governance' );
+			}
+
+			/**
+			 * Output the Settings Section for change form options
+			 *
+			 * @param array $args Display arguments
+			 *
+			 * @access public
+			 * @return void
+			 * @since  0.1
+			 */
+			public function do_change_settings_section( array $args ) {
+				_e( 'Change Form Options', 'cornell/governance' );
+			}
 
 			/**
 			 * Output the Settings Section for email prompt timing
@@ -225,8 +280,44 @@ namespace Cornell\Governance\Admin {
 			 * @return void
 			 * @since  0.1
 			 */
-			public function do_prompt_settings_section( array $args ): void {
+			public function do_prompt_settings_section( array $args ) {
 				_e( 'Email message timing', 'cornell/governance' );
+			}
+
+			/**
+			 * Output the tab handles for the admin settings page
+			 *
+			 * @access protected
+			 * @return void
+			 * @since  0.6.3
+			 */
+			protected function do_tab_handles() {
+				$tablist = array(
+					__( 'General Settings', 'cornell/governance' ),
+					__( 'Wayback Integration Settings', 'cornell/governance' ),
+					__( 'Change Form Settings', 'cornell/governance' ),
+					__( 'Email Settings', 'cornell/governance' ),
+				);
+
+				$handles = array();
+
+				for ( $i = 0; $i < count( $tablist ); $i ++ ) {
+					$selected  = $i === 0 ? 'true' : 'false';
+					$handles[] = sprintf( '<button
+      role="tab"
+      aria-selected="%3$s"
+      aria-controls="panel-%1$d"
+      id="tab-%1$d"
+      tabindex="0">
+      %2$s
+    </button>', ( $i + 1 ), $tablist[ $i ], $selected );
+				}
+
+				printf(
+					'<div role="tablist" aria-label="%s">%s</div>',
+					__( 'Settings Areas', 'cornell/governance' ),
+					implode( '', $handles )
+				);
 			}
 		}
 	}

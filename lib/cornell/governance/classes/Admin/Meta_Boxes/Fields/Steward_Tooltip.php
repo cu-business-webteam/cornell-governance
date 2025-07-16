@@ -16,7 +16,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-steward-tooltip',
-					'label'    => __( 'More about page stewards', 'cornell/governance' ),
+					'label'    => __( 'More about primary stewards', 'cornell/governance' ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-tooltip',
@@ -38,7 +38,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return string the HTML content of the tooltip dialog
 			 */
 			protected function get_content(): string {
-				$content = __( 'The page steward is automatically set by the WordPress "Author" field, and is only displayed here for information purposes. To change the page steward, please update the Author for this page.', 'cornell/governance' );
+				$content = __( 'The primary steward is automatically set by the WordPress "Author" field. To change the page steward, please update the Author for this page.', 'cornell/governance' );
 
 				return $content;
 			}

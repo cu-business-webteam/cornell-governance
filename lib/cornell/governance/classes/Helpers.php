@@ -22,8 +22,8 @@ namespace Cornell\Governance {
 			 * @return void
 			 * @since  0.1
 			 */
-			public static function log( string $message, string $level='debug' ): void {
-				if ( ! defined( 'CORNELL_DEBUG' ) || false === CORNELL_DEBUG ) {
+			public static function log( string $message, string $level = 'debug' ): void {
+				if ( empty( Config::instance()->get_var( 'CORNELL_DEBUG' ) ) || false === Config::instance()->get_var( 'CORNELL_DEBUG' ) ) {
 					return;
 				}
 
@@ -166,7 +166,7 @@ namespace Cornell\Governance {
 			 * @since  2023.04
 			 */
 			public static function get_date_time( $timestamp ) {
-				$gmt = new \DateTimeZone('UTC');
+				$gmt      = new \DateTimeZone( 'UTC' );
 				$timezone = wp_timezone();
 
 				$date = \DateTime::createFromFormat( 'U', $timestamp, $gmt );
@@ -232,66 +232,138 @@ namespace Cornell\Governance {
 
 				$timezone = wp_timezone();
 
+				$cycle = intval( $cycle );
+
 				$reviewed        = \DateTime::createFromFormat( 'U', $last_reviewed );
 				$compliance_time = get_option( 'cornell-governance-initial-prompt-time', 60 );
 				$interval        = new \DateInterval( 'P' . $compliance_time . 'D' );
 
 				$next = $reviewed->add( $interval );
 
+				Helpers::log( 'Last reviewed date appears to be: ' . print_r( $reviewed, true ) );
+				Helpers::log( 'Next test date is: ' . print_r( $next, true ) );
+
 				switch ( $cycle ) {
 					case 3 :
 						/* End of January - we test based on Feb. 1 */
-						$test           = \DateTime::createFromFormat( 'U', strtotime( 'February 1', $last_reviewed ), $timezone );
+						$test = \DateTime::createFromFormat( 'U', strtotime( 'February 1', $last_reviewed ), $timezone );
+
+						Helpers::log( 'First test in 3 month cycle is: ' . print_r( $test, true ) );
 
 						$cycle_interval = new \DateInterval( 'P3M' );
 
 						while ( $test < $next ) {
 							$test->add( $cycle_interval );
+							Helpers::log( 'Next test in 3 month cycle is: ' . print_r( $test, true ) );
 						}
 
-						$m1d = new \DateInterval( 'P1D' );
+						$m1d = new \DateInterval( 'PT1S' );
 						$test->sub( $m1d );
 
+						Helpers::log( 'Final result looks like: ' . print_r( $test, true ) );
+
 						$next_review = $test->getTimestamp();
+
+						Helpers::log( 'Returning ' . $next_review . ' as the next review timestamp' );
 
 						break;
 					case 6 :
 						/* End of May - we use June 1 for calculation */
-						$test           = \DateTime::createFromFormat( 'U', strtotime( 'June 1', $last_reviewed ), $timezone );
+						$test = \DateTime::createFromFormat( 'U', strtotime( 'June 1', $last_reviewed ), $timezone );
+
+						Helpers::log( 'First test in 6 month cycle is: ' . print_r( $test, true ) );
 
 						$cycle_interval = new \DateInterval( 'P6M' );
 
-						$m1d = new \DateInterval( 'P1D' );
-						$test->sub( $m1d );
-
-						$next_review = $test->getTimestamp();
-
 						while ( $test < $next ) {
 							$test->add( $cycle_interval );
+							Helpers::log( 'Next test in 6 month cycle is: ' . print_r( $test, true ) );
 						}
 
+						$m1d = new \DateInterval( 'PT1S' );
+						$test->sub( $m1d );
+
+						Helpers::log( 'Final result looks like: ' . print_r( $test, true ) );
+
 						$next_review = $test->getTimestamp();
+
+						Helpers::log( 'Returning ' . $next_review . ' as the next review timestamp' );
 
 						break;
 					default :
 						/* June 30 - we use July 1 for testing purposes */
-						$test           = \DateTime::createFromFormat( 'U', strtotime( 'July 1', $last_reviewed ), $timezone );
+						$test = \DateTime::createFromFormat( 'U', strtotime( 'July 1', $last_reviewed ), $timezone );
+
+						Helpers::log( 'First test in 12 month cycle is: ' . print_r( $test, true ) );
 
 						$cycle_interval = new \DateInterval( 'P1Y' );
 
 						while ( $test < $next ) {
 							$test->add( $cycle_interval );
+							Helpers::log( 'Next test in 12 month cycle is: ' . print_r( $test, true ) );
 						}
 
-						$m1d = new \DateInterval( 'P1D' );
+						$m1d = new \DateInterval( 'PT1S' );
 						$test->sub( $m1d );
 
+						Helpers::log( 'Final result looks like: ' . print_r( $test, true ) );
+
 						$next_review = $test->getTimestamp();
+
+						Helpers::log( 'Returning ' . $next_review . ' as the next review timestamp' );
 
 						break;
 				}
 
 				return $next_review;
+			}
+
+			/**
+			 * Identify and return the compliance status for a specific post
+			 *
+			 * @param array $meta the metadata for the post
+			 *
+			 * @access public static
+			 * @return array{
+			 *      legend: string,
+			 *      overdue: bool,
+			 *      due: bool,
+			 *      next_review: int
+			 * } the compliance status, overdue status, due status
+			 * @since  0.6.2
+			 */
+			public static function get_compliance_status( array $meta ): array {
+				$legend  = '';
+				$overdue = $due = false;
+
+				$last_review = array_key_exists( 'last-review', $meta ) ? $meta['last-review'] : null;
+				if ( array_key_exists( 'review-cycle', $meta ) ) {
+					$next_review     = Helpers::calculate_next_review_date( $last_review, $meta['review-cycle'] );
+					$compliance_time = get_option( sprintf( 'cornell-governance-%s', 'initial-prompt-time' ), 60 );
+
+					$due_date = \DateTime::createFromFormat( 'U', $next_review );
+					$now_date = new \DateTime();
+					$compare  = new \DateInterval( 'P' . $compliance_time . 'D' );
+
+					$overdue = ( $now_date >= $due_date );
+					$due     = ( $now_date->add( $compare ) >= $due_date );
+
+					$legend = $due ? __( 'This page is due for review', 'cornell/governance' ) : __( 'This page is in compliance', 'cornell/governance' );
+					if ( $overdue ) {
+						$legend = __( 'This page is out of compliance', 'cornell/governance' );
+					}
+				} else {
+					Helpers::log( sprintf( __( 'The page does not appear to have been reviewed. %s', 'cornell/governance' ), print_r( $meta, true ) ), 'alert' );
+					$next_review = null;
+					$legend      = __( 'Never Reviewed', 'cornell/governance' );
+				}
+
+				return array(
+					'legend' => $legend,
+					'overdue' => $overdue,
+					'due' => $due,
+					'next_review' => $next_review
+				);
 			}
 
 			/**
@@ -360,30 +432,31 @@ namespace Cornell\Governance {
 			 * @param mixed $input the item being evaluated
 			 *
 			 * @access public
-			 * @since  0.1
 			 * @return mixed the filtered content
+			 * @since  0.1
 			 */
-			public static function ArrayCleaner($input) {
-				foreach ($input as &$value) {
-					if (is_array($value)) {
-						$value = self::ArrayCleaner($value);
+			public static function ArrayCleaner( $input ) {
+				foreach ( $input as &$value ) {
+					if ( is_array( $value ) ) {
+						$value = self::ArrayCleaner( $value );
 					}
 				}
-				return array_filter($input);
+
+				return array_filter( $input );
 			}
 
 			/**
 			 * Determine which environment we are currently in
 			 *
 			 * @access public
-			 * @since  0.4.1
 			 * @return string environment handle
+			 * @since  0.4.1
 			 */
 			public static function get_environment(): string {
-				if ( getenv('WP_ENVIRONMENT_TYPE') !== false ) {
+				if ( getenv( 'WP_ENVIRONMENT_TYPE' ) !== false ) {
 					return getenv( 'WP_ENVIRONMENT_TYPE' );
 				} else {
-					return 'unknown';
+					return wp_get_environment_type();
 				}
 			}
 
@@ -394,14 +467,14 @@ namespace Cornell\Governance {
 			 * @param string $context
 			 *
 			 * @access public
-			 * @since  0.4.7
 			 * @return string the URL to edit a post
+			 * @since  0.4.7
 			 */
 			public static function get_edit_post_link( $post = 0, $context = 'display' ) {
 				$post = get_post( $post );
 
 				if ( ! $post ) {
-					return;
+					return '';
 				}
 
 				if ( 'revision' === $post->post_type ) {
@@ -415,7 +488,7 @@ namespace Cornell\Governance {
 				$post_type_object = get_post_type_object( $post->post_type );
 
 				if ( ! $post_type_object ) {
-					return;
+					return '';
 				}
 
 				/*if ( ! current_user_can( 'edit_post', $post->ID ) ) {
@@ -436,12 +509,13 @@ namespace Cornell\Governance {
 				/**
 				 * Filters the post edit link.
 				 *
-				 * @since 2.3.0
-				 *
-				 * @param string $link    The edit link.
-				 * @param int    $post_id Post ID.
+				 * @param string $link The edit link.
+				 * @param int $post_id Post ID.
 				 * @param string $context The link context. If set to 'display' then ampersands
 				 *                        are encoded.
+				 *
+				 * @since 2.3.0
+				 *
 				 */
 				return apply_filters( 'get_edit_post_link', $link, $post->ID, $context );
 			}
@@ -453,10 +527,10 @@ namespace Cornell\Governance {
 			 * @param string $cap - the capability being tested
 			 *
 			 * @access public
-			 * @since 1.0.26
 			 * @return bool whether or not the user has the specified capability
+			 * @since 1.0.26
 			 */
-			public static function user_can( $user=0, string $cap='' ): bool {
+			public static function user_can( $user = 0, string $cap = '' ): bool {
 				if ( empty( $user ) ) {
 					return current_user_can( $cap );
 				}
@@ -468,23 +542,109 @@ namespace Cornell\Governance {
 			 * Retrieve a sample user that does not have the required capability set by the plugin
 			 *
 			 * @access public
-			 * @since  1.0.26
 			 * @return null|\WP_User the sample user
+			 * @since  1.0.26
 			 */
 			public static function get_sample_author(): ?\WP_User {
 				$users = get_users( array(
-					'capability__in' => array(
+					'capability__in'     => array(
 						'edit_posts',
 					),
 					'capability__not_in' => Plugin::instance()->get_capability(),
-					'number' => 1
+					'number'             => 1
 				) );
 
-				if ( is_array( $users ) ) {
-					return $users[0];
+				if ( is_array( $users ) && count( $users ) >= 1 ) {
+					return array_shift( $users );
 				}
 
 				return null;
+			}
+
+			/**
+			 * Determine whether the current user can edit governance info
+			 *
+			 * @param int|\WP_Post $post the post being checked
+			 *
+			 * @access public
+			 * @return bool
+			 * @since  0.4.9
+			 */
+			public static function can_edit_governance( $post = 0 ): bool {
+				return current_user_can( Plugin::instance()->get_capability() );
+			}
+
+			/**
+			 * Determine whether the current user is allowed to review the current page
+			 *
+			 * @param int|\WP_Post $post the post being checked
+			 *
+			 * @access protected
+			 * @return bool
+			 * @since  0.4.9
+			 */
+			public static function can_review_page( $post = 0 ): bool {
+				if ( empty( $post ) ) {
+					$post = $GLOBALS['post'];
+				}
+
+				if ( empty( $post ) && isset( $_POST['cornell-governance-info-post-id'] ) ) {
+					$post = intval( $_POST['cornell-governance-info-post-id'] );
+				}
+
+				if ( is_numeric( $post ) ) {
+					$post_id = $post;
+					$post    = get_post( $post_id );
+				}
+
+				$author  = $post->post_author;
+				$current = get_current_user_id();
+
+				return ( intval( $author ) === intval( $current ) ) || current_user_can( 'edit_post', $post->ID );
+			}
+
+			/**
+			 * Determine whether the current user is allowed to edit the current page
+			 *
+			 * @param int|\WP_Post $post the page being checked
+			 *
+			 * @access protected
+			 * @return bool
+			 * @since  0.4.9
+			 */
+			public static function can_edit_page( $post = 0 ): bool {
+				if ( empty( $post ) ) {
+					$post = $GLOBALS['post'];
+				}
+
+				return current_user_can( 'edit_page', $post );
+			}
+
+			/**
+			 * Attempt to gracefully retrieve and return the current post ID
+			 *
+			 * @access public
+			 * @since  0.6.2
+			 * @return int the post ID
+			 */
+			public static function get_current_post_id(): int {
+				$post_id = 0;
+
+				if ( isset( $_REQUEST['post'] ) ) {
+					$post_id = $_REQUEST['post'];
+				} else if ( isset( $GLOBALS['post'] ) ) {
+					if ( is_numeric( $GLOBALS['post'] ) ) {
+						$post_id = $GLOBALS['post'];
+					} else if ( is_a( $GLOBALS['post'], '\WP_Post' ) ) {
+						$post_id = $GLOBALS['post']->ID;
+					}
+				}
+
+				return $post_id;
+			}
+
+			public static function get_page_status_list(): array {
+				return array( 'publish', 'pending', 'future', 'private' );
 			}
 		}
 	}

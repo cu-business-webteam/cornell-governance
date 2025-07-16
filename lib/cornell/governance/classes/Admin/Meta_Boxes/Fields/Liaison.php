@@ -51,7 +51,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return array the array of options
 			 */
 			public function get_options(): array {
-				$options = array( '' => __( 'Please select a user', 'cornell-governance' ) );
+				$options = array( '' => __( 'Please select a user', 'cornell/governance' ) );
 				foreach ( $this->get_users() as $user ) {
 					$options[$user->user_email] = $user->display_name;
 				}

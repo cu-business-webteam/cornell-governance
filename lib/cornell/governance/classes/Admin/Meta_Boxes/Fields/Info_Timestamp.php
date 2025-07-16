@@ -29,7 +29,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 					'label'    => __( 'Information last updated', 'cornell/governance' ),
 					'classes'  => array(
 						'cornell-governance-field',
-						'cornell-governance-email',
+						'cornell-governance-input',
 						'cornell-governance-timestamp'
 					),
 					'default'  => '',

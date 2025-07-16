@@ -9,6 +9,7 @@ namespace {
 namespace Cornell\Governance\Admin\Submenus\Reports {
 
 	use Cornell\Governance\Admin\Submenus\Reports;
+	use Cornell\Governance\Taxonomies\Audience;
 
 	if ( ! class_exists( 'Primary_Audience' ) ) {
 		class Primary_Audience extends Base {
@@ -54,7 +55,9 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$pages = array();
 
 				foreach ( Reports::instance()->get_var( 'primary-audience' ) as $post_id => $value ) {
-					$pages[$value][$post_id] = $terms[$value]->name;
+					if ( array_key_exists( $value, $terms ) ) {
+						$pages[$value][$post_id] = $terms[$value]->name;
+					}
 				}
 
 				return $pages;
@@ -69,7 +72,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 */
 			private function get_audiences(): array {
 				$audiences = get_terms( array(
-					'taxonomy' => 'audience',
+					'taxonomy' => Audience::HANDLE,
 					'hide_empty' => false
 				) );
 

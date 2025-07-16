@@ -24,14 +24,14 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			function __construct() {
 				parent::__construct( array(
 					'id'       => 'cornell-governance-page-revisions',
-					'title'    => __( 'Page Revision Information', 'cornell/governance' ),
+					'title'    => __( 'Content Updates', 'cornell/governance' ),
 					'context'  => 'side',
 					'priority' => 'high',
 					'fields'   => array(
 						'commit-message' => 'Commit_Message',
 						'editor'         => 'Editor',
 					),
-					'meta_key' => 'cornell/governance/revisions',
+					'meta_key' => Plugin::REVISIONS_META_KEY,
 				) );
 
 				$this->get_meta_data();
@@ -71,14 +71,10 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					'commit-message' => '',
 				);
 
-				if ( isset( $_GET['post'] ) ) {
-					$info = get_post_meta( $_GET['post'], $this->meta_key, true );
-				} else if ( isset( $GLOBALS['post'] ) ) {
-					if ( is_numeric( $GLOBALS['post'] ) ) {
-						$info = get_post_meta( $GLOBALS['post'], $this->meta_key );
-					} else {
-						$info = get_post_meta( $GLOBALS['post']->ID, $this->meta_key );
-					}
+				$post_id = Helpers::get_current_post_id();
+
+				if ( ! empty( $post_id ) ) {
+					$info = get_post_meta( $post_id, $this->meta_key, true );
 				} else {
 					$info = array();
 				}
@@ -128,7 +124,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$i        = 0;
 
 				while ( empty( $revision['commit-message'] ) && count( $revisions ) > 0 ) {
-					$p = array_shift( $revisions );
+					$p        = array_shift( $revisions );
 					$revision = get_post_meta( $p->ID, $this->meta_key, true );
 					if ( ! is_array( $revision ) || ! array_key_exists( 'commit-message', $revision ) ) {
 						$revision = array( 'commit-message' => '' );
@@ -183,7 +179,9 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					}
 				}
 
-				$output = '';
+				$output = $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-commit-message', __( 'Current Update', 'cornell/governance' ) );
+
+				$output .= \Cornell\Governance\Admin\Meta_Boxes\Fields\Commit_Message_Message::instance()->get_input();
 
 				if ( empty( $post_id ) ) {
 					return __( '<p class="note">You will not be able to set up governance information until you have saved this piece of content for the first time</p>', 'cornell/governance' );
@@ -196,7 +194,16 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$output .= wp_nonce_field( $this->id, $this->id . '-nonce', true, false );
 				$output .= Editor::instance()->get_input();
 				$output .= Commit_Message::instance()->get_input();
+
+				$output .= $this->fieldset_close();
+
 				if ( ! empty( $latest ) ) {
+					$link = '#tab-3';
+
+					if ( Helpers::user_can( 0, Plugin::instance()->get_capability() ) ) {
+						$link = '#tab-4';
+					}
+
 					$output .= sprintf( '
 						<div class="previous-commit">
 							<p>
@@ -206,11 +213,11 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 								%2$s
 							</blockquote>
 						</div>',
-						__( 'Latest commit message: ', 'cornell/governance' ),
+						__( 'Latest content update: ', 'cornell/governance' ),
 						self::format_commit_message( $latest )
 					);
 
-					$output .= sprintf( __( '<p class="field-note"><a href="%s">View more commit messages</a></p>', 'cornell/governance' ), '#cornell-governance-revisions-list-container' );
+					$output .= sprintf( __( '<p class="field-note"><a href="%s">View more content updates</a></p>', 'cornell/governance' ), $link );
 				}
 
 				return sprintf( '<div class="%1$s">%2$s</div>', 'cornell-governance-metabox', $output );
@@ -233,7 +240,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				}
 
 				$nonce = $this->id . '-nonce';
-				if ( ! wp_verify_nonce( $_REQUEST[ $nonce ], $this->id ) ) {
+				if ( ! array_key_exists( $nonce, $_REQUEST ) || ! wp_verify_nonce( $_REQUEST[ $nonce ], $this->id ) ) {
 					return;
 				}
 
@@ -268,16 +275,16 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					$test = get_post_meta( $parent, $this->meta_key, true );
 					if ( is_array( $test ) ) {
 						$copy = array_values( $test );
-						$tmp = array_pop( $copy );
+						$tmp  = array_pop( $copy );
 						if ( is_array( $tmp ) ) {
 							$all_meta = $test;
 						} else {
-							$all_meta = array();
+							$all_meta  = array();
 							$revisions = wp_get_post_revisions( $parent );
 							foreach ( $revisions as $revision ) {
 								$message = get_post_meta( $revision->ID, $this->meta_key, true );
 								if ( is_array( $message ) && array_key_exists( 'commit-message', $message ) ) {
-									$all_meta[$revision->ID] = $message;
+									$all_meta[ $revision->ID ] = $message;
 								}
 							}
 						}

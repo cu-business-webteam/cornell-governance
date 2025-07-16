@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'Once you have thoroughly reviewed this content, please select the checkbox below and then select the "Confirm Page Review" button to notify everyone involved that the review has been completed.', 'cornell/governance' );
+				$this->text = __( 'Once you have completed all of the review tasks, you need to confirm that the page is in compliance for this review cycle.', 'cornell/governance' );
 			}
 		}
 	}

@@ -107,7 +107,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$labels = array();
 				$data = array();
 				foreach ( $terms as $term ) {
-					if ( ! array_key_exists( $term->ID, $list ) ) {
+					if ( ! is_object( $term ) || ! array_key_exists( $term->ID, $list ) ) {
 						continue;
 					}
 

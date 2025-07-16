@@ -3,13 +3,21 @@
 
     <p>{{steward-name}}, you, or someone on your behalf, has indicated that <a href="{{permalink}}">{{post.post_title}}</a> is no longer necessary, and that it should be removed from the website.</p>
 
+    {{#if meta.mark-for-deletion.reason}}
+        <p>The requestor has included the following reason for requesting that this content be deleted:</p>
+
+        <div>
+            {{meta.mark-for-deletion.reason}}
+        </div>
+    {{/if}}
+
     <p><b><i>What happens next?</i></b></p>
 
     <ul>
         <li>The {{managing-office}} staff member(s) assigned to this content has received a copy of this message.</li>
         <li>That {{managing-office}} staff member will review the content and determine whether it really should be removed.</li>
         <li>If it should be removed, they will delete the page permanently from the website.</li>
-        <li>If the content does not appear that it should be removed, they will attempt to identify a new page steward to manage the item.</li>
+        <li>If the content does not appear that it should be removed, they will attempt to identify a new primary steward to manage the item.</li>
     </ul>
 
     <p><b>This is an automatic email. Please do not reply directly to this email.</b></p>

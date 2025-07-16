@@ -58,11 +58,7 @@ namespace Cornell\Governance\Admin\Fields {
 			 * @since  0.1
 			 */
 			protected function get_input(): string {
-				$id = $this->page . '-' . $this->id;
-
-				$current = $this->get_input_value();
-
-				return sprintf( '<input type="%3$s" name="%1$s" id="%1$s" value="true"%2$s/>', $id, ! empty( $current ) ? ' checked="checked"' : '', 'checkbox' );
+				return $this->get_input_boolean();
 			}
 
 			/**

@@ -116,6 +116,9 @@ namespace Cornell\Governance\Admin\Fields {
 				self::$did_sanitize = true;
 
 				$types = array();
+				if ( ! is_array( $value ) ) {
+					$value = array();
+				}
 
 				$all_types = array_keys( $this->get_post_props() );
 				foreach ( array_keys( $value ) as $item ) {

@@ -76,7 +76,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 
 				$data = Reports::instance()->get_var( 'all' );
 
-				if ( empty( $data ) ) {
+				if ( empty( $data ) || ! array_key_exists( 'last-review', $data ) ) {
 					return array();
 				}
 
@@ -128,7 +128,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				} else if ( count( $data['7-days'] ) + count( $data['30-days'] ) + count( $data['60-days'] ) <= 0 ) {
 					$output = sprintf(
 						'<div class="due-for-review-page-list"><p>%s</p></div>',
-						__( '<strong>Congratulations!</strong> There are currently no items that are due for review.', 'cornell/governance' )
+						__( '<strong>Congratulations!</strong> There are currently no pages that are due for review.', 'cornell/governance' )
 					);
 
 					printf(

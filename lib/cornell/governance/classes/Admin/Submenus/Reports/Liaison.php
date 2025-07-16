@@ -56,7 +56,9 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$pages = array();
 
 				foreach ( Reports::instance()->get_var( 'liaison' ) as $post_id => $value ) {
-					$pages[$value][$post_id] = $terms[$value]->display_name;
+					if ( array_key_exists( $value, $terms ) ) {
+						$pages[$value][$post_id] = $terms[$value]->display_name;
+					}
 				}
 
 				return $pages;

@@ -34,7 +34,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 					),
 					'default'  => '',
 					'type'     => 'hidden',
-					'meta_box' => 'Notes',
+					'meta_box' => 'Info',
 				);
 
 				parent::__construct( $atts );

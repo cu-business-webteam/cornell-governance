@@ -8,9 +8,11 @@ namespace {
 
 namespace Cornell\Governance\Admin\Meta_Boxes {
 
+	use Cornell\Governance\Admin\Meta_Boxes\Fields\Edit_Notes_Button;
 	use Cornell\Governance\Admin\Meta_Boxes\Fields\Notes_Notes;
 	use Cornell\Governance\Admin\Meta_Boxes\Fields\Notes_Timestamp;
 	use Cornell\Governance\Admin\Meta_Boxes\Fields\Save_Notes;
+	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Notes' ) ) {
@@ -24,17 +26,19 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			function __construct() {
 				parent::__construct( array(
 					'id'       => 'cornell-governance-page-notes',
-					'title'    => __( 'Page Notes', 'cornell/governance' ),
+					'title'    => __( 'Documentation', 'cornell/governance' ),
 					'context'  => 'advanced',
 					'priority' => 'high',
 					'fields'   => array(
 						'notes'     => 'Notes_Notes',
 						'timestamp' => 'Notes_Timestamp',
 					),
-					'meta_key' => 'cornell/governance/notes',
+					'meta_key' => Plugin::NOTES_META_KEY,
 				) );
 
 				$this->get_meta_data();
+
+				$this->unhook_metabox();
 
 				/*$this->maybe_unregister_metabox();*/
 			}
@@ -68,7 +72,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					return;
 				}
 
-				$post_id = $this->get_post_ID();
+				$post_id = Helpers::get_current_post_id();
 
 				if ( empty( $post_id ) ) {
 					$this->unhook_metabox();
@@ -92,14 +96,10 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			 */
 			protected function get_meta_data(): void {
 				$info = false;
-				if ( isset( $_GET['post'] ) ) {
-					$info = get_post_meta( $_GET['post'], $this->meta_key, true );
-				} else if ( isset( $GLOBALS['post'] ) ) {
-					if ( is_numeric( $GLOBALS['post'] ) ) {
-						$info = get_post_meta( $GLOBALS['post'], $this->meta_key );
-					} else {
-						$info = get_post_meta( $GLOBALS['post']->ID, $this->meta_key );
-					}
+				$post_id = Helpers::get_current_post_id();
+
+				if ( ! empty( $post_id ) ) {
+					$info = get_post_meta( $post_id, $this->meta_key, true );
 				}
 
 				if ( false === $info ) {
@@ -123,13 +123,13 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			protected function get_meta_box(): string {
 				$cap = Plugin::instance()->get_capability();
 
-				$post_id = $this->get_post_ID();
+				$post_id = Helpers::get_current_post_id();
 
 				$output = '';
 
 				$messages = $this->get_commit_messages( $post_id );
 				$output   .= '<blockquote id="cornell-governance-revisions-list-container">';
-				$output   .= sprintf( '<h3>%s</h3>', __( 'Recent Commit Messages', 'cornell/governance' ) );
+				$output   .= sprintf( '<h3>%s</h3>', __( 'Previous Content Changes', 'cornell/governance' ) );
 				if ( count( $messages ) > 0 ) {
 					$output .= '<ol class="commit-messages">';
 					$output .= sprintf( '<li>%s</li>', implode( '</li><li>', $messages ) );
@@ -143,13 +143,29 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					return __( '<p class="note">You will not be able to set up governance information until you have saved this piece of content for the first time</p>', 'cornell/governance' );
 				}
 
-				$output .= Notes_Notes::instance()->get_input();
+				$ro_notes = \Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Notes_Notes::instance();
+				$w_notes = \Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Notes_Notes::instance();
 
 				if ( current_user_can( $cap ) ) {
+					$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-notes-container', __( 'Documentation', 'cornell/governance' ) );
+					$output .= '<div class="cornell-governance-viewable-field">';
+					$output .= $ro_notes->get_input();
+					$output .= Edit_Notes_Button::instance()->get_input();
+					$output .= '</div>';
+
+					$output .= '<div class="cornell-governance-writable-field">';
+					$output .= $w_notes->get_input();
+
 					$output .= wp_nonce_field( $this->id, $this->id . '-nonce', true, false );
 					$output .= sprintf( '<input type="hidden" name="cornell-governance-notes-post-id" value="%d"/>', $post_id );
 					$output .= sprintf( '<input type="hidden" name="cornell-governance-action" value="%s"/>', 'notes' );
 					$output .= Save_Notes::instance()->get_input();
+
+					$output .= '</div>';
+
+					$output .= $this->fieldset_close();
+				} else {
+					$output .= $ro_notes->get_input();
 				}
 
 				$output .= sprintf( '<div class="field-note timestamp-container">%s</div>', Notes_Timestamp::instance()->get_input() );
@@ -170,7 +186,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			public function get_commit_messages( int $post, int $limit = 5 ): array {
 				$messages = array();
 
-				$all_commits = get_post_meta( $post, 'cornell/governance/revisions/all', true );
+				$all_commits = get_post_meta( $post, Plugin::REVISIONS_META_KEY . '/all', true );
 				if ( ! is_array( $all_commits ) ) {
 					$all_commits = array();
 				}
@@ -217,6 +233,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				if ( is_wp_error( $success ) ) {
 					wp_send_json_error( $success, 500 );
 				} else {
+					$Parsedown = new \ParsedownExtra();
+					$success['notes-rendered'] = $Parsedown->text($success['notes']);
 					wp_send_json_success( $success, 200 );
 				}
 			}

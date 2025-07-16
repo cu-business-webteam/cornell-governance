@@ -7,25 +7,20 @@ namespace {
 
 namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
+	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Textarea;
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\WYSIWYG;
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Notes_Notes' ) ) {
-		class Notes_Notes extends WYSIWYG {
-			/**
-			 * @var Notes_Notes $instance holds the single instance of this class
-			 * @access private
-			 */
-			protected static Notes_Notes $instance;
-
+		abstract class Notes_Notes extends Textarea {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-notes-notes',
 					'label' => __( 'Relevant documentation', 'cornell/governance' ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-textarea', 'cornell-governance-notes-notes' ),
 					'default' => '',
-					'meta_box' => 'Notes',
+					'meta_box' => 'Info',
 					'wysiwyg_settings' => array(
 						'teeny' => true,
 					),
@@ -40,19 +35,28 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			}
 
 			/**
-			 * Returns the instance of this class.
+			 * Outputs text instead of an input if the readonly property is true
 			 *
-			 * @access  public
-			 * @return  Notes_Notes
-			 * @since   0.1
+			 * @param mixed $value the value to output
+			 *
+			 * @access protected
+			 * @return string the HTML output
+			 * @since  0.1
 			 */
-			public static function instance(): Notes_Notes {
-				if ( ! isset( self::$instance ) ) {
-					$className      = __CLASS__;
-					self::$instance = new $className;
-				}
+			protected function get_input_readonly( $value ): string {
+				$Parsedown = new \ParsedownExtra();
+				$value = $Parsedown->text($value);
 
-				return self::$instance;
+				return sprintf( '
+				<div class="%1$s" id="%4$s">
+	<strong class="text-label">%2$s</strong>
+	<div class="input-value">%3$s</div>
+</div>',
+					implode( ' ', $this->classes ),
+					$this->label,
+					stripslashes( $value ),
+					$this->id
+				);
 			}
 		}
 	}

@@ -7,8 +7,16 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
+
+	use Cornell\Governance\Helpers;
+
 	if ( ! class_exists( 'Radio_Group' ) ) {
 		abstract class Radio_Group extends Base {
+			/**
+			 * @var string $instructions the fully-qualified class name for the message to be output
+			 */
+			protected string $instructions = '';
+
 			/**
 			 * Gathers the options for this radio button group
 			 *
@@ -17,12 +25,25 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			abstract public function get_options(): array;
 
 			/**
+			 * Set the instructions property so that it can be output at the top of the fieldset
+			 *
+			 * @param string $instructions the fully-qualified class name to be called to generate the message
+			 *
+			 * @access public
+			 * @since  0.5.0
+			 * @return void
+			 */
+			public function set_instructions( string $instructions ): void {
+				$this->instructions = $instructions;
+			}
+
+			/**
 			 * Builds the HTML for the radio button group
 			 *
 			 * @return string
 			 */
 			public function get_input(): string {
-				$options = array();
+				$options    = array();
 				$value_text = array();
 
 				foreach ( $this->get_options() as $val => $label ) {
@@ -47,8 +68,23 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 					return $this->get_input_readonly( implode( ',', $value_text ) );
 				}
 
+				if ( class_exists( $this->instructions ) ) {
+					$ob = $this->instructions::instance();
+					if ( is_a( $ob, '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Base' ) ) {
+						Helpers::log( 'Calling the ' . $this->instructions . ' class to generate micro-copy' );
+						$instructions = $this->instructions::instance()->get_input();
+					} else {
+						Helpers::log( 'The class called ' . print_r( $this->instructions, true ) . ' does not appear to be the right type of field' );
+						$instructions = '';
+					}
+				} else {
+					Helpers::log( 'Could not locate a class called ' . print_r( $this->instructions, true ) );
+					$instructions = '';
+				}
+
 				return sprintf( '<fieldset class="%1$s">
 	<legend>%3$s</legend>
+	%5$s
 	<div class="%2$s">
 		%4$s
 	</div>
@@ -56,7 +92,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 					implode( ' ', $this->classes ),
 					$this->id,
 					$this->label,
-					implode( "\n\r", $options )
+					implode( "\n\r", $options ),
+					$instructions,
 				);
 			}
 
@@ -66,8 +103,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 * @param mixed $value the current value of the field
 			 *
 			 * @access public
-			 * @since  0.1
 			 * @return mixed the sanitized value
+			 * @since  0.1
 			 */
 			public function validate( $value ) {
 				$opts = $this->get_options();

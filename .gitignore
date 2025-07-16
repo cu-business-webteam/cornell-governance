@@ -1,5 +1,6 @@
 .sass-cache
 .idea
+.vs
 node_modules
 .env
-vendor
+cornell-governance-config.php

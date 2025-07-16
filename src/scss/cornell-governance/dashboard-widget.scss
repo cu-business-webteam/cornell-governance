@@ -14,6 +14,7 @@
     display: table;
     text-align: left;
     width: 100%;
+    color: #000;
 
     &.non-compliant-page-list {
       background: #ff8080;
@@ -49,4 +50,12 @@
       }
     }
   }
+}
+
+a.large {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  margin: 1rem auto;
 }
