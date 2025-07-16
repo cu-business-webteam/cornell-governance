@@ -93,7 +93,13 @@ namespace Cornell\Governance\Admin\Submenus {
 					return "'" . esc_sql( $v ) . "'";
 				}, $types );
 				$types = implode( ',', $types );
-				$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$types}) AND post_author=%d", $this->user );
+
+				$statuses = array_map( function ( $v ) {
+					return "'" . esc_sql( $v ) . "'";
+				}, Helpers::get_page_status_list() );
+				$statuses = implode( ',', $statuses );
+
+				$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$types}) AND post_author=%d AND post_status IN ({$statuses})", $this->user );
 
 				$ids = $wpdb->get_col( $query );
 
@@ -102,7 +108,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				}
 			}
 
-			$q = $wpdb->prepare( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key=%s", 'cornell/governance/information' );
+			$q = $wpdb->prepare( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key=%s", Plugin::INFO_META_KEY );
 			if ( false !== $ids && ! is_wp_error( $ids ) ) {
 				if ( empty( $ids ) ) {
 					/* The current user has no content */
@@ -123,6 +129,10 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			foreach ( $results as $result ) {
 				$result->meta_value = maybe_unserialize( $result->meta_value );
+
+				if ( ! is_array( $result->meta_value ) ) {
+					$result->meta_value = array();
+				}
 
 				foreach ( $result->meta_value as $key => $value ) {
 					if ( ! array_key_exists( $key, $this->allData ) ) {

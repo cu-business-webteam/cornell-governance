@@ -47,6 +47,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'title'       => __( 'Page Title', 'cornell/governance' ),
 				'last-review' => __( 'Last Reviewed', 'cornell/governance' ),
 				'next-review' => __( 'Next Review Due', 'cornell/governance' ),
+				'status'      => __( 'Status', 'cornell/governance' ),
 				'modified'    => __( 'Modified', 'cornell/governance' ),
 				'type'        => __( 'Post Type', 'cornell/governance' ),
 			) );
@@ -85,6 +86,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'modified'           => array( 'modified', true ),
 				'last-review'        => array( 'last-review', 'asc' ),
 				'next-review'        => array( 'next-review', true ),
+				'status'             => array( 'status', 'asc' ),
 				'supervisor'         => array( 'supervisor', 'asc' ),
 				'liaison'            => array( 'liaison', 'asc' ),
 				'primary-audience'   => array( 'primary-audience', 'asc' ),
@@ -167,7 +169,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'posts_per_page' => $per_page,
 				'paged'          => $current_page,
 				'order'          => strtoupper( $order ),
-				'post_status'    => array( 'publish', 'pending', 'future', 'private' ),
+				'post_status'    => Helpers::get_page_status_list(),
 			);
 
 			if ( isset( $_POST['s'] ) && ! empty( $_POST['s'] ) ) {
@@ -192,7 +194,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 
 			$args['meta_query'] = array(
 				array(
-					'key' => 'cornell/governance/information',
+					'key' => \Cornell\Governance\Plugin::INFO_META_KEY,
 					'compare' => 'EXISTS',
 				),
 			);
@@ -357,10 +359,31 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				}
 			}
 
-			$item['next-review'] = Helpers::calculate_next_review_date( $meta['last-review'], $meta['review-cycle'] );
+			if ( ! array_key_exists( 'last-review', $meta ) ) {
+				$meta['last-review'] = 0;
+			}
+
+			if ( ! array_key_exists( 'review-cycle', $meta ) ) {
+				$status = array( 'next_review' => null );
+			} else {
+				$item['next-review'] = Helpers::calculate_next_review_date( $meta['last-review'], $meta['review-cycle'] );
+
+				$status = Helpers::get_compliance_status( $meta );
+			}
+
+			$item['status'] = __( 'Compliant', 'cornell/governance' );
+			if ( $status['overdue'] ) {
+				$item['status'] = __( 'Overdue', 'cornell/governance' );
+			} else if ( $status['due'] ) {
+				$item['status'] = __( 'Due', 'cornell/governance' );
+			} else if ( null === $status['next_review'] ) {
+				Helpers::log( __( 'It does not appear that this page has been reviewed.', 'cornell/governance' ), 'alert' );
+				Helpers::log( sprintf( __( 'The next review looks like: %s, the last review looks like: %s and the review cycle looks like: %s', 'cornell/governance' ), $status['next_review'], $meta['last-review'], $meta['review-cycle'] ), 'alert' );
+				$item['status'] = __( 'Never Reviewed', 'cornell/governance' );
+			}
 
 			$commit = Revisions::instance()->get_latest_commit( $post->ID );
-			if ( is_array( $commit ) && array_key_exists( 'commit-message', $commit ) ) {
+			if ( array_key_exists( 'commit-message', $commit ) ) {
 				$item['latest-commit'] = $commit['commit-message'];
 			}
 

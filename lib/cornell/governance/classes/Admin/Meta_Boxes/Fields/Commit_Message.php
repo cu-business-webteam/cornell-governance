@@ -81,14 +81,14 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			/**
 			 * Blank out the textarea value for this field
 			 *
-			 * @param string $value the existing value for the field
+			 * @param string|null $value the existing value for the field
 			 * @param string $field_id the field HTML ID
 			 *
 			 * @access public
+			 * @return string|null the blank value
 			 * @since  0.1
-			 * @return string the blank value
 			 */
-			public function blank_textarea( string $value, string $field_id='' ): string {
+			public function blank_textarea( ?string $value, string $field_id='' ): ?string {
 				if ( 'cornell-governance-page-revisions-commit-message' !== $field_id ) {
 					return $value;
 				}

@@ -9,9 +9,15 @@ namespace {
 namespace Cornell\Governance {
 
 	use Cornell\Governance\Admin\Admin;
+	use Cornell\Governance\Wayback\Trigger;
+	use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 	if ( ! class_exists( 'Plugin' ) ) {
 		class Plugin {
+			const INFO_META_KEY = 'cornell/governance/information';
+			const NOTES_META_KEY = 'cornell/governance/notes';
+			const REVISIONS_META_KEY = 'cornell/governance/revisions';
+
 			/**
 			 * @var Plugin $instance holds the single instance of this class
 			 * @access private
@@ -21,7 +27,7 @@ namespace Cornell\Governance {
 			 * @var string $version holds the version number for the plugin
 			 * @access public
 			 */
-			public static string $version = '0.4.8';
+			public static string $version = '0.6.3';
 			/**
 			 * @var string $capability the WP capability required to access settings
 			 * @access private
@@ -58,10 +64,45 @@ namespace Cornell\Governance {
 			 */
 			private array $post_types = array();
 			/**
+			 * @var bool $mark_for_deletion_active whether the Mark for Deletion option is enabled
+			 * @access private
+			 */
+			private bool $mark_for_deletion_active = false;
+			/**
 			 * @var Emails $email_obj a property to hold the Emails object used by this plugin
 			 * @access protected
 			 */
 			protected Emails $email_obj;
+			/**
+			 * @var Trigger $archive_obj a property to hold the Trigger object used by this plugin
+			 * @access protected
+			 */
+			protected Trigger $archive_obj;
+			/**
+			 * @var bool $frontend_compliance_active whether the plugin should display a compliance status on the frontend for logged-in privileged users
+			 * @access private
+			 */
+			private bool $frontend_compliance_active = false;
+			/**
+			 * @var bool $archive_active whether the plugin should integrate the Wayback Machine
+			 * @access private
+			 */
+			private bool $archive_active = false;
+			/**
+			 * @var bool $email_active whether the plugin should send out email prompts
+			 * @access private
+			 */
+			private bool $email_active = true;
+			/**
+			 * @var string $archive_search the URL to be replaced in snapshot URL queries
+			 * @access private
+			 */
+			private string $archive_search = '';
+			/**
+			 * @var string $archive_replace the URL with which this site's URL should be replaced in snapshot queries
+			 * @access private
+			 */
+			private string $archive_replace = '';
 
 			/**
 			 * Creates the Plugin object
@@ -70,14 +111,21 @@ namespace Cornell\Governance {
 			 * @since  0.1
 			 */
 			private function __construct() {
+				Config::instance();
+
 				$this->set_initial_variables();
 
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 				add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 				add_action( 'init', array( $this, 'load_types' ) );
 
+				Updates::instance();
+				REST::instance();
+
 				if ( is_admin() ) {
 					Admin::instance();
+				} else {
+					Frontend::instance();
 				}
 
 				/*if ( in_array( Helpers::get_environment(), array( 'production', 'staging', 'development' ) ) ) {
@@ -85,9 +133,17 @@ namespace Cornell\Governance {
 					return;
 				}*/
 
-				if ( isset( $_GET['cornell/governance/run-email-cron'] ) ) {
-					add_action( 'init', array( $this, 'send_emails' ) );
+				if ( $this->get_email_active() ) {
+					if ( isset( $_GET['cornell/governance/run-email-cron'] ) || isset( $_GET['cornell/governance/daily-cron'] ) ) {
+						add_action( 'init', array( $this, 'send_emails' ) );
+					}
 				}
+
+				/*if ( $this->get_archive_settings( 'active' ) ) {
+					if ( isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) || isset( $_GET['cornell/governance/daily-cron'] ) ) {
+						add_action( 'init', array( $this, 'do_snapshots' ) );
+					}
+				}*/
 			}
 
 			/**
@@ -118,6 +174,10 @@ namespace Cornell\Governance {
 				$this->set_managing_office();
 				$this->set_change_form_vars();
 				$this->set_post_types();
+				$this->set_mark_for_deletion_active();
+				$this->set_frontend_compliance_active();
+				$this->set_archive_settings();
+				$this->set_email_active();
 			}
 
 			/**
@@ -305,6 +365,116 @@ namespace Cornell\Governance {
 			}
 
 			/**
+			 * Set the value of the setting that determines whether the "Mark for Deletion" option is enabled
+			 *
+			 * @access private
+			 * @return void
+			 * @since  0.4.9
+			 */
+			private function set_mark_for_deletion_active() {
+				$this->mark_for_deletion_active = ! empty( apply_filters( 'cornell/governance/mark-for-deletion/active', get_option( 'cornell-governance-mark-for-deletion-active', false ) ) );
+			}
+
+			/**
+			 * Get the value of the mark_for_deletion_active option
+			 *
+			 * @access public
+			 * @return bool whether the option is enabled or not
+			 * @since  0.4.9
+			 */
+			public function get_mark_for_deletion_active(): bool {
+				return $this->mark_for_deletion_active;
+			}
+
+			/**
+			 * Set the value of the setting that determines whether the "Front-End Compliance" option is enabled
+			 *
+			 * @access private
+			 * @return void
+			 * @since  0.5.8
+			 */
+			private function set_frontend_compliance_active() {
+				$this->frontend_compliance_active = ! empty( apply_filters( 'cornell/governance/frontend-compliance/active', get_option( 'cornell-governance-frontend-compliance-active', false ) ) );
+			}
+
+			/**
+			 * Get the value of the frontend_compliance_active option
+			 *
+			 * @access public
+			 * @return bool whether the option is enabled or not
+			 * @since  0.5.8
+			 */
+			public function get_frontend_compliance_active(): bool {
+				return $this->frontend_compliance_active;
+			}
+
+			/**
+			 * Set the values of the Archive settings
+			 *
+			 * @access private
+			 * @return void
+			 * @since  0.6.2
+			 */
+			private function set_archive_settings() {
+				$this->archive_active = ! empty( apply_filters( 'cornell/governance/archive/active', get_option( 'cornell-governance-archive-active', false ) ) );
+				$this->archive_search  = apply_filters( 'cornell/governance/archive/search', get_option( 'cornell-governance-archive-url-search', get_bloginfo( 'url' ) ) );
+				$this->archive_replace = apply_filters( 'cornell/governance/archive/replace', get_option( 'cornell-governance-archive-url-replace', '' ) );
+			}
+
+			/**
+			 * Retrieve and return the value of one of the Archive settings
+			 *
+			 * @param string $key the variable to be retrieved
+			 *       If left empty, the full array of Archive vars will be retrieved and returned
+			 *
+			 * @access public
+			 * @return string|array|bool the value of the setting
+			 * @since  0.6.2
+			 */
+			public function get_archive_settings( string $key = '' ) {
+				switch ( $key ) {
+					case 'active' :
+						return $this->archive_active;
+						break;
+					case 'search' :
+						return $this->archive_search;
+						break;
+					case 'replace' :
+						return $this->archive_replace;
+						break;
+					default :
+						return array(
+							'active'  => $this->archive_active,
+							'search'  => $this->archive_search,
+							'replace' => $this->archive_replace,
+						);
+						break;
+				}
+			}
+
+			/**
+			 * Set the value of the setting that determines whether the "Archive" option is enabled
+			 *
+			 * @access private
+			 * @return void
+			 * @since  0.5.8
+			 */
+			private function set_email_active() {
+				$this->email_active = ! empty( apply_filters( 'cornell/governance/email/active', get_option( 'cornell-governance-email-prompts-active', true ) ) );
+			}
+
+			/**
+			 * Get the value of the archive_active option
+			 *
+			 * @access public
+			 * @return bool whether the option is enabled or not
+			 * @since  0.5.8
+			 */
+			public function get_email_active(): bool {
+				return $this->email_active;
+			}
+
+			/**
 			 * Enqueue the necessary styles and scripts for this plugin
 			 *
 			 * @access public
@@ -312,12 +482,9 @@ namespace Cornell\Governance {
 			 * @since  0.1
 			 */
 			public function enqueue_scripts(): void {
-				//There is no "frontend" to this plugin, so we do not need any frontend scripts or styles at this time
-				return;
-
 				$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 				wp_enqueue_style( 'cornell-governance', Helpers::plugins_url( '/dist/css/cornell-governance' . $min . '.css' ), array(), self::$version, 'all' );
-				wp_enqueue_script( 'cornell-governance', Helpers::plugins_url( '/dist/js/cornell-governance' . $min . '.js' ), array(), self::$version, true );
+				/*wp_enqueue_script( 'cornell-governance', Helpers::plugins_url( '/dist/js/cornell-governance' . $min . '.js' ), array(), self::$version, true );*/
 			}
 
 			/**
@@ -358,11 +525,10 @@ namespace Cornell\Governance {
 				}
 
 				foreach ( $types as $type ) {
-					register_post_meta( $type, 'cornell/governance/information', array(
+					register_post_meta( $type, self::INFO_META_KEY, array(
 						'type'              => 'array',
 						'description'       => __( 'The Page Governance Information associated with this piece of content', 'cornell/governance' ),
 						'sanitize_callback' => array( $this, 'validate_meta_fields' ),
-						'show_in_rest'      => true,
 						'revisions_enabled' => true,
 					) );
 
@@ -398,105 +564,6 @@ namespace Cornell\Governance {
 			}
 
 			/**
-			 * Replaces "MarCom" with the filtered name of the managing office in field labels/descriptions
-			 *
-			 * @param array $field the ACF field array
-			 *
-			 * @access public
-			 * @return array the updated field array
-			 * @since  0.1
-			 */
-			public function managing_office_labels( array $field ): array {
-				if ( __( 'MarCom', 'cornell/governance' ) === $this->get_managing_office() ) {
-					return $field;
-				}
-
-				$keys = array(
-					'label',
-					'aria-label',
-					'instructions',
-					'placeholder',
-				);
-
-				foreach ( $keys as $key ) {
-					if ( empty( $field[ $key ] ) ) {
-						continue;
-					}
-
-					$field[ $key ] = str_replace( __( 'MarCom', 'cornell/governance' ), $this->get_managing_office(), $field[ $key ] );
-				}
-
-				return $field;
-			}
-
-			/**
-			 * Fills in the dynamic values of the "Last Reviewed" message field
-			 *
-			 * @param array $field the ACF field array
-			 *
-			 * @access public
-			 * @return array the updated field array
-			 * @since  0.1
-			 */
-			public function dynamic_review_message( array $field ): array {
-				if ( $field['type'] !== 'message' ) {
-					return $field;
-				}
-
-				preg_match_all( '/\{\{([^\}]*?)\}\}/', $field['message'], $matches );
-				if ( $matches ) {
-					foreach ( $matches[1] as $keyword ) {
-						switch ( $keyword ) {
-							case 'change_form_url' :
-								$value = $this->get_change_form_url();
-								break;
-							default :
-								$value = get_post_meta( $GLOBALS['post']->ID, $keyword, true );
-								break;
-						}
-						$field['message'] = str_replace( '{{' . $keyword . '}}', $value, $field['message'] );
-					}
-				}
-
-				return $field;
-			}
-
-			/**
-			 * Set all fields to read-only for non-admins
-			 *
-			 * @param array $field the ACF field array
-			 *
-			 * @access public
-			 * @return array the updated field array
-			 * @since  0.1
-			 */
-			public function disable_fields( array $field ): array {
-				if ( current_user_can( $this->capability ) ) {
-					return $field;
-				}
-
-				$disabled_fields = array(
-					'group_63b2e80616138',
-					'field_63b2e8a42cef9',
-					'field_63b2e9422cefe',
-					'field_63b2e9a12ceff'
-				);
-
-				$excluded_fields = array(
-					'field_63b2f888a5114',
-					'field_63b2f8bba5115',
-				);
-
-				if ( in_array( $field['parent'], $disabled_fields ) && ! in_array( $field['key'], $excluded_fields ) ) {
-					$field['readonly']         = true;
-					$field['disabled']         = true;
-					$field['wrapper']['class'] .= ' disabled';
-				}
-
-				return $field;
-			}
-
-			/**
 			 * Attempt to send scheduled email messages
 			 *
 			 * @access public
@@ -515,6 +582,22 @@ namespace Cornell\Governance {
 				$debug_text = isset( $_GET['cornell/governance/debug'] ) ? ' The debug switch is set to ' . $_GET['cornell/governance/debug'] : '';
 
 				wp_die( __( 'The cron task to send Governance notifications has completed.' . $email_text . $debug_text, 'cornell/governance' ), __( 'Governance Emails Sent', 'cornell/governance' ), array( 'response' => 200 ) );
+			}
+
+			/**
+			 * Attempt to perform the scheduled Wayback Machine snapshots
+			 *
+			 * @access public
+			 * @return void
+			 * @since  0.6.2
+			 */
+			public function do_snapshots() {
+				if ( isset( $this->archive_obj ) && is_a( $this->archive_obj, 'Cornell\Governance\Wayback\Trigger' ) ) {
+					return;
+				}
+
+				$this->archive_obj = Trigger::instance();
+				$this->archive_obj->do_cron();
 			}
 		}
 	}

@@ -21,10 +21,10 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-notes-save',
-					'label' => __( 'Update Page Notes', 'cornell/governance' ),
+					'label' => __( 'Save Documentation', 'cornell/governance' ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-button', 'cornell-governance-save-notes' ),
 					'default' => '',
-					'meta_box' => 'Notes',
+					'meta_box' => 'Info',
 					'primary' => true,
 				);
 

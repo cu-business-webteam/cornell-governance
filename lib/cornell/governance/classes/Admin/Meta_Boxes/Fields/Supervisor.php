@@ -16,7 +16,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-supervisor',
-					'label' => __( 'Office, supervisor or secondary contact email address', 'cornell/governance' ),
+					'label' => __( 'Secondary Contact Email', 'cornell/governance' ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-email', 'cornell-governance-supervisor' ),
 					'default' => '',
 					'type' => 'email',

@@ -47,9 +47,11 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 				} else {
 					/* translators: The #1 placeholder is a formatted date indicating when the next governance review is due on this piece of content; the #2 placeholder is the word "is" or the word "was" depending on when the review was due */
 					$this->text = sprintf(
-						__( 'Your next review %2$s due by %1$s', 'cornell/governance' ),
+						__( 'Your next review %2$s due by %1$s <!-- ' . PHP_EOL . ' %3$s ' . PHP_EOL . ' %4$s ' . PHP_EOL . ' -->', 'cornell/governance' ),
 						date( get_option( 'date_format' ), $next_review ),
-						$next_review < time() ? 'was' : 'is'
+						$next_review < time() ? 'was' : 'is',
+						$next_review,
+						date( 'c', $next_review )
 					);
 				}
 			}

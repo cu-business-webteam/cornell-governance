@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'If you indicate below that this content should be deleted, an email will be automatically dispatched to the Liaison once you select the "Confirm Page Review" button below.', 'cornell/governance' );
+				$this->text = __( 'If you indicate below that this content should be deleted, an email will be automatically dispatched to both the steward and the Liaison once you select the "Submit Deletion Request" button below.', 'cornell/governance' );
 			}
 		}
 	}

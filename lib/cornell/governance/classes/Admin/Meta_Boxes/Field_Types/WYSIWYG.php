@@ -90,13 +90,14 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 */
 			protected function get_input_readonly( $value ): string {
 				return sprintf( '
-				<div class="%1$s">
+				<div class="%1$s" id="%4$s">
 	<h3 class="text-label">%2$s</h3>
 	<div class="input-value wysiwyg-value">%3$s</div>
 </div>',
 					implode( ' ', $this->classes ),
 					$this->label,
-					$value
+					$value,
+					$this->id
 				);
 			}
 

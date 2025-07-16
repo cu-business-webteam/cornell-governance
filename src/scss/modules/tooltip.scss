@@ -59,29 +59,30 @@
 
   &.cornell-governance-inline-tooltip {
     .governance-tooltip-opener, .governance-tooltip-opener::after {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1rem;
+      height: 1rem;
     }
 
     .governance-tooltip-opener {
       display: inline-block;
       text-indent: -9999rem;
-      overflow: hidden;
       border: none;
       background: none;
-      margin: 1rem 0;
+      margin: 0;
       position: absolute;
       right: 1rem;
       top: auto;
       padding: 0;
+      vertical-align: middle;
 
       &::after {
         content: "?";
         background: var(--cornell-red);
         color: #fff;
-        font-size: 1rem;
+        font-size: .75rem;
         text-align: center;
         text-indent: 0;
+        vertical-align: middle;
         display: block;
         border-radius: 1rem;
         padding: 0;

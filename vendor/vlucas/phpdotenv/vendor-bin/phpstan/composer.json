@@ -1,0 +1,15 @@
+{
+    "require": {
+        "php": "^8.4",
+        "phpstan/phpstan": "2.1.11",
+        "phpstan/extension-installer": "1.4.3",
+        "phpstan/phpstan-deprecation-rules": "2.0.1",
+        "phpstan/phpstan-strict-rules": "2.0.4"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    }
+}

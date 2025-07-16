@@ -19,7 +19,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-tasks',
-					'label'    => __( 'On-Page Content Review Tasks', 'cornell/governance' ),
+					'label'    => __( 'Governance Task Check List', 'cornell/governance' ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-repeater',
@@ -37,7 +37,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->add_text    = __( 'Add New Task', 'cornell/governance' );
+				$this->add_text    = __( 'Add Another New Task', 'cornell/governance' );
 				$this->remove_text = __( 'Remove This Task', 'cornell/governance' );
 				$this->short_name = __( 'Task', 'cornell/governance' );
 			}
@@ -51,11 +51,15 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 */
 			public function get_input(): string {
 				if ( ! $this->is_readonly ) {
+					Helpers::log( 'We determined the Task List was not read-only, so we are generating a repeater field' );
 					return parent::get_input();
 				} else {
 					$options    = array();
 
 					foreach ( $this->get_options() as $val => $label ) {
+						if ( empty( trim( $label ) ) ) {
+							continue;
+						}
 						$options[] = sprintf( '
 <label for="%2$s_%1$s"%6$s>
 	<input type="checkbox" name="%2$s[%1$s]" id="%2$s_%1$s" value="%1$s" %3$s%5$s/> 
@@ -92,6 +96,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return string the HTML for the ordered list
 			 */
 			public function get_plain_list(): string {
+				Helpers::log( 'We are generating a plain list of tasks rather than a set of checkboxes or repeaters' );
 				$options    = array();
 
 				foreach ( $this->get_options() as $val => $label ) {

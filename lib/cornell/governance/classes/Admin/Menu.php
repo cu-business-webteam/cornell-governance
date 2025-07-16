@@ -58,6 +58,7 @@ namespace Cornell\Governance\Admin {
 				'Steward_Dashboard',
 				'Page_Meta',
 				'Email_Test',
+				'Import_Export',
 				'Setup',
 			);
 

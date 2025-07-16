@@ -14,6 +14,8 @@ namespace Cornell\Governance\Taxonomies {
 
 	if ( ! class_exists( 'Audience' ) ) {
 		class Audience extends Base {
+			const HANDLE = 'audience';
+
 			/**
 			 * @var Audience $instance holds the single instance of this class
 			 * @access private
@@ -68,7 +70,7 @@ namespace Cornell\Governance\Taxonomies {
 					$this->get_args()['label'],
 					$this->get_args()['label'],
 					Plugin::instance()->get_capability(),
-					'edit-tags.php?taxonomy=audience&post_type=page'
+					'edit-tags.php?taxonomy=' . self::HANDLE . '&post_type=page'
 				);
 			}
 
@@ -101,11 +103,11 @@ namespace Cornell\Governance\Taxonomies {
 			 * @return string|null the updated submenu slug
 			 */
 			public function highlight_submenu( ?string $submenu_file, ?string $parent_file='' ): ?string {
-				if ( $submenu_file == 'edit-tags.php?taxonomy=audience&amp;post_type=page' ) {
+				if ( $submenu_file == 'edit-tags.php?taxonomy=' . self::HANDLE . '&amp;post_type=page' ) {
 					global $plugin_page;
 					$plugin_page = Menu::instance()->get_page_slug();
 
-					return 'edit-tags.php?taxonomy=audience&post_type=page';
+					return 'edit-tags.php?taxonomy=' . self::HANDLE . '&post_type=page';
 				}
 
 				return $submenu_file;
@@ -119,7 +121,7 @@ namespace Cornell\Governance\Taxonomies {
 			 * @since  0.1
 			 */
 			protected function get_handle(): string {
-				return 'audience';
+				return self::HANDLE;
 			}
 
 			/**

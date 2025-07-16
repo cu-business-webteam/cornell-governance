@@ -94,6 +94,17 @@ namespace Cornell\Governance\Admin\Fields {
 			}
 
 			/**
+			 * Retrieve and returns the full-text label for the field
+			 *
+			 * @access public
+			 * @since  0.6.2
+			 * @return string the label
+			 */
+			public function get_field_title(): string {
+				return $this->title;
+			}
+
+			/**
 			 * Build the HTML for the input
 			 *
 			 * @return string the HTML for the input
@@ -101,6 +112,21 @@ namespace Cornell\Governance\Admin\Fields {
 			 * @since  0.1
 			 */
 			abstract protected function get_input(): string;
+
+			/**
+			 * Build and return a boolean field
+			 *
+			 * @access protected
+			 * @since  0.6.3
+			 * @return string the HTML for the boolean field
+			 */
+			protected function get_input_boolean(): string {
+				$id = $this->page . '-' . $this->id;
+
+				$current = $this->get_input_value();
+
+				return sprintf( '<input class="cornell-governance-boolean-field" type="%3$s" name="%1$s" id="%1$s" value="true"%2$s/>', $id, ! empty( $current ) ? ' checked="checked"' : '', 'checkbox' );
+			}
 
 			/**
 			 * Validate the value of this input
@@ -123,11 +149,11 @@ namespace Cornell\Governance\Admin\Fields {
 			/**
 			 * Retrieve the default value for this input/option
 			 *
-			 * @access protected
+			 * @access public
 			 * @return mixed the default value
 			 * @since  0.1
 			 */
-			protected function get_default() {
+			public function get_default() {
 				return $this->default;
 			}
 

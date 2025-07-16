@@ -10,117 +10,79 @@
   font-size: 1em;
 }
 
-.cornell-governance-metabox {
-  border: 1px solid #e2e2e2;
-  position: relative;
-}
-.cornell-governance-metabox label,
-.cornell-governance-metabox p.static-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-.cornell-governance-metabox label:has(input),
-.cornell-governance-metabox p.static-label:has(input) {
-  font-weight: normal;
-}
-.cornell-governance-metabox fieldset {
-  border: 1px solid #e2e2e2;
-  border-top: none;
-  border-right: none;
-  margin-left: -1px;
-}
-.cornell-governance-metabox fieldset legend {
-  font-weight: bolder;
-  padding: 1rem 1rem 0.5rem;
-}
-.cornell-governance-metabox .field-note {
-  font-style: italic;
-  font-size: 0.9em;
-}
-.cornell-governance-metabox .field-note.timestamp-container {
-  text-align: right;
-}
-.cornell-governance-metabox .field-note.timestamp-container label {
-  font-weight: normal;
-}
-.cornell-governance-metabox .cornell-governance-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.cornell-governance-metabox .cornell-governance-grid.one-two {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-}
-.cornell-governance-metabox .cornell-governance-grid.two-one {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-}
-.cornell-governance-metabox .cornell-governance-field {
+.cornell-governance-tablist [role=tablist] button {
   border: none;
-  border-top: 1px solid #e2e2e2;
-  display: block;
+  background: transparent;
+  font-weight: bold;
+  color: #666;
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+}
+.cornell-governance-tablist [role=tablist] button[aria-selected=true] {
+  color: blue;
+  border-bottom: 2px solid blue;
+}
+.cornell-governance-tablist [role=tabpanel] {
+  border: 2px solid #ccc;
   padding: 1rem;
-  margin: -1px 0 0;
+  margin-top: -2px;
 }
-.cornell-governance-metabox .cornell-governance-field input {
-  width: 100%;
+.cornell-governance-tablist table.form-table th {
+  width: 40%;
 }
-.cornell-governance-metabox .cornell-governance-field input[type=radio], .cornell-governance-metabox .cornell-governance-field input[type=checkbox] {
-  width: auto;
-  display: inline-block;
+
+.cornell-governance-metabox [role=tablist] button {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  color: #666;
+  padding: 0 0.5rem 1rem;
+  margin: 0 0.5rem;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-textarea .text-label,
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-textarea .input-value {
-  display: block;
-  margin: 0 0 0.5rem;
+.cornell-governance-metabox [role=tablist] button[aria-selected=true] {
+  color: blue;
+  border-bottom: 2px solid blue;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-textarea textarea {
-  display: block;
-  width: 100%;
-  height: 8rem;
+.cornell-governance-metabox fieldset.cornell-governance-fieldset {
+  margin: 1rem;
+  padding: 1rem;
+  border: none;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-textarea.cornell-governance-commit-message textarea {
-  height: 2rem;
+.cornell-governance-metabox fieldset.cornell-governance-fieldset legend {
+  font-size: 1.25rem;
+  font-weight: bolder;
+  margin-bottom: 0;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-confirm {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.cornell-governance-metabox fieldset.cornell-governance-fieldset legend + .cornell-governance-message {
+  margin-top: -0.75rem;
+  margin-left: 0.15rem;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-confirm label {
-  display: block;
-  margin: 0 0 0 1rem;
+.cornell-governance-metabox fieldset.cornell-governance-fieldset.cornell-governance-fieldset-commit-message legend + .cornell-governance-message {
+  margin-top: 0;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-confirm input {
-  display: block;
-  width: auto;
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field {
+  margin: 1rem 0;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-button button {
-  display: block;
-  margin: 0 auto;
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-tasks legend, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-review-cycle legend {
+  font-size: 0.9375rem;
 }
-.cornell-governance-metabox .cornell-governance-field.cornell-governance-request-changes {
-  text-align: center;
-  margin-top: 1rem;
-  /*p {
-    font-size: 1.5em;
-  }*/
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset {
+  padding: 1rem;
+  border: 1px solid;
 }
-.cornell-governance-metabox .cornell-governance-save-box {
-  margin: 0.5rem;
-  border: 2px solid var(--cornell-red);
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset legend {
+  font-size: 0.9375rem;
 }
-.cornell-governance-metabox .cornell-governance-save-box .cornell-governance-field {
-  border-top: none;
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .cornell-governance-message-title {
+  font-weight: bolder;
 }
-.cornell-governance-metabox .cornell-governance-page-info-tasks label:has(input[type=checkbox]).done {
-  text-decoration: line-through;
-}
-.cornell-governance-metabox .compliance-status-fieldset .cornell-governance-grid {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .cornell-governance-grid {
+  display: grid;
   grid-template-columns: minmax(0, max-content) minmax(0, 2fr);
   justify-items: stretch;
   align-items: start;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon {
   --calendar-icon-compliant-bg: #00cc00;
   --calendar-icon-overdue-bg: #cc0000;
   --calendar-icon-due-bg: #737373;
@@ -129,13 +91,13 @@
   font-size: 0.35rem;
   width: 7em;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon.due {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.due {
   --calendar-icon-calendar-bg: var(--calendar-icon-due-bg);
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon.overdue {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.overdue {
   --calendar-icon-calendar-bg: var(--calendar-icon-overdue-bg);
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon time.icon {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon time.icon {
   font-size: 1em;
   display: block;
   position: relative;
@@ -146,7 +108,7 @@
   box-shadow: 0 1px 0 var(--calendar-icon-calendar-bg), 0 2px 0 #fff, 0 3px 0 var(--calendar-icon-calendar-bg), 0 4px 0 #fff, 0 5px 0 var(--calendar-icon-calendar-bg), 0 0 0 1px var(--calendar-icon-calendar-bg);
   overflow: hidden;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon time.icon * {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon time.icon * {
   display: block;
   width: 100%;
   font-size: 1em;
@@ -154,7 +116,7 @@
   font-style: normal;
   text-align: center;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon time.icon .month {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon time.icon .month {
   position: absolute;
   top: 0;
   padding: 0.4em 0;
@@ -163,21 +125,21 @@
   border-bottom: 1px dashed var(--calendar-icon-calendar-bg);
   box-shadow: 0 2px 0 var(--calendar-icon-calendar-bg);
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon time.icon .weekday {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon time.icon .weekday {
   position: absolute;
   bottom: 0.3em;
   color: var(--calendar-icon-calendar-bg);
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon time.icon .day {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon time.icon .day {
   font-size: 2.5em;
   letter-spacing: -0.05em;
   padding-top: 1em;
   color: var(--calendar-icon-calendar-bg);
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon.due .compliance-icon {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.due .compliance-icon {
   display: none;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon .checkmark, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.compliant .compliance-icon {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .checkmark, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.compliant .compliance-icon {
   font-size: 0.5em;
   display: inline-block;
   width: 5.5em;
@@ -191,7 +153,7 @@
   bottom: 0;
   right: 0;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon .checkmark:before, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.compliant .compliance-icon:before {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .checkmark:before, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.compliant .compliance-icon:before {
   content: "";
   position: absolute;
   width: 0.75em;
@@ -200,7 +162,7 @@
   left: 2.75em;
   top: 1.5em;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon .checkmark:after, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.compliant .compliance-icon:after {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .checkmark:after, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.compliant .compliance-icon:after {
   content: "";
   position: absolute;
   width: 0.75em;
@@ -209,7 +171,7 @@
   left: 2em;
   top: 3em;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon .overdue-icon, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.overdue .compliance-icon {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .overdue-icon, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.overdue .compliance-icon {
   display: block;
   width: 2.5em;
   height: 2.5em;
@@ -220,7 +182,7 @@
   border-radius: 0.375em;
   box-shadow: 0.125em 0.125em 0.25em 0 white;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon .overdue-icon:before, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon .overdue-icon:after, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:before, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:after {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .overdue-icon:before, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .overdue-icon:after, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:before, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:after {
   content: "";
   position: absolute;
   width: 2.25em;
@@ -230,20 +192,158 @@
   top: 1em;
   box-shadow: 0 0 0.125em 0 #ccc;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon .overdue-icon:before, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:before {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .overdue-icon:before, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:before {
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   transform: rotate(45deg);
   left: 0.125em;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon .overdue-icon:after, .cornell-governance-metabox .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:after {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon .overdue-icon:after, .cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon.overdue .compliance-icon:after {
   -webkit-transform: rotate(-45deg);
   -moz-transform: rotate(-45deg);
   transform: rotate(-45deg);
   right: 0.125em;
 }
-.cornell-governance-metabox .compliance-status-fieldset .calendar-icon {
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .compliance-status-fieldset .calendar-icon {
   margin: 2rem;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm) {
+  margin: 1rem;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm) label, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm) .text-label {
+  font-size: 0.9375rem;
+  font-weight: bolder;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm) :is(input:not([type=checkbox], [type=radio]), textarea, select) {
+  display: block;
+  margin: 0 0 1rem;
+  width: 100%;
+  max-width: 100%;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-radio-group > legend, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-repeater > legend {
+  font-size: 0.8125rem;
+  margin-bottom: 0.5rem;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-radio-group.cornell-governance-review-cycle > legend, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-radio-group.cornell-governance-tasks > legend, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-repeater.cornell-governance-review-cycle > legend, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-repeater.cornell-governance-tasks > legend {
+  font-size: 0.9375rem;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-radio-group label, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-radio-group .text-label, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-repeater label, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-repeater .text-label {
+  font-size: 0.8125rem;
+  font-weight: normal;
+  display: block;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-radio-group > .text-label, .cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm).cornell-governance-repeater > .text-label {
+  font-weight: bolder;
+  font-size: 0.9375rem;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm) textarea {
+  height: 10rem;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset .cornell-governance-field.cornell-governance-confirm label {
+  font-weight: bolder;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-audiences {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas: "legend legend" "note note" "primary secondary";
+  column-gap: 1rem;
+  row-gap: 0;
+  justify-items: stretch;
+  align-items: start;
+  justify-content: space-between;
+  align-content: start;
+}
+@media all and (max-width: 700px) {
+  .cornell-governance-metabox fieldset.cornell-governance-fieldset-audiences {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "legend" "note" "primary" "secondary";
+  }
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-audiences legend {
+  grid-area: legend;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-audiences .cornell-governance-message {
+  grid-area: note;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-audiences .cornell-governance-primary-audience {
+  grid-area: primary;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-audiences .cornell-governance-secondary-audience {
+  grid-area: secondary;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas: "legend legend legend" "note note note" "one two three";
+  column-gap: 1rem;
+  row-gap: 0;
+  justify-items: stretch;
+  align-items: start;
+  justify-content: space-between;
+  align-content: start;
+}
+@media all and (max-width: 700px) {
+  .cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "legend" "note" "one" "two" "three";
+  }
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities legend {
+  grid-area: legend;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .governance-tooltip-container {
+  grid-area: one;
+  margin: 0;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm, .cornell-governance-tooltip) {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  align-items: stretch;
+  align-content: stretch;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm, .cornell-governance-tooltip) :first-child {
+  align-self: start;
+  margin: 0;
+  padding: 0;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-field:not(.cornell-governance-message, .cornell-governance-confirm, .cornell-governance-tooltip) :nth-child(2) {
+  align-self: end;
+  margin-bottom: 0;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-message {
+  grid-area: note;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-steward {
+  grid-area: one;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-steward .cornell-governance-message-title {
+  font-size: 0.9375rem;
+  font-weight: bolder;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-supervisor {
+  grid-area: two;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-liaison {
+  grid-area: three;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-confirm-review .cornell-governance-message-title {
+  font-weight: bolder;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-commit-message {
+  margin: 0;
+  padding: 0;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-commit-message p.cornell-governance-field.cornell-governance-commit-message {
+  margin: 0;
+  padding: 0;
+}
+.cornell-governance-metabox .cornell-governance-timestamp {
+  text-align: right;
+  font-style: italic;
+}
+.cornell-governance-metabox :is(.cornell-governance-page-info-tasks, .cornell-governance-page-info-tasks-readonly) label:has(input[type=checkbox]).done {
+  text-decoration: line-through;
 }
 .cornell-governance-metabox .progress-overlay {
   position: absolute;
@@ -280,61 +380,13 @@
     transform: rotate(360deg);
   }
 }
-.cornell-governance-metabox .cornell-governance-message-title {
-  font-weight: 600;
+.cornell-governance-metabox .cornell-governance-request-changes {
+  font-weight: bolder;
+  text-align: center;
+  margin: 2rem auto;
 }
-.cornell-governance-metabox .cornell-governance-mark-for-deletion-instructions + .cornell-governance-mark-for-deletion,
-.cornell-governance-metabox .cornell-governance-completed-review-instructions + .cornell-governance-completed-review {
-  border-top: none;
-}
-.cornell-governance-metabox .cornell-governance-save-info-instructions {
-  color: #8b0000;
-}
-.cornell-governance-metabox .components-button {
-  align-items: center;
-  -webkit-appearance: none;
-  background: none;
-  border: 0;
-  border-radius: 2px;
-  box-sizing: border-box;
-  color: var(--wp-components-color-foreground, #1e1e1e);
-  cursor: pointer;
-  display: inline-flex;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 400;
-  height: 36px;
-  margin: 0;
-  padding: 6px 12px;
-  text-decoration: none;
-  transition: box-shadow 0.1s linear;
-}
-.cornell-governance-metabox .components-button.is-primary {
-  background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-  color: var(--wp-components-color-accent-inverted, #fff);
-  outline: 1px solid rgba(0, 0, 0, 0);
-  text-decoration: none;
-  text-shadow: none;
-  white-space: nowrap;
-}
-.cornell-governance-metabox .tabs [role=tablist] {
-  padding-left: 1rem;
-}
-.cornell-governance-metabox .tabs [role=tablist] button[role=tab] {
-  font-size: 1.2rem;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0 0;
-  display: inline-block;
-  border: 1px solid #e2e2e2;
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
-  background: transparent;
-  cursor: pointer;
-}
-.cornell-governance-metabox .tabs [role=tablist] button[role=tab][aria-selected=true] {
-  background: #e2e2e2;
-  border: 1px solid black;
-  border-bottom: none;
+.cornell-governance-metabox .cornell-governance-request-changes .cornell-governance-message-title {
+  font-size: 1rem;
 }
 
 .governance-menu-boxes {
@@ -628,28 +680,29 @@
   right: 0.125em;
 }
 .governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener, .governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener::after {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1rem;
+  height: 1rem;
 }
 .governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener {
   display: inline-block;
   text-indent: -9999rem;
-  overflow: hidden;
   border: none;
   background: none;
-  margin: 1rem 0;
+  margin: 0;
   position: absolute;
   right: 1rem;
   top: auto;
   padding: 0;
+  vertical-align: middle;
 }
 .governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener::after {
   content: "?";
   background: var(--cornell-red);
   color: #fff;
-  font-size: 1rem;
+  font-size: 0.75rem;
   text-align: center;
   text-indent: 0;
+  vertical-align: middle;
   display: block;
   border-radius: 1rem;
   padding: 0;
@@ -673,48 +726,57 @@
   width: 100%;
 }
 
-#cornell-governance-compliance-widget .governance-chart {
+#cornell-governance-compliance-widget .governance-chart, .governance_page_cornell-governance-reports .governance-chart {
   margin: 1rem;
   padding: 1rem;
   border: 1px solid #ccc;
 }
-#cornell-governance-compliance-widget .governance-chart h3 {
+#cornell-governance-compliance-widget .governance-chart h3, .governance_page_cornell-governance-reports .governance-chart h3 {
   font-weight: 500;
   border-bottom: 1px solid #666;
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
 }
-#cornell-governance-compliance-widget .governance-chart table {
+#cornell-governance-compliance-widget .governance-chart table, .governance_page_cornell-governance-reports .governance-chart table {
   display: table;
   text-align: left;
   width: 100%;
+  color: #000;
 }
-#cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list {
+#cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list, .governance_page_cornell-governance-reports .governance-chart table.non-compliant-page-list {
   background: #ff8080;
 }
-#cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list a {
+#cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list a, .governance_page_cornell-governance-reports .governance-chart table.non-compliant-page-list a {
   color: #103656;
 }
-#cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list a:hover, #cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list a:focus {
+#cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list a:hover, #cornell-governance-compliance-widget .governance-chart table.non-compliant-page-list a:focus, .governance_page_cornell-governance-reports .governance-chart table.non-compliant-page-list a:hover, .governance_page_cornell-governance-reports .governance-chart table.non-compliant-page-list a:focus {
   color: #0B385B;
 }
-#cornell-governance-compliance-widget .governance-chart table caption {
+#cornell-governance-compliance-widget .governance-chart table caption, .governance_page_cornell-governance-reports .governance-chart table caption {
   text-align: center;
   margin: 0.5rem auto;
   font-weight: 500;
 }
-#cornell-governance-compliance-widget .governance-chart table tr {
+#cornell-governance-compliance-widget .governance-chart table tr, .governance_page_cornell-governance-reports .governance-chart table tr {
   display: table-row;
   vertical-align: center;
   padding: 0;
   margin: 0;
 }
 #cornell-governance-compliance-widget .governance-chart table tr th,
-#cornell-governance-compliance-widget .governance-chart table tr td {
+#cornell-governance-compliance-widget .governance-chart table tr td, .governance_page_cornell-governance-reports .governance-chart table tr th,
+.governance_page_cornell-governance-reports .governance-chart table tr td {
   display: table-cell;
   text-align: left;
   padding: 0.25rem;
   border: 1px solid #e2e2e2;
+}
+#cornell-governance-compliance-widget a.large, .governance_page_cornell-governance-reports a.large {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  margin: 1rem auto;
 }
 
 .cornell-governance-email-testing fieldset {
@@ -740,9 +802,196 @@
 }
 .cornell-governance-steward-tooltip[data-purpose=tooltip-container] [role=tooltip] {
   text-align: left;
-  margin-top: 3rem;
   width: 200%;
   z-index: 1;
+}
+
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h1, #poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h2, #poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h3, #poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h4, #poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h5, #poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h6 {
+  font-weight: bolder;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h1 {
+  font-size: 2rem;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h2 {
+  font-size: 1.75rem;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h3 {
+  font-size: 1.5rem;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h4 {
+  font-size: 1.3rem;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h5 {
+  font-size: 1.2rem;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value h6 {
+  font-size: 1.1rem;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value blockquote {
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid #333;
+  background: #e2e2e2;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value ul, #poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value ol {
+  list-style: revert;
+  margin-left: 2rem;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value table {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0 0 1rem;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value table tr {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value table tr td, #poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value table tr th {
+  padding: 0.25rem;
+  border: 1px solid #666;
+  margin: 0;
+}
+#poststuff .cornell-governance-field:has(.text-label):has(.input-value) .input-value table tr th {
+  background: #e2e2e2;
+  font-weight: bolder;
+}
+
+.cornell-governance-notes-notes .input-value {
+  margin: 2rem;
+  padding: 2rem;
+  border: 2px solid #333;
+}
+
+.cornell-governance-admin-boolean input {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid black;
+  width: 62px;
+  height: 24px;
+  border-radius: 28px;
+  background: #ffa07a;
+  color: black;
+}
+.cornell-governance-admin-boolean input:before {
+  padding: 0;
+  content: "No";
+  width: calc(100% - 0.5rem);
+  margin-right: auto;
+  margin-left: 0;
+  display: block;
+  line-height: 22px;
+  text-align: right;
+  height: auto;
+}
+.cornell-governance-admin-boolean input:after {
+  content: "";
+  position: absolute;
+  background-color: black;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition-property: left;
+  transition: 0.2s ease-in-out;
+}
+.cornell-governance-admin-boolean input:checked {
+  background: lightgreen;
+}
+.cornell-governance-admin-boolean input:checked:before {
+  /* reset */
+  margin: 0;
+  height: auto;
+  float: none;
+  /* new styles */
+  content: "Yes";
+  text-align: left;
+  display: block;
+  width: calc(100% - 0.5rem);
+  margin-right: 0;
+  margin-left: auto;
+}
+.cornell-governance-admin-boolean input:checked:after {
+  left: 40px;
+}
+
+.cornell-governance-wayback-list {
+  margin-left: 1rem;
+  padding-left: 1rem;
+}
+.cornell-governance-wayback-list.cornell-governance-unordered-list {
+  list-style: disc;
+}
+.cornell-governance-wayback-list.cornell-governance-ordered-list {
+  list-style: decimal;
+}
+
+.page-meta-report-container h3 {
+  font-size: 1.5rem;
+}
+
+.import-export-wrap {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  line-height: 2;
+}
+.import-export-wrap > div {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  margin: 0;
+  padding: 1rem;
+  background: white;
+  width: 100%;
+  max-width: calc(100% - 2rem);
+  overflow: auto;
+}
+.import-export-wrap > div.full-width {
+  grid-column: 1/-1;
+}
+.import-export-wrap > div .button-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto;
+}
+.import-export-wrap > div table {
+  width: 100%;
+  max-width: 100%;
+}
+.import-export-wrap > div textarea[readonly] {
+  background: #ccc;
+  width: 100%;
+  max-width: 100%;
+  padding: 1rem;
+  border: 1px solid #000;
+  height: 8rem;
+}
+.import-export-wrap .import p,
+.import-export-wrap .import-settings p {
+  font-style: italic;
+}
+.import-export-wrap .import label,
+.import-export-wrap .import-settings label {
+  display: block;
+  font-style: normal;
+}
+.import-export-wrap .import input[type=file],
+.import-export-wrap .import-settings input[type=file] {
+  font-style: normal;
+  display: block;
+  margin: 2rem;
+  width: 100%;
+  max-width: calc(100% - 4rem);
+  padding: 1rem;
+  border: 1px solid #666;
 }
 
 /*# sourceMappingURL=cornell-governance-admin.css.map */

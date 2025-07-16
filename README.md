@@ -1,13 +1,13 @@
 # Cornell In-Page Governance
-**Contributors:** cgrymala  
-**Donate link:** https://cornell.edu  
-**Tags:** governance, notes, admin  
-**Requires at least:** 6.4  
-**Tested up to:** 6.5.3  
-**Stable tag:** 0.4.8  
-**Requires PHP:** 7.4  
-**License:** GPLv2 or later  
-**License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
+Contributors: cgrymala  
+Donate link: https://cornell.edu  
+Tags: governance, notes, admin  
+Requires at least: 6.4  
+Tested up to: 6.7.1  
+Stable tag: 0.6.3  
+Requires PHP: 7.4  
+License: GPLv2 or later  
+License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
 Allows tracking and adding notes about the content, purpose, audiences, etc of individual pages
 
@@ -21,6 +21,31 @@ It also adds automated review messages that can be emailed out to a list of rele
 
 1. Go to Governance -> Audiences on each site and add the audiences that should be selectable for the Primary and Secondary Audience fields
 1. Go to Governance -> Governance Settings on each site and make sure the settings make sense, then save them
+
+### Updates
+
+The plugin has a built-in update checker. By default, it will use the public, authoritative GitHub repository for the plugin.
+
+If you would like to override those settings to check your own Git repository, you can do so with environment variables or PHP constants.
+
+To override those settings, you have a few options. 
+
+1. You can copy the `.env.default` file to `.env` in the plugin folder, and update the definitions (**not recommended, as `.env` is a plain-text file, and those secrets would be publicly accessible**)
+2. You can create and define environment variables on your server with these values
+3. You can create a file called `cornell-governance-config.php` in the plugin's root and define these as PHP constants
+4. You can add these constant definitions to your `wp-config.php` file
+
+The definitions available are:
+
+1. `CORNELL_GOVERNANCE_REPO_URL` - the URL to the Git repository
+2. `CORNELL_GOVERNANCE_REPO_SLUG` - the unique slug for the repo; if you're using a self-hosted GitLab instance and subgroups or nested groups, you have to tell the update checker which parts of the URL are subgroups
+3. `CORNELL_GOVERNANCE_REPO_BRANCH` - the name of the stable branch you want to use
+4. If you are using a private Bitbucket repo, you will need to get a consumer key and secret, and define them:
+    1. `CORNELL_GOVERNANCE_REPO_CONSUMER_KEY`
+    2. `CORNELL_GOVERNANCE_REPO_CONSUMER_SECRET`
+5. If you're using a private GitLab repo, you will need to get a token and define it:
+    1. `CORNELL_GOVERNANCE_REPO_AUTH_TOKEN`
+6. `CORNELL_GOVERNANCE_REPO_IS_CUSTOM_GITLAB` - If you're using a self-hosted GitLab repo, you need to indicate that by setting this to `true`  
 
 ### Settings
 
@@ -44,7 +69,43 @@ It also adds automated review messages that can be emailed out to a list of rele
 
     These global tasks will be inserted as plain-text above the list of inputs where administrators add new tasks for each page, and they will be inserted at the beginning of the task checklist for authors/page stewards.
 
-#### Change Form Options
+5. **Include a button allowing stewards to mark pages for deletion?**
+
+    If this is enabled, then a "Mark this page for deletion" option becomes available to stewards, allowing them to specify that a page is no longer necessary. 
+
+    When that option is selected by the Steward, then an email message is dispatched to the steward, the secondary contact, and the liaison, notifying all of them that the page is no longer necessary. At that point, the liaison can choose to delete/draft/remove the page from the site.
+
+#### Wayback Integration Settings
+
+1. **Integrate Wayback Machine archival of modified content?**
+
+    Check this box to implement integration with the Internet Archive Wayback Machine
+
+2. **If you would like to replace this site's URL with a production URL, enter this site's URL here.**
+
+    _If this is a non-production site, chances are fairly good that there won't be any existing snapshots of the pages on this site (and that you probably don't want to capture snapshots of this site)._
+
+    _In this case, the plugin can programatically replace any calls to the Wayback API so that it queries the production URL instead of the non-production URL._
+
+    This setting allows you to specify the URL of this non-production site that should be replaced during those API queries.
+
+3. **If you would like to replace this site's URL with a production URL, enter that production URL here.**
+
+   _If this is a non-production site, chances are fairly good that there won't be any existing snapshots of the pages on this site (and that you probably don't want to capture snapshots of this site)._
+
+   _In this case, the plugin can programatically replace any calls to the Wayback API so that it queries the production URL instead of the non-production URL._
+
+    This setting allows you to specify the URL of your production site, so that that URL will replace this site's URL in Wayback queries.
+
+4. **How many days should be stored in the Archive Snapshot log?**
+
+    This plugin will store a log of Wayback Machine snapshot requests that are triggered by the plugin. That log should be cleaned out regularly in order to avoid bloat in the database.
+
+    With this setting, you can specify how long those logs should be kept. The default is 30 days, but you can set it to any number of days you want. 
+
+    If you have a very active, large site, you may want to set it as low as 7 days; if you have a fairly small site that doesn't get updated extremely often, you could realistically set this to 365 days.
+
+#### Change Form Settings
 
 1. **Include a link to a form allowing users to request changes to the governance settings for a page?**
     
@@ -90,12 +151,22 @@ By default, they are set to 60 days, 30 days and 15 days.
 
 ### Constants
 
-There are 4 constants used within this plugin:
+There are a number of constants used within this plugin. They can be defined as environment variables within your PHP environment; they can be defined in an `.env` file in the root folder of this plugin (not recommended for publicly-accessible websites); they can be defined within wp-config, or they can be defined as PHP constants in a file called `cornell-governance-config.php`.  
 
 1. `CORNELL_DEBUG` - This will output informational debug content into the error log when it is defined as `true`
 2. `CORNELL_GOVERNANCE_EMAIL_TO` - If the `CORNELL_DEBUG` constant is defined as `true` and this constant is defined with a valid email address, that email address will be used as the "to" field for all automated emails from this plugin (overriding the individual users' email addresses)
 3. `CORNELL_GOVERNANCE_EMAIL_CC` - Can accept a comma-separated list of email addresses. Any addresses set inside this constant will receive a CC copy of all email messages sent by this plugin
 4. `CORNELL_GOVERNANCE_EMAIL_BCC` - Can accept a comma-separated list of email addresses. Any addresses set inside this constant will receive a BCC copy of all email messages sent by this plugin
+
+The following constants apply to the auto-update functionality. They are defined with defaults that will point to the main public Github repo, but you can redefine them for your own private repo if you prefer:
+
+1. `CORNELL_GOVERNANCE_REPO_URL` - the URL to the git repo where this plugin can be downloaded
+2. `CORNELL_GOVERNANCE_REPO_SLUG` - the slug of the plugin within that repo
+3. `CORNELL_GOVERNANCE_REPO_BRANCH` - the branch from which you want to pull the plugin
+4. `CORNELL_GOVERNANCE_REPO_CONSUMER_KEY` - if you are using a private Bitbucket repo, you will need to define a consumer key
+5. `CORNELL_GOVERNANCE_REPO_CONSUMER_SECRET` - if you are using a private Bitbucket repo, you will need to define a consumer secret
+6. `CORNELL_GOVERNANCE_REPO_AUTH_TOKEN` - if you are using a private GitLab repo, you will need to set an authorization token
+7. `CORNELL_GOVERNANCE_REPO_IS_CUSTOM_GITLAB` - if you are using a custom/self-hosted GitLab server, you need to indicate that
 
 _In a multisite environment, these constants will impact all sites in the network where the plugin is active; they are not unique to each individual site within the network._
 
@@ -163,6 +234,69 @@ The template files are built as [Handlebars templates](https://handlebarsjs.com/
 
 The template variables can be modified using the `cornell/governance/emails/report-data` filter. That filter sends the array of data being sent to the template as the first parameter, and the name of the PHP class being used to generate the email as the second parameter.
 
+### REST API Information
+
+#### WordPress Native REST Requests
+
+This plugin adds some custom information to the standard post REST requests found at `wp-json/wp/v2/`. The following data are added to these responses:
+
+  - `goal` - the "Page Goal" text
+  - `purpose` - the "Purpose/Problems Solved" text
+  - `primaryAudience` - the slug for the Primary Audience selection
+  - `secondaryAudience` - the slug for the Secondary Audience selection
+  - `secondaryContact` - the email address for the Secondary Contact 
+  - `liaison` - the email address for the liaison
+  - `cycle` - a text representation of how often the page is reviewed
+  - `complianceStatus` - a message about the page's compliance status
+  - `updateMessage` - the most recent "Content Update" commit message
+    - `commit-message` - the text of the latest commit message
+    - `editor` - the ID of the user that posted that commit message
+    - `timestamp` - the UNIX timestamp showing when the commit message was saved
+
+#### Custom Governance REST Endpoint
+
+You can also access just the Governance information for content by using the custom REST endpoint located at `wp-json/cornell/governance/v1/information`.
+
+If you want Governance Information about a specific piece of content, you can append the content ID to the end of that endpoint. 
+
+The properties included in this response are:
+
+  - `post-title` - The title assigned to the piece of content (for informational purposes)
+  - `goals` - the text of the "Page Goals" field
+  - `primary-audience` - A [WP_Term](https://developer.wordpress.org/reference/classes/wp_term/#comment-2653) object containing information about the selected Primary Audience
+  - `problem` - the text of the "Purpose/Problems Solved" field
+  - `review-cycle` - an array with information about the review cycle
+    - `cycle` - the number of months between reviews
+    - `text` - a text representation showing how often the page needs to be reviewed
+  - `secondary-audience` - A [WP_Term](https://developer.wordpress.org/reference/classes/wp_term/#comment-2653) object containing information about the selected Secondary Audience
+  - `secondary-contact` - the email address of the Secondary Contact
+  - `tasks` - an array of the tasks for the content
+  - `liaison` - the email address for the Liaison assigned to this content
+  - `timestamp` - the date and time at which the governance information was last updated
+  - `last-review` - an array of information about when the content was last reviewed
+    - `timestamp` - the UNIX timestamp when the content was last reviewed
+    - `date` - the ISO 8601 date formatted date and time when the content was last reviewed
+  - `initial-setup` - an array with information about when the governance information was first set up
+    - `timestamp` - the UNIX timestamp when the information was created
+    - `date` - the ISO 8601 date formatted date and time when the information was created
+    - `user` - an array with information about the user that set up the governance information
+      - `id` - the user ID
+      - `email` - the user's email address
+    - `completed-tasks` - an array showing which tasks (if any) have been checked off
+    - `compliance-status` - a text representation showing the compliance status for the page
+    - `notes` - an array with information about notes that have been added to the page
+      - `notes` - the raw markdown text of the notes
+      - `timestamp` - a WP-formatted date and time showing when the notes were last updated
+      - `rendered` - an HTML-formatted version of the notes
+    - `revisions` - an array of revision content update notes. Each item inside the array is an array with the following properties
+      - `revision-id` - the ID that WP assigned to the revision that is associated with the update message
+      - `message` - the text of the update message
+      - `author` - an array of information about the user that committed the update message
+        - `id` - the WP User ID
+        - `email` - the user's email address
+      - `timestamp` - the UNIX timestamp of the update message
+      - `date` - the WP-formatted date and time of the update message
+
 ## Installation
 
 1. Upload the plugin files to the `/wp-content/plugins/cornell-governance` directory, or install the plugin through the WordPress plugins screen directly.
@@ -183,7 +317,12 @@ The template variables can be modified using the `cornell/governance/emails/repo
 * `cornell/governance/change-form/url` - allows you to change the location of the form used for requesting changes
 * `cornell/governance/change-form/props` - filters the array of query parameters appended to the change form URL when it's presented as a link (same as below)
 * `cornell/governance/change-form-url/parameters` - filters the array of query parameters appended to the change form URL when it's presented as a link
+* `cornell/governance/mark-for-deletion/active` - whether the mark for deletion option should be enabled or not
 * `cornell/governance/emails/limit` - allows you to limit how many emails are sent in a single batch. The default is 25.
+* `cornell/governance/frontend-compliance/active` - filters whether the Frontend Compliance widget is active or not
+* `cornell/governance/archive/active` - filters whether the Wayback Machine integration is active or not
+* `cornell/governance/wayback/timeout` - allows you to filter how long the list of Wayback Machine snapshots are cached (default is 1 day) _(added in 0.6.2)_
+* `cornell/governance/wayback/record-limit` - allows you to filter the maximum number of Wayback Machine results to display in a list or table (default is 20) _(added in 0.6.2)_
 
 #### Reports
 
@@ -231,8 +370,116 @@ _Unreviewed Pages Report_
     _An example of the "Unreviewed Pages" report_](assets/screenshot-4.png)
 5. [![Current user dashboard compliance widget](assets/screenshot-5.png)
     _An example of the Compliance Widget on the Dashboard for the current user_](assets/screenshot-5.png)
+6. [![Tabbed Interface for Liaisons Who Are Stewards of Current Page](assets/screenshot-6.png)
+    _A snapshot showing the tabbed interface for Liaisons who are also the Steward of the current page_](assets/screenshot-6.png)
 
 ## Changelog
+
+### 0.6.3
+
+Bugfixes:
+
+* Pages that were compliant were showing "Never reviewed" as their status; this is fixed
+* There were some new PHP errors/warnings introduced in 0.6.2; these are fixed
+* Various admin style tweaks
+
+### 0.6.2
+
+* Implements REST API for Governance information
+  * Governance info is added to posts/pages REST endpoint
+  * New custom endpoint specifically for Governance info
+* Implements Import/Export functionality
+  * You can now export all existing Governance information to a CSV file
+  * You can also import a specially-formatted CSV file into a site to add, update or overwrite Governance information on the site
+* Moves Deletion Request to its own tab in the interface
+  * Adds field to allow steward to add reason for deletion
+
+### 0.6.1
+
+* Fix "View more content updates" link in Content Updates side metabox
+
+### 0.6.0
+
+* Move i18n to correct hook
+* Fix PHP warning on frontend
+* Move Info Meta Box key to root constant
+* Add schema to registered meta data
+
+### 0.5.9
+
+* Implements new optional front-end compliance banner for post authors
+
+### 0.5.8
+
+* Fixes bug that kept authors from seeing Task checkboxes
+    * Any user that is allowed to edit a post can now review the governance info for that post
+
+### 0.5.7
+
+* Updated microcopy for Audience selectors
+* Updated microcopy for Secondary Contact Email field
+* Tweaked CSS for legends and labels in Governance input metaboxes
+* Begin setting automatic updater to preserve .env file
+* Fixed bugs when calculating review dates
+    * "Every 6 Months" cycle was calculating the date incorrectly
+    * On the calculated due date, the language said "was" due, even though it shouldn't be due until the end of the day; that language is fixed
+
+### 0.5.6
+
+Bug-fixes:
+
+* Ensure compliance status is update in real time when review cycle is changed or page review is completed
+* Ensure Steward View is visible for Liaisons, and make sure save button is included appropriately in the correct contexts 
+* CSS changes to 'Overdue' widget in dashboard and reports
+
+### 0.5.5
+
+* Fixes bug that stopped Liaisons from seeing Steward Tab
+
+### 0.5.4
+
+* Fixes fatal error introduced in 0.5.3
+
+### 0.5.3
+
+* Moved update checker to its own class
+* Allow users to override default update settings
+
+### 0.5.2
+
+* Implemented automatic plugin updates
+
+### 0.5.1
+
+* Implemented tabbed interface for Liaison, Steward, Documentation and Content Updates (revisions)
+* Fixes:
+  * If a page is due for review, the steward will get the checkbox list rather than a plain list after governance information is updated
+  * Updating the list of tasks no longer un-sets the completed tasks
+
+### 0.5.0
+
+* Implemented view mode for Page Documentation so that folks don’t accidentally edit it
+* Updated micro copy throughout plugin
+* Updated styles for Liaison View and Steward View meta box content
+
+### 0.4.9
+
+New Features:
+
+* Allow editors, etc. to see non-interactive governance information
+* Make "Mark for deletion" checkbox optional, based on plugin settings
+
+Fatal Error Fixes:
+
+* Fix fatal error in Page Meta reports
+* Fix fatal errors when specific governance info is not set for a page
+* Fix fatal error that occurred when saving Settings without any Change Form parameters selected
+
+JavaScript Fixes:
+
+* Stop overlay from being added multiple times during save
+* Ensure that the Steward review options are hidden appropriately after confirming page review
+* Ensure task lists are updated appropriately when tasks are updated
 
 ### 0.4.8
 
@@ -358,7 +605,72 @@ Bug fixes:
 
 ## Upgrade Notice
 
-* 0.4.8 - Fixes multiple bugs; allows Liaisons to review their own pages
+### 0.6.3
+
+Bugfix: Pages that are compliant were showing "Never reviewed" as their status; this is fixed
+
+### 0.6.2
+
+Implements REST API endpoints, implements basic Wayback Machine integration, moves Deletion Request to its own tab, and adds new Import/Export functionality
+
+### 0.6.1
+
+Fixes "View more content updates" link in Content Updates side metabox
+
+### 0.6.0
+
+Minor bug fixes; mostly PHP warnings
+
+### 0.5.8
+
+Fixes bug that kept authors from being able to see task checkboxes
+
+### 0.5.7
+
+Microcopy and style tweaks
+
+### 0.5.6
+
+Compliance status is now updated in real-time when review cycle is changed of page review is completed
+
+### 0.5.5
+
+Fixes bug that stopped Liaisons from seeing Steward Tab
+
+### 0.5.4
+
+Fixes fatal error introduced in 0.5.3
+
+### 0.5.3
+
+Allow user to override update check defaults
+
+### 0.5.2
+
+Implemented automatic plugin updates
+
+### 0.5.1
+
+Implements tabbed interface for all governance information
+
+### 0.5.0
+
+Updated micro copy and styles for admin meta boxes
+
+### 0.4.9
+
+Minor JavaScript bug fixes; fatal error fixes
+
+### 0.4.8
+
+Fixes multiple bugs; allows Liaisons to review their own pages
+
+### 0.4.7
+
+Fixes NPM security vulnerabilities
+
+### Older Versions
+
 * 0.4.6 - Added `CORNELL_GOVERNANCE_EMAIL_CC` and `CORNELL_GOVERNANCE_EMAIL_BCC` constants
 * 0.4.5 - Make default email templates more generic
 * 0.4.4 - Dispatches email message when page steward completes page review

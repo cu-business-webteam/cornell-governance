@@ -85,19 +85,28 @@ namespace Cornell\Governance\Admin {
 			 *
 			 * @access public
 			 * @return void
+			 * @throws \Exception
 			 * @since  0.1
 			 */
 			public function save_ajax(): void {
 				if ( ! isset( $_POST['cornell-governance-action'] ) ) {
+					Helpers::log( 'There was not an action set, so we are doing nothing', 'warning' );
 					return;
 				}
 
 				if ( 'info' === $_POST['cornell-governance-action'] ) {
+					Helpers::log( 'We are saving the main governance info', 'info' );
 					Info::instance()->ajax_save();
 				} else if ( 'notes' === $_POST['cornell-governance-action'] ) {
 					if ( current_user_can( Plugin::instance()->get_capability() ) ) {
+						Helpers::log( 'We are saving the governance notes', 'info' );
 						Notes::instance()->ajax_save();
+					} else {
+						Helpers::log( 'The user does not have permission to save governance notes', 'warning' );
 					}
+				} else if ( 'delete' === $_POST['cornell-governance-action'] ) {
+					Helpers::log( 'We are saving the governance deletion request', 'info' );
+					Info::instance()->ajax_save_delete();
 				}
 			}
 
@@ -114,6 +123,17 @@ namespace Cornell\Governance\Admin {
 			 */
 			public function save_revision( int $post_id, \WP_Post $post, bool $update = false ) {
 				Revisions::instance()->save_revision( $post_id, $post, $update );
+
+				if ( Plugin::instance()->get_archive_settings( 'active' ) ) {
+					$tomorrow = date( 'Y-m-d', strtotime( 'tomorrow' ) );
+					$posts = apply_filters( 'cornell/governance/archive/trigger/posts', get_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, array() ) );
+					if ( array_key_exists( $post_id, $posts ) ) {
+						return;
+					} else {
+						$posts[ $post_id ] = $post;
+						update_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, $posts );
+					}
+				}
 			}
 
 			/**
@@ -266,7 +286,7 @@ namespace Cornell\Governance\Admin {
 
 				$now = time();
 
-				$data = get_post_meta( $post_id, 'cornell/governance/information', true );
+				$data = get_post_meta( $post_id, Plugin::INFO_META_KEY, true );
 
 				if ( empty( $data['goals'] ) ) {
 					_e( 'Unreviewed', 'cornell/governance' );

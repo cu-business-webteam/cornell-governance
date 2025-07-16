@@ -10,6 +10,7 @@ namespace Cornell\Governance\Admin\Submenus {
 
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
+	use Cornell\Governance\Taxonomies\Audience;
 
 	class Setup extends Base {
 		/**
@@ -68,7 +69,7 @@ namespace Cornell\Governance\Admin\Submenus {
 			$readme = ob_get_clean();
 			/*$readme = file_get_contents( Helpers::plugins_url( '/README.md' ) );*/
 
-			$audience_link = admin_url( '/edit-tags.php?taxonomy=audience&post_type=page' );
+			$audience_link = admin_url( '/edit-tags.php?taxonomy=' . Audience::HANDLE . '&post_type=page' );
 			$settings_link = admin_url( '/admin.php?page=cornell-governance-settings' );
 
 			$search = array(
@@ -76,6 +77,8 @@ namespace Cornell\Governance\Admin\Submenus {
 				'Governance -> Governance Settings' => '[Governance -> Governance Settings](' . $settings_link . ')',
 				'(assets/' => '(' . Helpers::plugins_url( '/assets/' ),
 				'the plugin settings' => '[the plugin settings](' . $settings_link . ')',
+				'`wp-json/wp/v2/`' => '[wp-json/wp/v2/](' . get_rest_url( null, '/wp/v2/' ) . ')',
+				'`wp-json/cornell/governance/v1/information`' => '[wp-json/cornell/governance/v1/information](' . get_rest_url( null, '/cornell/governance/v1/information' ) . ')',
 			);
 
 			$readme = str_replace( array_keys( $search ), array_values( $search ), $readme );

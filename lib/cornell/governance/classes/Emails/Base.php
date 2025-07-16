@@ -7,6 +7,9 @@ namespace {
 }
 
 namespace Cornell\Governance\Emails {
+
+	use Cornell\Governance\Config;
+
 	if ( ! class_exists( 'Base' ) ) {
 		abstract class Base {
 			/**
@@ -70,8 +73,8 @@ namespace Cornell\Governance\Emails {
 			 * @since  0.1
 			 */
 			public function set_email_to( $to ) {
-				if ( is_email( CORNELL_GOVERNANCE_EMAIL_TO ) && CORNELL_DEBUG && ! isset( $_GET['cornell/governance/debug'] ) ) {
-					$this->to = is_email( CORNELL_GOVERNANCE_EMAIL_TO );
+				if ( is_email( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) && Config::instance()->get_var( 'CORNELL_DEBUG' ) && ! isset( $_GET['cornell/governance/debug'] ) ) {
+					$this->to = is_email( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) );
 
 					return;
 				}
@@ -173,8 +176,8 @@ namespace Cornell\Governance\Emails {
 					}
 				}
 
-				if ( defined( 'CORNELL_GOVERNANCE_EMAIL_CC' ) ) {
-					$cclist = explode( ',', CORNELL_GOVERNANCE_EMAIL_CC );
+				if ( ! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_CC' ) ) ) {
+					$cclist = explode( ',', Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_CC' ) );
 					foreach ( $cclist as $address ) {
 						if ( is_email( trim( $address ) ) ) {
 							$cc[] = is_email( trim( $address ) );
@@ -184,8 +187,8 @@ namespace Cornell\Governance\Emails {
 					$cc = array_unique( $cc );
 				}
 
-				if ( defined( 'CORNELL_GOVERNANCE_EMAIL_BCC' ) ) {
-					$cclist = explode( ',', CORNELL_GOVERNANCE_EMAIL_BCC );
+				if ( ! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_BCC' ) ) ) {
+					$cclist = explode( ',', Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_BCC' ) );
 					foreach ( $cclist as $address ) {
 						if ( is_email( trim( $address ) ) ) {
 							$bcc[] = is_email( trim( $address ) );

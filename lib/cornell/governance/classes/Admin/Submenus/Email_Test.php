@@ -8,6 +8,7 @@ namespace {
 
 namespace Cornell\Governance\Admin\Submenus {
 
+	use Cornell\Governance\Config;
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
@@ -204,27 +205,33 @@ namespace Cornell\Governance\Admin\Submenus {
 			print( '<ul>' );
 
 			ob_start();
+			$option = Plugin::instance()->get_email_active();
+			var_dump( $option );
+			$val = ob_get_clean();
+			printf( '<li><code>Email Prompts Active</code>: %s</li>', $val );
+
+			ob_start();
 			defined( 'WP_DEBUG' ) ? var_dump( WP_DEBUG ) : print('false');
 			$val = ob_get_clean();
 			printf( '<li><code>WP_DEBUG</code>: %s</li>', $val );
 
 			ob_start();
-			defined( 'CORNELL_DEBUG' ) ? var_dump( CORNELL_DEBUG ) : print('false');
+			! empty( Config::instance()->get_var( 'CORNELL_DEBUG' ) ) ? var_dump( Config::instance()->get_var( 'CORNELL_DEBUG' ) ) : print('false');
 			$val = ob_get_clean();
 			printf( '<li><code>CORNELL_DEBUG</code>: %s</li>', $val );
 
 			ob_start();
-			defined( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ? var_dump( CORNELL_GOVERNANCE_EMAIL_TO ) : print('false');
+			! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) ? var_dump( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_TO' ) ) : print('false');
 			$val = ob_get_clean();
 			printf( '<li><code>CORNELL_GOVERNANCE_EMAIL_TO</code>: %s</li>', $val );
 
 			ob_start();
-			defined( 'CORNELL_GOVERNANCE_EMAIL_CC' ) ? var_dump( CORNELL_GOVERNANCE_EMAIL_CC ) : print('false');
+			! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_CC' ) ) ? var_dump( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_CC' ) ) : print('false');
 			$val = ob_get_clean();
 			printf( '<li><code>CORNELL_GOVERNANCE_EMAIL_CC</code>: %s</li>', $val );
 
 			ob_start();
-			defined( 'CORNELL_GOVERNANCE_EMAIL_BCC' ) ? var_dump( CORNELL_GOVERNANCE_EMAIL_BCC ) : print('false');
+			! empty( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_BCC' ) ) ? var_dump( Config::instance()->get_var( 'CORNELL_GOVERNANCE_EMAIL_BCC' ) ) : print('false');
 			$val = ob_get_clean();
 			printf( '<li><code>CORNELL_GOVERNANCE_EMAIL_BCC</code>: %s</li>', $val );
 
@@ -260,7 +267,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				'post_type' => Plugin::instance()->get_post_types(),
 				'meta_query' => array(
 					array(
-						'key' => 'cornell/governance/information',
+						'key' => Plugin::INFO_META_KEY,
 						'compare' => 'EXISTS',
 					),
 				),
@@ -281,7 +288,7 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			$q = $this->do_query();
 			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
-				$data = get_post_meta( get_the_ID(), 'cornell/governance/information', true );
+				$data = get_post_meta( get_the_ID(), Plugin::INFO_META_KEY, true );
 				$supervisors[$data['supervisor']] = $data['supervisor'];
 			endwhile; endif;
 
@@ -303,7 +310,7 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			$q = $this->do_query();
 			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
-				$data = get_post_meta( get_the_ID(), 'cornell/governance/information', true );
+				$data = get_post_meta( get_the_ID(), Plugin::INFO_META_KEY, true );
 				$liaisons[$data['liaison']] = $data['liaison'];
 			endwhile; endif;
 
@@ -321,7 +328,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @return void
 		 */
 		protected function send_test_mail() {
-			if ( ! wp_verify_nonce( $_GET['cornell_governance_send_test_mail'], 'cornell/governance/send-test-mail' ) ) {
+			if ( ! array_key_exists( 'cornell_governance_send_test_mail', $_GET ) || ! wp_verify_nonce( $_GET['cornell_governance_send_test_mail'], 'cornell/governance/send-test-mail' ) ) {
 				$this->message = __( 'Could not send the test email for some reason', 'cornell/governance' );
 				return;
 			}
@@ -474,7 +481,7 @@ namespace Cornell\Governance\Admin\Submenus {
 			$q = $this->do_query( $args );
 			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
 				global $post;
-				$data = get_post_meta( get_the_ID(), 'cornell/governance/information', true );
+				$data = get_post_meta( get_the_ID(), Plugin::INFO_META_KEY, true );
 
 				if ( ! array_key_exists( 'last-review', $data ) || ! array_key_exists( 'review-cycle', $data ) ) {
 					continue;

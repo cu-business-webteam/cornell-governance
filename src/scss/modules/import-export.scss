@@ -1,0 +1,63 @@
+.import-export-wrap {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+  line-height: 2;
+
+  > div {
+    border: 1px solid lightblue;
+    border-radius: 1rem;
+    margin: 0;
+    padding: 1rem;
+    background: white;
+    width: 100%;
+    max-width: calc( 100% - 2rem );
+    overflow: auto;
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .button-row {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: auto;
+    }
+
+    table {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    textarea[readonly] {
+      background: #ccc;
+      width: 100%;
+      max-width: 100%;
+      padding: 1rem;
+      border: 1px solid #000;
+      height: 8rem;
+    }
+  }
+
+  .import,
+  .import-settings {
+    p {
+      font-style: italic;
+    }
+
+    label {
+      display: block;
+      font-style: normal;
+    }
+
+    input[type=file] {
+      font-style: normal;
+      display: block;
+      margin: 2rem;
+      width: 100%;
+      max-width: calc(100% - 4rem);
+      padding: 1rem;
+      border: 1px solid #666;
+    }
+  }
+}

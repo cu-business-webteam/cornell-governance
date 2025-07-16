@@ -110,7 +110,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				} else if ( count( $data['overdue'] ) <= 0 ) {
 					$output = sprintf(
 						'<div class="non-compliant-page-list"><p>%s</p></div>',
-						__( '<strong>Congratulations!</strong> There are currently no items that are overdue.', 'cornell/governance' )
+						__( '<strong>Congratulations!</strong> There are currently no pages that are overdue.', 'cornell/governance' )
 					);
 
 					printf(
