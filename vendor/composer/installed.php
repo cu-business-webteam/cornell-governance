@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'cornell/governance',
-        'pretty_version' => '0.6.3',
-        'version' => '0.6.3.0',
+        'pretty_version' => '0.6.4',
+        'version' => '0.6.4.0',
         'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'cornell/governance' => array(
-            'pretty_version' => '0.6.3',
-            'version' => '0.6.3.0',
+            'pretty_version' => '0.6.4',
+            'version' => '0.6.4.0',
             'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
@@ -111,7 +111,7 @@
         'yahnis-elsts/plugin-update-checker' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'dbe1a66274343924f0c57cf30295abcff0858e72',
+            'reference' => '8add8143a274c47cafed48512e1259a2be859837',
             'type' => 'library',
             'install_path' => __DIR__ . '/../yahnis-elsts/plugin-update-checker',
             'aliases' => array(

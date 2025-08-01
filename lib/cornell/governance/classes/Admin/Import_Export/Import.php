@@ -217,6 +217,8 @@ namespace Cornell\Governance\Admin\Import_Export {
 						$governance_meta['completed-tasks']    = array();
 						if ( ! empty( $row['last-reviewed'] ) ) {
 							$governance_meta['last-review'] = strtotime( $row['last-reviewed'] );
+						} else {
+							$governance_meta['last-review'] = null;
 						}
 						if ( ! array_key_exists( 'timestamp', $governance_meta ) ) {
 							$governance_meta['timestamp'] = date( 'Y-m-d H:i:s' );

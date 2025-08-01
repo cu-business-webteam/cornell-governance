@@ -1,6 +1,6 @@
 {
   "name": "cornell-governance",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "dependencies": {
     "babel-loader": "^9.2.1",
     "normalize.css": "^8.0.1",
