@@ -1,7 +1,7 @@
 {
   "name": "cornell/governance",
   "description": "Cornell's In-Page Governance Plugin",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "authors": [
     {
       "name": "Curtiss Grymala",

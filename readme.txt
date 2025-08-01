@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 0.6.3  
+Stable tag: 0.6.4  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -375,6 +375,11 @@ _Unreviewed Pages Report_
 
 == Changelog ==
 
+= 0.6.4 =
+
+* Fixes fatal error in some Governance REST requests
+* On import, will blank out last review date if that cell is blank in the import file
+
 = 0.6.3 =
 
 Bugfixes:
@@ -604,6 +609,10 @@ Bug fixes:
 * 2022-12 - This is the first version
 
 == Upgrade Notice ==
+
+= 0.6.4 =
+
+Bugfix: Should fix fatal error on REST requests
 
 = 0.6.3 =
 

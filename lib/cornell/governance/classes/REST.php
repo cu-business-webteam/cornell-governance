@@ -8,6 +8,7 @@ namespace {
 
 namespace Cornell\Governance {
 
+	use Cornell\Governance\Taxonomies\Audience;
 	use WP_REST_Request;
 
 	if ( ! class_exists( 'REST' ) ) {
@@ -78,6 +79,7 @@ namespace Cornell\Governance {
 								'liaison'           => 'string',
 								'cycle'             => 'string',
 								'complianceStatus'  => 'string',
+								'lastReview'        => 'string',
 								'updateMessage'     => 'string',
 							)
 						),
@@ -119,6 +121,7 @@ namespace Cornell\Governance {
 					'liaison'           => $meta['liaison'],
 					'cycle'             => sprintf( __( 'Every %d months', 'cornell/governance' ), $meta['review-cycle'] ),
 					'complianceStatus'  => $legend,
+					'lastReview'        => array_key_exists( 'last-review', $meta ) ? $meta['last-review'] : null,
 					'updateMessage'     => $latest_update,
 				);
 
@@ -155,6 +158,9 @@ namespace Cornell\Governance {
 						break;
 					case 'cycle' :
 						$key = 'review-cycle';
+						break;
+					case 'lastReview' :
+						$key = 'last-review';
 						break;
 					case 'complianceStatus' :
 						$key = 'compliance-status';
@@ -321,7 +327,7 @@ namespace Cornell\Governance {
 				if ( array_key_exists( 'review-cycle', $meta ) ) {
 					$meta['review-cycle'] = array(
 						'cycle' => (int) $meta['review-cycle'],
-						'text' => sprintf( __( 'Every %d months', 'cornell/governance' ), $meta['review-cycle'] ),
+						'text'  => sprintf( __( 'Every %d months', 'cornell/governance' ), $meta['review-cycle'] ),
 					);
 				}
 
@@ -365,7 +371,7 @@ namespace Cornell\Governance {
 					$meta['notes'] = $notes;
 
 					$Parsedown = new \ParsedownExtra();
-					$value = $Parsedown->text($meta['notes']['notes']);
+					$value     = $Parsedown->text( $meta['notes']['notes'] );
 
 					$meta['notes']['rendered'] = $value;
 				}
@@ -377,7 +383,7 @@ namespace Cornell\Governance {
 							'revision-id' => $key,
 							'message'     => $revision['commit-message'],
 							'author'      => array(
-								'id' => $revision['editor'],
+								'id'    => $revision['editor'],
 								'email' => get_user_by( 'id', (int) $revision['editor'] )->user_email,
 							),
 							'timestamp'   => $revision['timestamp'],

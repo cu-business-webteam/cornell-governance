@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cecd82db9e24f29cb8715b03e6c8256d",
+    "content-hash": "789ee84afd022f04939ed4516c910617",
     "packages": [
         {
             "name": "erusev/parsedown",
@@ -643,12 +643,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
-                "reference": "dbe1a66274343924f0c57cf30295abcff0858e72"
+                "reference": "8add8143a274c47cafed48512e1259a2be859837"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/dbe1a66274343924f0c57cf30295abcff0858e72",
-                "reference": "dbe1a66274343924f0c57cf30295abcff0858e72",
+                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/8add8143a274c47cafed48512e1259a2be859837",
+                "reference": "8add8143a274c47cafed48512e1259a2be859837",
                 "shasum": ""
             },
             "require": {
@@ -686,7 +686,7 @@
                 "issues": "https://github.com/YahnisElsts/plugin-update-checker/issues",
                 "source": "https://github.com/YahnisElsts/plugin-update-checker/tree/master"
             },
-            "time": "2025-06-13T14:57:13+00:00"
+            "time": "2025-07-22T11:38:19+00:00"
         }
     ],
     "packages-dev": [],
