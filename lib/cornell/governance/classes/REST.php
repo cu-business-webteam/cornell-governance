@@ -357,10 +357,10 @@ namespace Cornell\Governance {
 					unset( $meta['supervisor'] );
 				}
 
-				if ( array_key_exists( 'primary-audience', $meta ) ) {
+				if ( array_key_exists( 'primary-audience', $meta ) && ! empty( $meta['primary-audience'] ) ) {
 					$meta['primary-audience'] = $this->get_audience_term( $meta['primary-audience'] );
 				}
-				if ( array_key_exists( 'secondary-audience', $meta ) ) {
+				if ( array_key_exists( 'secondary-audience', $meta ) && ! empty( $meta['secondary-audience'] ) ) {
 					$meta['secondary-audience'] = $this->get_audience_term( $meta['secondary-audience'] );
 				}
 

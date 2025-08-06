@@ -56,6 +56,7 @@ namespace Cornell\Governance\Admin {
 				'Unreviewed',
 				'Reports',
 				'Steward_Dashboard',
+				'Liaison_Dashboard',
 				'Page_Meta',
 				'Email_Test',
 				'Import_Export',

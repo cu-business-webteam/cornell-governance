@@ -91,6 +91,7 @@ namespace Cornell\Governance\Admin {
 			public function save_ajax(): void {
 				if ( ! isset( $_POST['cornell-governance-action'] ) ) {
 					Helpers::log( 'There was not an action set, so we are doing nothing', 'warning' );
+
 					return;
 				}
 
@@ -126,7 +127,7 @@ namespace Cornell\Governance\Admin {
 
 				if ( Plugin::instance()->get_archive_settings( 'active' ) ) {
 					$tomorrow = date( 'Y-m-d', strtotime( 'tomorrow' ) );
-					$posts = apply_filters( 'cornell/governance/archive/trigger/posts', get_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, array() ) );
+					$posts    = apply_filters( 'cornell/governance/archive/trigger/posts', get_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, array() ) );
 					if ( array_key_exists( $post_id, $posts ) ) {
 						return;
 					} else {
@@ -161,7 +162,10 @@ namespace Cornell\Governance\Admin {
 			public function revision_fields( array $fields ): array {
 				$key            = 'cornell/governance/commit-message';
 				$fields[ $key ] = __( 'Commit Message', 'cornell/governance' );
-				add_filter( '_wp_post_revision_field_' . $key, array( Commit_Message::instance(), 'revision_field' ), 10, 4 );
+				add_filter( '_wp_post_revision_field_' . $key, array(
+					Commit_Message::instance(),
+					'revision_field'
+				), 10, 4 );
 
 				return $fields;
 			}
@@ -290,6 +294,7 @@ namespace Cornell\Governance\Admin {
 
 				if ( empty( $data['goals'] ) ) {
 					_e( 'Unreviewed', 'cornell/governance' );
+
 					return;
 				}
 
@@ -300,7 +305,7 @@ namespace Cornell\Governance\Admin {
 					$data['review-cycle'] = 12;
 				}
 
-				$due  = Helpers::calculate_next_review_date( $data['last-review'], $data['review-cycle'] );
+				$due = Helpers::calculate_next_review_date( $data['last-review'], $data['review-cycle'] );
 
 				if ( $due <= $now ) {
 					_e( 'Overdue', 'cornell/governance' );

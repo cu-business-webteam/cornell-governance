@@ -87,7 +87,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			$columns               = $this->get_columns();
 			$hidden                = array_keys( $this->get_hidden_columns() );
 			$sortable              = $this->get_sortable_columns();
-			$this->_column_headers = array( $columns, $hidden, $sortable );
+			$this->_column_headers = $this->get_column_info();
 
 			$this->items = $this->get_data();
 		}
@@ -103,6 +103,15 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 */
 		protected function get_orderby( string $orderby ): array {
 			return array( 'orderby' => $orderby );
+		}
+
+		/**
+		 * Return the search filter for this request, if any.
+		 *
+		 * @return string
+		 */
+		protected function get_request_search_query(): string {
+			return ( ! empty( $_REQUEST['s'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 
 		/**
@@ -136,8 +145,9 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'post_status'    => array( 'publish', 'pending', 'future', 'private' ),
 			);
 
-			if ( isset( $_POST['s'] ) && ! empty( $_POST['s'] ) ) {
-				$args['s'] = esc_attr( $_POST['s'] );
+			$s = $this->get_request_search_query();
+			if ( ! empty( $s ) ) {
+				$args['s'] = $s;
 			}
 
 			$args = array_merge( $args, $this->get_orderby( $orderby ) );
@@ -159,6 +169,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			$this->set_pagination_args( array(
 				'total_items' => $q->found_posts,
 				'per_page' => $per_page,
+				'total_pages' => ceil( $q->found_posts / $per_page ),
 			) );
 
 			return apply_filters(

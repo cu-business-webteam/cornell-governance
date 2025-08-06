@@ -18,7 +18,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				parent::__construct( $args );
 			}
 
-			function add_author_arg( $args ) {
+			function add_author_arg( $args ): array {
 				$user           = get_current_user_id();
 				$args['author'] = $user;
 

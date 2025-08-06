@@ -40,8 +40,6 @@ namespace Cornell\Governance\Admin\Submenus {
 				'per_page_option' => 'cornell/governance/page-list/items_per_page',
 				'description'     => __( 'View a sortable list of all governable content on this site, along with various governance information about each piece of content', 'cornell/governance' ),
 			) );
-
-			$this->table = new Tables\Page_List_Table();
 		}
 
 		/**
@@ -83,14 +81,6 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @since  0.1
 		 */
 		public function add_options() {
-			$option = 'per_page';
-			$args   = array(
-				'label'   => __( 'Pages', 'cornell/governance' ),
-				'default' => 50,
-				'option'  => $this->per_page_option,
-			);
-			add_screen_option( $option, $args );
-
 			$this->table = new Tables\Page_List_Table();
 		}
 
