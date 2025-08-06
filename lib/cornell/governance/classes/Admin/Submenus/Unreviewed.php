@@ -42,7 +42,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				'description'     => __( 'A list of all governable content on this site that has not been reviewed for governance purposes, yet.', 'cornell/governance' ),
 			) );
 
-			$this->table = new Unreviewed_Table();
+			$this->table_class = 'Unreviewed_Table';
 		}
 
 		/**
@@ -84,14 +84,6 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @since  0.1
 		 */
 		public function add_options() {
-			$option = 'per_page';
-			$args   = array(
-				'label'   => __( 'Pages', 'cornell/governance' ),
-				'default' => 50,
-				'option'  => $this->per_page_option,
-			);
-			add_screen_option( $option, $args );
-
 			$this->table = new Unreviewed_Table();
 		}
 

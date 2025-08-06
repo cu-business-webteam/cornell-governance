@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 0.6.4  
+Stable tag: 0.6.5  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -16,6 +16,27 @@ Allows tracking and adding notes about the content, purpose, audiences, etc of i
 This plugin adds numerous fields to the page editor, allowing users to review their pages, provide certain relevant information about the page and its audiences, etc.
 
 It also adds automated review messages that can be emailed out to a list of relevant users.
+
+= Links =
+
+1. [Setup](#setup)
+2. [Updates](#updates)
+3. [Settings](#settings)
+    1. [General Settings](#general-settings)
+    2. [Wayback Integration Settings](#wayback-integration-settings)
+    3. [Change Form Settings](#change-form-settings)
+    4. [Email Settings](#email-settings)
+4. [Constants](#constants)
+5. [Emails](#emails)
+    1. [Email Templates](#email-templates)
+6. [REST API Information](#rest-api-information)
+    1. [WordPress Native REST Requests](#wordpress-native-rest-requests)
+    2. [Custom Governance REST Endpoint](#custom-governance-rest-endpoint)
+7. [Installation](#installation)
+8. [Frequently Asked Questions](#frequently-asked-questions)
+9. [Screenshots](#screenshots)
+10. [Changelog](#changelog)
+11. [Upgrade Notice](#upgrade-notice)
 
 = Setup =
 
@@ -370,10 +391,18 @@ _Unreviewed Pages Report_
     _An example of the "Unreviewed Pages" report_](assets/screenshot-4.png)
 5. [![Current user dashboard compliance widget](assets/screenshot-5.png)
     _An example of the Compliance Widget on the Dashboard for the current user_](assets/screenshot-5.png)
-6. [![Tabbed Interface for Liaisons Who Are Stewards of Current Page](assets/screenshot-6.png)
-    _A snapshot showing the tabbed interface for Liaisons who are also the Steward of the current page_](assets/screenshot-6.png)
+6. [![List of recent commit messages](assets/screenshot-6.png)
+    _An example of the list of recent commit messages_](assets/screenshot-6.png)
+7. [![Page Deletion Request interface](assets/screenshot-7.png)
+    _The Page Deletion Request interface_](assets/screenshot-7.png)
 
 == Changelog ==
+
+= 0.6.5 =
+
+* Adds a report where Liaisons can see all pages for which they're responsible
+* Re-implements the "Screen Options" for all reports with page list tables
+* Fixes pagination for report page lists
 
 = 0.6.4 =
 
@@ -609,6 +638,10 @@ Bug fixes:
 * 2022-12 - This is the first version
 
 == Upgrade Notice ==
+
+= 0.6.5 =
+
+Feature: Adds a report where Liaisons can see all pages for which they're responsible
 
 = 0.6.4 =
 

@@ -72,18 +72,48 @@ namespace Cornell\Governance\Admin\Submenus {
 			$audience_link = admin_url( '/edit-tags.php?taxonomy=' . Audience::HANDLE . '&post_type=page' );
 			$settings_link = admin_url( '/admin.php?page=cornell-governance-settings' );
 
+			$pattern = '/(#{1,4}) ([^\r|\n]*)/';
+			$slugs   = array();
+			preg_match_all( $pattern, $readme, $matches, PREG_SET_ORDER, 0 );
+			foreach ( $matches as $match ) {
+				if ( is_numeric( $match[2][1] ) ) {
+					continue;
+				}
+
+				$slug = sanitize_title( $match[2] );
+				if ( in_array( $slug, $slugs ) ) {
+					$counter = 1;
+					$test    = $slug . '-' . $counter;
+
+					while ( in_array( $test, $slugs ) ) {
+						$counter ++;
+						$test = $slug . '-' . $counter;
+					}
+
+					$slug = $test;
+				}
+
+				$slugs[] = $slug;
+
+				$pos = strpos( $readme, $match[0] . PHP_EOL );
+				if ( $pos !== false ) {
+					$readme = substr_replace( $readme, sprintf( '%1$s {#%2$s}', $match[0], $slug ), $pos, strlen( $match[0] ) );
+				}
+			}
+
 			$search = array(
-				'Governance -> Audiences' => '[Governance -> Audiences](' . $audience_link . ')',
-				'Governance -> Governance Settings' => '[Governance -> Governance Settings](' . $settings_link . ')',
-				'(assets/' => '(' . Helpers::plugins_url( '/assets/' ),
-				'the plugin settings' => '[the plugin settings](' . $settings_link . ')',
-				'`wp-json/wp/v2/`' => '[wp-json/wp/v2/](' . get_rest_url( null, '/wp/v2/' ) . ')',
+				'Governance -> Audiences'                     => '[Governance -> Audiences](' . $audience_link . ')',
+				'Governance -> Governance Settings'           => '[Governance -> Governance Settings](' . $settings_link . ')',
+				'(assets/'                                    => '(' . Helpers::plugins_url( '/assets/' ),
+				'the plugin settings'                         => '[the plugin settings](' . $settings_link . ')',
+				'`wp-json/wp/v2/`'                            => '[wp-json/wp/v2/](' . get_rest_url( null, '/wp/v2/' ) . ')',
 				'`wp-json/cornell/governance/v1/information`' => '[wp-json/cornell/governance/v1/information](' . get_rest_url( null, '/cornell/governance/v1/information' ) . ')',
 			);
 
 			$readme = str_replace( array_keys( $search ), array_values( $search ), $readme );
 
-			$Parsedown = new \Parsedown();
+			$Parsedown = new \ParsedownExtra();
+
 			echo $Parsedown->text( $readme );
 
 			print( '</div></div>' );

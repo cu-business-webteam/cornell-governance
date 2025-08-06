@@ -9,14 +9,16 @@ namespace {
 namespace Cornell\Governance\Admin\Submenus {
 
 	use Cornell\Governance\Admin\Submenus\Reports\Compliance_Status;
+	use Cornell\Governance\Admin\Submenus\Reports\Liaison_Status;
 	use Cornell\Governance\Helpers;
+	use Cornell\Governance\Plugin;
 
-	class Steward_Dashboard extends Base {
+	class Liaison_Dashboard extends Base {
 		/**
-		 * @var Steward_Dashboard $instance holds the single instance of this class
+		 * @var Liaison_Dashboard $instance holds the single instance of this class
 		 * @access private
 		 */
-		private static Steward_Dashboard $instance;
+		private static Liaison_Dashboard $instance;
 		/**
 		 * @var Tables\Page_List_Table $table holds the WP_List_Table that is part of this page
 		 * @access protected
@@ -35,30 +37,58 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'           => __( 'Cornell Governance: Steward Dashboard', 'cornell/governance' ),
-				'menu_name'       => __( 'Your Pages', 'cornell/governance' ),
-				'slug'            => 'cornell-governance-steward-dashboard',
-				'per_page_option' => 'cornell/governance/steward-dashboard/items_per_page',
-				'description'     => __( 'A series of reports specifically about content that you currently own or manage.', 'cornell/governance' ),
+				'title'           => __( 'Cornell Governance: Liaison Dashboard', 'cornell/governance' ),
+				'menu_name'       => __( 'Liaison Dashboard', 'cornell/governance' ),
+				'slug'            => 'cornell-governance-liaison-dashboard',
+				'per_page_option' => 'cornell-governance-liaison-dashboard-items_per_page',
+				'description'     => __( 'A series of reports specifically about content that you currently manage as the liaison.', 'cornell/governance' ),
 			) );
-
-			$this->table_class = 'Steward_Page_List';
 		}
 
 		/**
 		 * Returns the instance of this class.
 		 *
 		 * @access  public
-		 * @return  Steward_Dashboard
+		 * @return  Liaison_Dashboard
 		 * @since   0.1
 		 */
-		public static function instance(): Steward_Dashboard {
+		public static function instance(): Liaison_Dashboard {
 			if ( ! isset( self::$instance ) ) {
 				$className      = __CLASS__;
 				self::$instance = new $className;
 			}
 
 			return self::$instance;
+		}
+
+		/**
+		 * Add the appropriate meta query to only retrieve results for this specific liaison
+		 *
+		 * @param array $args the existing query arguments
+		 *
+		 * @access public
+		 * @return array the updated query arguments
+		 * @since  0.6.5
+		 */
+		public function add_meta_query( array $args ): array {
+			$user           = wp_get_current_user();
+			if ( ! is_a( $user, 'WP_User' ) ) {
+				return $args;
+			}
+
+			$email = $user->user_email;
+			$length = strlen( $email );
+			$search = sprintf( 's:7:"liaison";s:%1$d:"%2$s";', $length, $email );
+
+			$args['meta_query'] = array(
+				array(
+					'key' => \Cornell\Governance\Plugin::INFO_META_KEY,
+					'compare' => 'LIKE',
+					'value' => $search,
+				)
+			);
+
+			return $args;
 		}
 
 		/**
@@ -94,7 +124,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				}
 			}
 
-			$this->cap = 'edit_pages';
+			$this->cap = Plugin::instance()->get_capability();
 		}
 
 		/**
@@ -113,7 +143,7 @@ namespace Cornell\Governance\Admin\Submenus {
 			$this->do_search_box();
 			$this->table->display();
 			print( '</div><div class="steward-dashboard-chart-container cornell-governance-data-charts">' );
-			Compliance_Status::instance()->display();
+			Liaison_Status::instance()->display();
 			print( '</div></div>' );
 
 			remove_filter( 'cornell/governance/reports/current-user', array( $this, 'current_user' ) );
@@ -127,7 +157,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @since  0.1
 		 */
 		public function add_options() {
-			$this->table = new Tables\Steward_Page_List();
+			$this->table = new Tables\Liaison_Page_List();
 		}
 
 		/**

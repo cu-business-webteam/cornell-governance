@@ -345,14 +345,6 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @since  0.1
 		 */
 		public function add_options() {
-			$option = 'per_page';
-			$args   = array(
-				'label'   => __( 'Pages', 'cornell/governance' ),
-				'default' => 50,
-				'option'  => $this->per_page_option,
-			);
-			add_screen_option( $option, $args );
-
 			$this->table = new Tables\Steward_Page_List();
 		}
 

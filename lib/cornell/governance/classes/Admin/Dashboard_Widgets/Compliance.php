@@ -11,6 +11,7 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Admin\Submenus\Reports\Non_Compliant;
 	use Cornell\Governance\Helpers;
+	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Compliance' ) ) {
 		class Compliance extends Base {
@@ -59,8 +60,14 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 				Due_For_Review::instance()->display();
 				printf( '<p><a href="%s" class="large">%s</a></p>',
 					admin_url( 'admin.php?page=cornell-governance-steward-dashboard' ),
-					__( 'View your full pages report', 'cornell/governance' )
+					__( 'View your full Steward Page report', 'cornell/governance' )
 				);
+				if ( current_user_can( Plugin::instance()->get_capability() ) ) {
+					printf( '<p><a href="%s" class="large">%s</a></p>',
+						admin_url( 'admin.php?page=cornell-governance-liaison-dashboard' ),
+						__( 'View your full Liaison Page Report', 'cornell/governance' )
+					);
+				}
 			}
 		}
 	}

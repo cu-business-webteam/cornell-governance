@@ -21,6 +21,31 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 
 	class Page_List_Table extends \WP_List_Table {
 		/**
+		 * @var string $per_page_option the option name for our per_page setting
+		 */
+		protected string $per_page_option = 'per_page';
+
+		/**
+		 * Construct our object
+		 *
+		 * @param $args
+		 */
+		function __construct( $args = array() ) {
+			parent::__construct( $args );
+
+			$this->per_page_option = str_replace( '-', '_', $this->screen->id ) . '_per_page';
+
+			$option = 'per_page';
+			$args   = array(
+				'default' => 50,
+			);
+			add_screen_option( $option, $args );
+
+			add_filter( 'set_screen_option_' . $this->per_page_option, array( $this, 'save_per_page_option' ), 10, 3 );
+			set_screen_options();
+		}
+
+		/**
 		 * Define the table columns
 		 */
 		function get_columns() {
@@ -102,7 +127,12 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			$columns               = $this->get_columns();
 			$hidden                = array_keys( $this->get_hidden_columns() );
 			$sortable              = $this->get_sortable_columns();
-			$this->_column_headers = array( $columns, $hidden, $sortable );
+			/*$this->_column_headers = array( $columns, $hidden, $sortable );*/
+			$this->_column_headers = array(
+				$this->get_columns(),
+				get_hidden_columns( $this->screen ),
+				$this->get_sortable_columns(),
+			);
 
 			$this->items = $this->get_data();
 		}
@@ -142,6 +172,15 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		}
 
 		/**
+		 * Return the search filter for this request, if any.
+		 *
+		 * @return string
+		 */
+		protected function get_request_search_query(): string {
+			return ( ! empty( $_REQUEST['s'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		}
+
+		/**
 		 * Retrieve the data to be displayed in the table
 		 *
 		 * @access public
@@ -151,7 +190,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		function get_data(): array {
 			$data = array();
 
-			$per_page     = $this->get_items_per_page( 'cornell/governance/page-list/items_per_page', 50 );
+			$per_page     = $this->get_items_per_page( $this->per_page_option, 50 );
 			$current_page = $this->get_pagenum();
 			$orderby      = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'title';
 			$order        = ( ! empty( $_GET['order'] ) ) ? $_GET['order'] : false;
@@ -172,8 +211,9 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'post_status'    => Helpers::get_page_status_list(),
 			);
 
-			if ( isset( $_POST['s'] ) && ! empty( $_POST['s'] ) ) {
-				$args['s'] = esc_attr( $_POST['s'] );
+			$s = $this->get_request_search_query();
+			if ( ! empty( $s ) ) {
+				$args['s'] = $s;
 			}
 
 			$natural_sort = false;
@@ -213,6 +253,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			$this->set_pagination_args( array(
 				'total_items' => $q->found_posts,
 				'per_page' => $per_page,
+				'total_pages' => ceil( $q->found_posts / $per_page ),
 			) );
 
 			if ( false === $natural_sort ) {
@@ -364,7 +405,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			}
 
 			if ( ! array_key_exists( 'review-cycle', $meta ) ) {
-				$status = array( 'next_review' => null );
+				$status = array( 'next_review' => null, 'overdue' => false, 'due' => false );
 			} else {
 				$item['next-review'] = Helpers::calculate_next_review_date( $meta['last-review'], $meta['review-cycle'] );
 
@@ -372,11 +413,11 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			}
 
 			$item['status'] = __( 'Compliant', 'cornell/governance' );
-			if ( $status['overdue'] ) {
+			if ( array_key_exists( 'overdue', $status ) && $status['overdue'] ) {
 				$item['status'] = __( 'Overdue', 'cornell/governance' );
-			} else if ( $status['due'] ) {
+			} else if ( array_key_exists( 'due', $status ) && $status['due'] ) {
 				$item['status'] = __( 'Due', 'cornell/governance' );
-			} else if ( null === $status['next_review'] ) {
+			} else if ( ! array_key_exists( 'next_review', $status ) || null === $status['next_review'] ) {
 				Helpers::log( __( 'It does not appear that this page has been reviewed.', 'cornell/governance' ), 'alert' );
 				Helpers::log( sprintf( __( 'The next review looks like: %s, the last review looks like: %s and the review cycle looks like: %s', 'cornell/governance' ), $status['next_review'], $meta['last-review'], $meta['review-cycle'] ), 'alert' );
 				$item['status'] = __( 'Never Reviewed', 'cornell/governance' );
@@ -403,6 +444,21 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			} else {
 				_e( 'There are no pages to display', 'cornell/governance' );
 			}
+		}
+
+		/**
+		 * Filter the value of the Per Page option before saving
+		 *
+		 * @param mixed $ignore whether to ignore saving this value or not
+		 * @param string $option the name of the option being filtered
+		 * @param mixed $value the value being filtered
+		 *
+		 * @access public
+		 * @since  0.6.5
+		 * @return mixed the new value
+		 */
+		public function save_per_page_option( $ignore, string $option, $value ) {
+			return intval( $value );
 		}
 	}
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Cornell\Governance\Admin\Submenus {
 
 	use Cornell\Governance\Admin\Admin;
@@ -47,7 +48,7 @@ namespace Cornell\Governance\Admin\Submenus {
 			 */
 			public function __construct( array $atts ) {
 				foreach ( $atts as $key => $val ) {
-					switch( $key ) {
+					switch ( $key ) {
 						case 'cap' :
 						case 'page' :
 						case 'title' :
@@ -69,12 +70,12 @@ namespace Cornell\Governance\Admin\Submenus {
 			 * @param array $attributes the properties to assign
 			 *
 			 * @access public
-			 * @since  0.1
 			 * @return void
+			 * @since  0.1
 			 */
 			public function set_properties( array $attributes ) {
 				foreach ( $attributes as $key => $attribute ) {
-					switch( $key ) {
+					switch ( $key ) {
 						case 'cap' :
 							$this->cap = $attribute;
 							break;
@@ -91,8 +92,8 @@ namespace Cornell\Governance\Admin\Submenus {
 			 * Run the registration action
 			 *
 			 * @access public
-			 * @since  0.1
 			 * @return void
+			 * @since  0.1
 			 */
 			public function register() {
 				$this->add_submenu_page();
@@ -111,15 +112,15 @@ namespace Cornell\Governance\Admin\Submenus {
 					array( $this, 'do_submenu_page' )
 				);
 
-				/*add_action( 'load-' . $this->hook, array( $this, 'add_options' ) );*/
+				add_action( 'load-' . $this->hook, array( $this, 'add_options' ) );
 			}
 
 			/**
 			 * Output the submenu page
 			 *
 			 * @access public
-			 * @since  0.1
 			 * @return void
+			 * @since  0.1
 			 */
 			public function do_submenu_page() {
 				Admin::instance()->admin_enqueue_scripts();
@@ -136,22 +137,22 @@ namespace Cornell\Governance\Admin\Submenus {
 			 * Register the screen options
 			 *
 			 * @access public
-			 * @since  0.1
 			 * @return void
+			 * @since  0.1
 			 */
 			abstract public function add_options();
 
 			/**
 			 * Save the per_page setting
 			 *
-			 * @param mixed  $screen_option The value to save instead of the option value.
+			 * @param mixed $screen_option The value to save instead of the option value.
 			 *                              Default false (to skip saving the current option).
-			 * @param string $option        The option name.
-			 * @param int    $value         The option value.
+			 * @param string $option The option name.
+			 * @param int $value The option value.
 			 *
 			 * @access public
-			 * @since  0.1
 			 * @return int the per_page option value
+			 * @since  0.1
 			 */
 			public function set_per_page_option( $screen_option, string $option, int $value ): int {
 				if ( $this->per_page_option === $option ) {
@@ -171,15 +172,15 @@ namespace Cornell\Governance\Admin\Submenus {
 			 * Output the table search form
 			 *
 			 * @access protected
-			 * @since  0.1
 			 * @return void
+			 * @since  0.1
 			 */
 			protected function do_search_box() {
 				?>
-				<form method="post">
-					<input type="hidden" name="page" value="<?php echo $this->hook . '_table' ?>" />
-					<?php $this->table->search_box( __( 'Search:', 'cornell/governance' ), 'search_id') ?>
-				</form>
+                <form method="post">
+                    <input type="hidden" name="page" value="<?php echo $this->hook . '_table' ?>"/>
+					<?php $this->table->search_box( __( 'Search:', 'cornell/governance' ), 'search_id' ) ?>
+                </form>
 				<?php
 			}
 
