@@ -289,7 +289,9 @@ namespace Cornell\Governance\Admin\Submenus {
 			$q = $this->do_query();
 			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
 				$data = get_post_meta( get_the_ID(), Plugin::INFO_META_KEY, true );
-				$supervisors[$data['supervisor']] = $data['supervisor'];
+				if ( is_array( $data ) && array_key_exists( 'supervisor', $data ) ) {
+					$supervisors[ $data['supervisor'] ] = $data['supervisor'];
+				}
 			endwhile; endif;
 
 			wp_reset_postdata();
@@ -311,7 +313,9 @@ namespace Cornell\Governance\Admin\Submenus {
 			$q = $this->do_query();
 			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
 				$data = get_post_meta( get_the_ID(), Plugin::INFO_META_KEY, true );
-				$liaisons[$data['liaison']] = $data['liaison'];
+				if ( is_array( $data ) && array_key_exists( 'liaison', $data ) ) {
+					$liaisons[ $data['liaison'] ] = $data['liaison'];
+				}
 			endwhile; endif;
 
 			wp_reset_postdata();

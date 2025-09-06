@@ -160,6 +160,20 @@ namespace Cornell\Governance\Admin\Import_Export {
 
 					print( '<tr>' );
 					foreach ( $row as $key => $cell ) {
+						if ( 'steward' === $key && empty( trim( $cell ) ) ) {
+							if ( ! empty( $row['steward_email'] ) ) {
+								$user = get_user_by( 'email', $row['steward_email'] );
+								if ( is_a( $user, '\WP_User' ) ) {
+									$cell = $user->ID;
+								}
+							} else if ( ! empty( $row['steward_username'] ) ) {
+								$user = get_user_by( 'login', $row['steward_username'] );
+								if ( is_a( $user, '\WP_User' ) ) {
+									$cell = $user->ID;
+								}
+							}
+						}
+
 						printf( '<%s data-key="%s">', $cell_type, $key );
 						print( nl2br( $cell ) );
 						/*var_dump( $cell );*/
@@ -251,6 +265,18 @@ namespace Cornell\Governance\Admin\Import_Export {
 
 						if ( ! empty( $row['steward'] ) && ( intval( $row['steward'] ) !== intval( $post->post_author ) ) ) {
 							$post->post_author = intval( $row['steward'] );
+							wp_update_post( $post );
+						} else if ( ! empty( $row['steward_email'] ) ) {
+							$user = get_user_by( 'email', $row['steward_email'] );
+							if (  is_a( $user, '\WP_User' ) ) {
+								$post->post_author = $user->ID;
+							}
+							wp_update_post( $post );
+						} else if ( ! empty( $row['steward_username'] ) ) {
+							$user = get_user_by( 'login', $row['steward_username'] );
+							if ( is_a( $user, '\WP_User' ) ) {
+								$post->post_author = $user->ID;
+							}
 							wp_update_post( $post );
 						}
 					}

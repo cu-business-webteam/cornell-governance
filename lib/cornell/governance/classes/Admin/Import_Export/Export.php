@@ -97,9 +97,12 @@ namespace Cornell\Governance\Admin\Import_Export {
 						$notes = array( 'notes' => '' );
 					}
 
+					$author = get_user( $post->post_author );
+
 					$this->data[$post->ID] = array(
 						$post->ID,
 						$post->post_title,
+						get_permalink( $post->ID ),
 						$meta['goals'],
 						$meta['problem'],
 						$meta['primary-audience'],
@@ -108,6 +111,8 @@ namespace Cornell\Governance\Admin\Import_Export {
 						$meta['review-cycle'],
 						implode( PHP_EOL, $meta['tasks'] ),
 						$post->post_author,
+						$author->user_email,
+						$author->user_login,
 						$meta['supervisor'],
 						$meta['liaison'],
 						$notes['notes'],
