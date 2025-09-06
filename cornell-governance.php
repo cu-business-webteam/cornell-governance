@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cornell Business: In-Page Governance
 Description: Allows tracking and adding notes about the content, purpose, audiences, etc of individual pages
-Version: 0.6.5
+Version: 1.0.0
 Author: Curtiss Grymala
 License: GPL2
 Text Domain: cornell/governance

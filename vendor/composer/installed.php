@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'cornell/governance',
-        'pretty_version' => '0.6.5',
-        'version' => '0.6.5.0',
+        'pretty_version' => '0.9.1',
+        'version' => '0.9.1.0',
         'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'cornell/governance' => array(
-            'pretty_version' => '0.6.5',
-            'version' => '0.6.5.0',
+            'pretty_version' => '0.9.1',
+            'version' => '0.9.1.0',
             'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
@@ -22,7 +22,7 @@
         'erusev/parsedown' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '5b74b74145aa14653d3285d793cf7fa817b3f7e7',
+            'reference' => '0b274ac959624e6c6d647e9c9b6c2d20da242004',
             'type' => 'library',
             'install_path' => __DIR__ . '/../erusev/parsedown',
             'aliases' => array(
@@ -53,7 +53,7 @@
         'phpoption/phpoption' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'e3fac8b24f56113f7cb96af14958c0dd16330f54',
+            'reference' => '638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoption/phpoption',
             'aliases' => array(

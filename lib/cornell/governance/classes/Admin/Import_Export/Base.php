@@ -30,6 +30,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 				$this->headers = array(
 					'page_id'            => __( 'Page ID', 'cornell/governance' ),
 					'page_title'         => __( 'Page Title', 'cornell/governance' ),
+					'page_url'           => __( 'Page URL', 'cornell/governance' ),
 					'goals'              => __( 'Goals', 'cornell/governance' ),
 					'problem'            => __( 'Problem', 'cornell/governance' ),
 					'primary-audience'   => __( 'Primary Audience', 'cornell/governance' ),
@@ -38,6 +39,8 @@ namespace Cornell\Governance\Admin\Import_Export {
 					'review-cycle'       => __( 'Review Cycle', 'cornell/governance' ),
 					'tasks'              => __( 'Tasks', 'cornell/governance' ),
 					'steward'            => __( 'Steward', 'cornell/governance' ),
+					'steward_email'      => __( 'Steward Email', 'cornell/governance' ),
+					'steward_username'   => __( 'Steward Username', 'cornell/governance' ),
 					'supervisor'         => __( 'Secondary Contact', 'cornell/governance' ),
 					'liaison'            => __( 'Liaison', 'cornell/governance' ),
 					'notes'              => __( 'Notes', 'cornell/governance' ),

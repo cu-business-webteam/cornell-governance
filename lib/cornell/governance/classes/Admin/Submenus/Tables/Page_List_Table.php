@@ -418,8 +418,9 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			} else if ( array_key_exists( 'due', $status ) && $status['due'] ) {
 				$item['status'] = __( 'Due', 'cornell/governance' );
 			} else if ( ! array_key_exists( 'next_review', $status ) || null === $status['next_review'] ) {
+				$tmp = array_merge( array( 'next_review' => null, 'last-review' => null, 'review-cycle' => null ), $meta, $status );
 				Helpers::log( __( 'It does not appear that this page has been reviewed.', 'cornell/governance' ), 'alert' );
-				Helpers::log( sprintf( __( 'The next review looks like: %s, the last review looks like: %s and the review cycle looks like: %s', 'cornell/governance' ), $status['next_review'], $meta['last-review'], $meta['review-cycle'] ), 'alert' );
+				Helpers::log( sprintf( __( 'The next review looks like: %s, the last review looks like: %s and the review cycle looks like: %s', 'cornell/governance' ), $tmp['next_review'], $tmp['last-review'], $tmp['review-cycle'] ), 'alert' );
 				$item['status'] = __( 'Never Reviewed', 'cornell/governance' );
 			}
 

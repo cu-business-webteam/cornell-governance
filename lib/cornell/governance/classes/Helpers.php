@@ -640,6 +640,10 @@ namespace Cornell\Governance {
 					}
 				}
 
+				if ( ! is_numeric( $post_id ) ) {
+					return 0;
+				}
+
 				return $post_id;
 			}
 

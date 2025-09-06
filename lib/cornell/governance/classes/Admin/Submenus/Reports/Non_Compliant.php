@@ -154,12 +154,15 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 
 					$output .= sprintf( '<tr id="content-%1$d">', $key );
 
+					$user = get_user_by( 'id', $post->post_author );
+					$steward = is_object( $user ) && property_exists( $user, 'user_email' ) ? $user->user_email : null;
+
 					foreach (
 						array(
 							'id'      => $key,
 							'title'   => sprintf( '<a href="%1$s">%2$s</a>', get_edit_post_link( $key, 'link' ), $post->post_title ),
 							'due'     => Helpers::format_date( $datum ),
-							'steward' => get_user_by( 'id', $post->post_author )->user_email,
+							'steward' => $steward,
 						) as $k => $value
 					) {
 						$output .= sprintf( '<td class="non-compliant-%1$s">%2$s</td>', $k, $value );

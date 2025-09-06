@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 0.6.5  
+Stable tag: 1.0.0  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -397,6 +397,19 @@ _Unreviewed Pages Report_
     _The Page Deletion Request interface_](assets/screenshot-7.png)
 
 == Changelog ==
+
+= 1.0.0 =
+
+This is the first complete version of the plugin. All features intended to be included in the initial version have been added and tested.
+
+= 0.9.1 =
+
+* Fixed some PHP warnings throughout the plugin
+
+= 0.6.6 =
+
+* Added URL to exported data to help identify pages
+* Added user email and username to exported data, and begin handling user email in imports
 
 = 0.6.5 =
 

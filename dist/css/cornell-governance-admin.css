@@ -938,13 +938,20 @@
   font-size: 1.5rem;
 }
 
-.import-export-wrap {
+.cornell-governance-import-export-page h2 {
+  font-size: 1.25rem;
+}
+.cornell-governance-import-export-page .import-export-wrap fieldset {
   display: grid;
   gap: 3rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   line-height: 2;
 }
-.import-export-wrap > div {
+.cornell-governance-import-export-page .import-export-wrap fieldset > legend {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.cornell-governance-import-export-page .import-export-wrap fieldset > div {
   border: 1px solid lightblue;
   border-radius: 1rem;
   margin: 0;
@@ -954,37 +961,25 @@
   max-width: calc(100% - 2rem);
   overflow: auto;
 }
-.import-export-wrap > div.full-width {
+.cornell-governance-import-export-page .import-export-wrap fieldset > div.full-width {
   grid-column: 1/-1;
 }
-.import-export-wrap > div .button-row {
+.cornell-governance-import-export-page .import-export-wrap fieldset > div .button-row {
   display: grid;
   gap: 1rem;
   grid-template-columns: auto;
 }
-.import-export-wrap > div table {
-  width: 100%;
-  max-width: 100%;
-}
-.import-export-wrap > div textarea[readonly] {
-  background: #ccc;
-  width: 100%;
-  max-width: 100%;
-  padding: 1rem;
-  border: 1px solid #000;
-  height: 8rem;
-}
-.import-export-wrap .import p,
-.import-export-wrap .import-settings p {
+.cornell-governance-import-export-page .import-export-wrap fieldset .import p,
+.cornell-governance-import-export-page .import-export-wrap fieldset .import-settings p {
   font-style: italic;
 }
-.import-export-wrap .import label,
-.import-export-wrap .import-settings label {
+.cornell-governance-import-export-page .import-export-wrap fieldset .import label,
+.cornell-governance-import-export-page .import-export-wrap fieldset .import-settings label {
   display: block;
   font-style: normal;
 }
-.import-export-wrap .import input[type=file],
-.import-export-wrap .import-settings input[type=file] {
+.cornell-governance-import-export-page .import-export-wrap fieldset .import input[type=file],
+.cornell-governance-import-export-page .import-export-wrap fieldset .import-settings input[type=file] {
   font-style: normal;
   display: block;
   margin: 2rem;
@@ -992,6 +987,33 @@
   max-width: calc(100% - 4rem);
   padding: 1rem;
   border: 1px solid #666;
+}
+.cornell-governance-import-export-page .import-export-wrap table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  background: white;
+  border-collapse: collapse;
+}
+.cornell-governance-import-export-page .import-export-wrap table caption {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 1rem auto;
+}
+.cornell-governance-import-export-page .import-export-wrap table th, .cornell-governance-import-export-page .import-export-wrap table td {
+  padding: 0.25rem;
+  border: 1px solid #000;
+  vertical-align: text-top;
+  margin: 0;
+}
+.cornell-governance-import-export-page .import-export-wrap textarea[readonly] {
+  background: #ccc;
+  width: 100%;
+  max-width: 100%;
+  padding: 1rem;
+  border: 1px solid #000;
+  height: 8rem;
 }
 
 /*# sourceMappingURL=cornell-governance-admin.css.map */

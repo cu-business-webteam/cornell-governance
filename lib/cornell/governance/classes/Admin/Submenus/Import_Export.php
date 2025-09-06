@@ -80,35 +80,43 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @since  0.1
 		 */
 		protected function display() {
-			printf( '<div class="wrap"><h2>%s</h2>', $this->title );
+			printf( '<div class="wrap"><h1>%s</h1>', $this->title );
 
 			if ( isset( $_REQUEST['governance-action'] ) && 'import' == $_REQUEST['governance-action'] ) {
 				$this->handle_upload();
 			} else if ( isset( $_REQUEST['governance-action'] ) && 'import-settings' == $_REQUEST['governance-action'] ) {
 				$this->handle_settings_upload();
 			} else {
-				print( '<div class="cornell-governance-metabox">' );
+				print( '<div class="cornell-governance-metabox cornell-governance-import-export-page">' );
 
 				printf( '<h2>%s</h2>', __( 'Governance Settings', 'cornell/governance' ) );
 
 				print( '<div class="import-export-wrap">' );
 
+				printf( '<fieldset><legend>%s</legend>', __( 'Settings Import/Export', 'cornell/governance' ) );
+
 				$this->do_export_settings_box();
 
 				$this->do_import_settings_box();
 
+				print( '</fieldset>' );
+
 				print( '</div><!-- .import-export-wrap -->' );
 				print( '</div><!-- .cornell-governance-metabox -->' );
 
-				print( '<div class="cornell-governance-metabox">' );
+				print( '<div class="cornell-governance-metabox cornell-governance-import-export-page">' );
 
 				printf( '<h2>%s</h2>', __( 'Governance Data', 'cornell/governance' ) );
 
 				print( '<div class="import-export-wrap">' );
 
+				printf( '<fieldset><legend>%s</legend>', __( 'Data Import/Export', 'cornell/governance' ) );
+
 				$this->do_export_box();
 
 				$this->do_import_box();
+
+				print( '</fieldset>' );
 
 				$this->do_sample_table_box();
 

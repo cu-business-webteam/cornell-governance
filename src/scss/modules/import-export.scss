@@ -1,32 +1,84 @@
-.import-export-wrap {
-  display: grid;
-  gap: 3rem;
-  grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
-  line-height: 2;
+.cornell-governance-import-export-page {
+  h2 {
+    font-size: 1.25rem;
+  }
 
-  > div {
-    border: 1px solid lightblue;
-    border-radius: 1rem;
-    margin: 0;
-    padding: 1rem;
-    background: white;
-    width: 100%;
-    max-width: calc( 100% - 2rem );
-    overflow: auto;
-
-    &.full-width {
-      grid-column: 1 / -1;
-    }
-
-    .button-row {
+  .import-export-wrap {
+    fieldset {
       display: grid;
-      gap: 1rem;
-      grid-template-columns: auto;
+      gap: 3rem;
+      grid-template-columns: repeat( 2, minmax(0, 1fr) );
+      line-height: 2;
+
+      > legend {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+
+      > div {
+        border: 1px solid lightblue;
+        border-radius: 1rem;
+        margin: 0;
+        padding: 1rem;
+        background: white;
+        width: 100%;
+        max-width: calc(100% - 2rem);
+        overflow: auto;
+
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+
+        .button-row {
+          display: grid;
+          gap: 1rem;
+          grid-template-columns: auto;
+        }
+      }
+
+      .import,
+      .import-settings {
+        p {
+          font-style: italic;
+        }
+
+        label {
+          display: block;
+          font-style: normal;
+        }
+
+        input[type=file] {
+          font-style: normal;
+          display: block;
+          margin: 2rem;
+          width: 100%;
+          max-width: calc(100% - 4rem);
+          padding: 1rem;
+          border: 1px solid #666;
+        }
+      }
     }
 
     table {
+      display: block;
       width: 100%;
       max-width: 100%;
+      overflow-x: auto;
+      background: white;
+      border-collapse: collapse;
+
+      caption {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 1rem auto;
+      }
+
+      th, td {
+        padding: .25rem;
+        border: 1px solid #000;
+        vertical-align: text-top;
+        margin: 0;
+      }
     }
 
     textarea[readonly] {
@@ -36,28 +88,6 @@
       padding: 1rem;
       border: 1px solid #000;
       height: 8rem;
-    }
-  }
-
-  .import,
-  .import-settings {
-    p {
-      font-style: italic;
-    }
-
-    label {
-      display: block;
-      font-style: normal;
-    }
-
-    input[type=file] {
-      font-style: normal;
-      display: block;
-      margin: 2rem;
-      width: 100%;
-      max-width: calc(100% - 4rem);
-      padding: 1rem;
-      border: 1px solid #666;
     }
   }
 }
