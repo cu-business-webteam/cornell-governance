@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'cornell/governance',
-        'pretty_version' => '1.0.1.37',
-        'version' => '1.0.1.37',
+        'pretty_version' => '1.0.2',
+        'version' => '1.0.2.0',
         'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'cornell/governance' => array(
-            'pretty_version' => '1.0.1.37',
-            'version' => '1.0.1.37',
+            'pretty_version' => '1.0.2',
+            'version' => '1.0.2.0',
             'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',

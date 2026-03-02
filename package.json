@@ -2,21 +2,21 @@
   "name": "cornell-governance",
   "version": "1.0.2",
   "dependencies": {
-    "babel-loader": "^9.2.1",
+    "babel-loader": "^10.0.0",
     "normalize.css": "^8.0.1",
-    "replace-in-file": "^8.3.0"
+    "replace-in-file": "^8.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.7",
-    "@babel/preset-env": "^7.25.7",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
     "@wpsh/to-wp-txt": "^0.1.1",
-    "chart.js": "^4.4.4",
+    "chart.js": "^4.5.1",
     "clean-css-cli": "^5.6.3",
     "concat": "^1.0.3",
-    "sass": "^1.79.4",
+    "sass": "^1.97.3",
     "uglify-js": "^3.19.3",
-    "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4"
+    "webpack": "5.105.3",
+    "webpack-cli": "^6.0.1"
   },
   "scripts": {
     "scss-editor": "sass src/scss/editor-style.scss dist/css/cornell-governance/editor-style.css",
