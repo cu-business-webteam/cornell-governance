@@ -9,6 +9,7 @@ namespace {
 namespace Cornell\Governance\Wayback {
 
 	use Cornell\Governance\Helpers;
+	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Save' ) ) {
 		class Save {
@@ -77,7 +78,7 @@ namespace Cornell\Governance\Wayback {
 			 *
 			 * @access public
 			 * @return string|\WP_Error the content location on success; error on failure
-			 *@since  0.6.2
+			 * @since  0.6.2
 			 */
 			public function trigger_snapshot_by_url( string $url ) {
 				// Ping archive machine.
@@ -105,6 +106,52 @@ namespace Cornell\Governance\Wayback {
 					}
 				} else {
 					return print_r( wp_remote_retrieve_headers( $response ), true );
+				}
+
+				return '';
+			}
+
+			/**
+			 * Schedule a snapshot of an updated piece of content
+			 *
+			 * @param int $post_id the ID of the post being saved
+			 * @param \WP_Post $post the post object being saved
+			 * @param bool $update whether this is an update or a new post
+			 *
+			 * @access public
+			 * @since  1.0.2
+			 * @return void
+			 */
+			public function schedule_post( int $post_id, \WP_Post $post, bool $update = false ) {
+				if ( ! Plugin::instance()->get_archive_settings( 'active' ) ) {
+					return;
+				}
+
+				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+					return;
+				}
+
+				$types = Plugin::instance()->get_post_types();
+				if ( ! in_array( $post->post_type, $types ) && 'revision' !== $post->post_type ) {
+					return;
+				}
+
+				$parent = wp_is_post_revision( $post_id );
+				if ( $parent ) {
+					return;
+				}
+
+				if ( ! in_array( $post->post_status, Helpers::get_page_status_list() ) ) {
+					return;
+				}
+
+				$tomorrow = date( 'Y-m-d', strtotime( 'tomorrow' ) );
+				$posts    = apply_filters( 'cornell/governance/archive/trigger/posts', get_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, array() ) );
+				if ( array_key_exists( $post_id, $posts ) ) {
+					return;
+				} else {
+					$posts[ $post_id ] = $post;
+					update_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, $posts );
 				}
 			}
 		}

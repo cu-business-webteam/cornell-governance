@@ -27,7 +27,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 			 * Construct our Base object
 			 */
 			protected function __construct() {
-				$this->headers = array(
+				$this->headers = apply_filters( 'cornell/governance/import-export/headers', array(
 					'page_id'            => __( 'Page ID', 'cornell/governance' ),
 					'page_title'         => __( 'Page Title', 'cornell/governance' ),
 					'page_url'           => __( 'Page URL', 'cornell/governance' ),
@@ -44,7 +44,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 					'supervisor'         => __( 'Secondary Contact', 'cornell/governance' ),
 					'liaison'            => __( 'Liaison', 'cornell/governance' ),
 					'notes'              => __( 'Notes', 'cornell/governance' ),
-				);
+				) );
 			}
 		}
 	}

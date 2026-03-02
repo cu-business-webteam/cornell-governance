@@ -1,0 +1,41 @@
+.governance-paginated-list {
+  ul.is-hidden {
+    display: none;
+  }
+
+  .governance-pagination {
+    h4 {
+      display: inline-block;
+      margin: 0 0 0 .25rem;
+      padding: 0;
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      gap: .25rem;
+
+      button {
+        display: block;
+        color: black;
+        background: transparent;
+        border: 1px solid #999;
+        padding: .2rem;
+        font-family: Arial, sans-serif;
+        line-height: 1;
+        font-size: 1rem;
+        margin: 0;
+
+        &:hover, &:focus {
+          background: #FF7276;
+        }
+      }
+
+      [aria-selected="true"] {
+        background: darkred;
+        color: white;
+      }
+    }
+  }
+}

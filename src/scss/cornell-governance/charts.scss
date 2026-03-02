@@ -79,4 +79,12 @@
       }
     }
   }
+
+  .governance-action-buttons {
+    .button-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+  }
 }

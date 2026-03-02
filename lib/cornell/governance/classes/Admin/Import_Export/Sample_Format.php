@@ -60,7 +60,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 
 				$this->data[] = $this->headers;
 
-				$this->data[] = array(
+				$this->data[] = apply_filters( 'cornell/governance/import-export/sample-descriptions', array(
 					__( 'Numerical WP Post ID (read-only)', 'cornell/governance' ),
 					__( 'Full-Text Post Title (read-only)', 'cornell/governance' ),
 					__( 'Full URL to the page (read-only)', 'cornell/governance' ),
@@ -77,9 +77,9 @@ namespace Cornell\Governance\Admin\Import_Export {
 					__( 'The email address for the Secondary Contact', 'cornell/governance' ),
 					__( 'The email address for the Liaison (must be someone with appropriate permissions to be a liaison)', 'cornell/governance' ),
 					__( 'Any text (markdown-formatting is permitted) that should be added as the Page Documentation', 'cornell/governance' ),
-				);
+				) );
 
-				$this->data[] = array(
+				$this->data[] = apply_filters( 'cornell/governance/import-export/sample-data', array(
 					0,
 					__( 'Sample Page Title', 'cornell/governance' ),
 					'https://example.com/page-slug/',
@@ -99,7 +99,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 					'supervisor@example.com',
 					'liaison@example.com',
 					sprintf( __( 'Sample Note _with_ [basic Markdown formatting](%s)', 'cornell/governance' ), 'https://www.markdownguide.org/basic-syntax/' ),
-				);
+				) );
 
 				return;
 			}

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "222dd4111fe1f5303ab401293d1fc721",
+    "content-hash": "e36b28dd0609ad6d323abe536ddef415",
     "packages": [
         {
             "name": "erusev/parsedown",
-            "version": "dev-master",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "0b274ac959624e6c6d647e9c9b6c2d20da242004"
+                "reference": "96baaad00f71ba04d76e45b4620f54d3beabd6f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/0b274ac959624e6c6d647e9c9b6c2d20da242004",
-                "reference": "0b274ac959624e6c6d647e9c9b6c2d20da242004",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/96baaad00f71ba04d76e45b4620f54d3beabd6f7",
+                "reference": "96baaad00f71ba04d76e45b4620f54d3beabd6f7",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^7.5|^8.5|^9.6"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -53,9 +52,15 @@
             ],
             "support": {
                 "issues": "https://github.com/erusev/parsedown/issues",
-                "source": "https://github.com/erusev/parsedown/tree/master"
+                "source": "https://github.com/erusev/parsedown/tree/1.8.0"
             },
-            "time": "2025-08-31T07:57:44+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/erusev",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-16T11:41:01+00:00"
         },
         {
             "name": "erusev/parsedown-extra",
@@ -63,23 +68,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown-extra.git",
-                "reference": "acebd175967ac1224dc710ab6082e5a28c202c85"
+                "reference": "b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/acebd175967ac1224dc710ab6082e5a28c202c85",
-                "reference": "acebd175967ac1224dc710ab6082e5a28c202c85",
+                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d",
+                "reference": "b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d",
                 "shasum": ""
             },
             "require": {
-                "erusev/parsedown": "dev-master",
+                "erusev/parsedown": "^1.8",
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.5|^8.5|^9.6"
+                "phpunit/phpunit": "^8.5.52|^9.6.33"
             },
             "default-branch": true,
             "type": "library",
@@ -111,7 +116,13 @@
                 "issues": "https://github.com/erusev/parsedown-extra/issues",
                 "source": "https://github.com/erusev/parsedown-extra/tree/master"
             },
-            "time": "2024-11-03T08:25:00+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/erusev",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-18T15:50:12+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -119,17 +130,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GrahamCampbell/Result-Type.git",
-                "reference": "bdd52c41913b414f4ca7dcb34482babcd0e9bd58"
+                "reference": "e01f4a821471308ba86aa202fed6698b6b695e3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/bdd52c41913b414f4ca7dcb34482babcd0e9bd58",
-                "reference": "bdd52c41913b414f4ca7dcb34482babcd0e9bd58",
+                "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/e01f4a821471308ba86aa202fed6698b6b695e3b",
+                "reference": "e01f4a821471308ba86aa202fed6698b6b695e3b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2.5 || ^8.0",
-                "phpoption/phpoption": "^1.9.3"
+                "phpoption/phpoption": "^1.9.5"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5.41 || ^9.6.22 || ^10.5.45 || ^11.5.7"
@@ -174,7 +185,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-02T21:31:24+00:00"
+            "time": "2025-12-27T19:43:20+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -182,12 +193,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d"
+                "reference": "c7c576f3b1245ee34fad8904fa6478c443c8e0bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d",
-                "reference": "638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/c7c576f3b1245ee34fad8904fa6478c443c8e0bc",
+                "reference": "c7c576f3b1245ee34fad8904fa6478c443c8e0bc",
                 "shasum": ""
             },
             "require": {
@@ -238,7 +249,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/php-option/issues",
-                "source": "https://github.com/schmittjoh/php-option/tree/1.9.4"
+                "source": "https://github.com/schmittjoh/php-option/tree/master"
             },
             "funding": [
                 {
@@ -250,7 +261,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-21T11:53:16+00:00"
+            "time": "2025-12-27T19:43:39+00:00"
         },
         {
             "name": "salesforce/handlebars-php",
@@ -570,22 +581,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "24ac4c74f91ee2c193fa1aaa5c249cb0822809af"
+                "reference": "2af27192fc6c6bf7c05ef26e67d54afe9a0c39e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/24ac4c74f91ee2c193fa1aaa5c249cb0822809af",
-                "reference": "24ac4c74f91ee2c193fa1aaa5c249cb0822809af",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/2af27192fc6c6bf7c05ef26e67d54afe9a0c39e1",
+                "reference": "2af27192fc6c6bf7c05ef26e67d54afe9a0c39e1",
                 "shasum": ""
             },
             "require": {
                 "ext-pcre": "*",
-                "graham-campbell/result-type": "^1.1.3",
+                "graham-campbell/result-type": "^1.1.4",
                 "php": "^7.2.5 || ^8.0",
-                "phpoption/phpoption": "^1.9.3",
-                "symfony/polyfill-ctype": "^1.24",
-                "symfony/polyfill-mbstring": "^1.24",
-                "symfony/polyfill-php80": "^1.24"
+                "phpoption/phpoption": "^1.9.5",
+                "symfony/polyfill-ctype": "^1.26",
+                "symfony/polyfill-mbstring": "^1.26",
+                "symfony/polyfill-php80": "^1.26"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
@@ -635,7 +646,7 @@
             ],
             "support": {
                 "issues": "https://github.com/vlucas/phpdotenv/issues",
-                "source": "https://github.com/vlucas/phpdotenv/tree/v5.6.2"
+                "source": "https://github.com/vlucas/phpdotenv/tree/master"
             },
             "funding": [
                 {
@@ -647,7 +658,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-30T23:37:27+00:00"
+            "time": "2025-12-27T19:51:34+00:00"
         },
         {
             "name": "yahnis-elsts/plugin-update-checker",
@@ -655,12 +666,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
-                "reference": "8add8143a274c47cafed48512e1259a2be859837"
+                "reference": "9c044de05f7829e2c88b2c773957e17d5423ffb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/8add8143a274c47cafed48512e1259a2be859837",
-                "reference": "8add8143a274c47cafed48512e1259a2be859837",
+                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/9c044de05f7829e2c88b2c773957e17d5423ffb8",
+                "reference": "9c044de05f7829e2c88b2c773957e17d5423ffb8",
                 "shasum": ""
             },
             "require": {
@@ -698,14 +709,13 @@
                 "issues": "https://github.com/YahnisElsts/plugin-update-checker/issues",
                 "source": "https://github.com/YahnisElsts/plugin-update-checker/tree/master"
             },
-            "time": "2025-07-22T11:38:19+00:00"
+            "time": "2026-02-18T17:31:46+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "erusev/parsedown": 20,
         "erusev/parsedown-extra": 20,
         "vlucas/phpdotenv": 20,
         "yahnis-elsts/plugin-update-checker": 20

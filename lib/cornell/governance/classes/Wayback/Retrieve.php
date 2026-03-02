@@ -7,6 +7,8 @@ namespace {
 }
 
 namespace Cornell\Governance\Wayback {
+	use \Cornell\Governance\Admin\HTML_Table;
+
 	if ( ! class_exists( 'Retrieve' ) ) {
 		class Retrieve {
 			/**

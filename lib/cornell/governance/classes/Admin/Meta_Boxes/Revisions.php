@@ -198,10 +198,10 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$output .= $this->fieldset_close();
 
 				if ( ! empty( $latest ) ) {
-					$link = '#tab-3';
+					$link = '#tab-2';
 
 					if ( Helpers::user_can( 0, Plugin::instance()->get_capability() ) ) {
-						$link = '#tab-4';
+						$link = '#tab-3';
 					}
 
 					$output .= sprintf( '

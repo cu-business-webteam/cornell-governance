@@ -48,17 +48,21 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 					$attributes .= ' ' . $name . '="' . esc_attr( $val ) . '"';
 				}
 
-				return sprintf( '<p class="%1$s">
+				$instructions = empty( $this->instructions ) ? '' : sprintf( '<p class="cornell-governance-note">%s</p>', $this->instructions );
+
+				return sprintf( '<div class="%1$s">
 	<label for="%2$s">%3$s</label>
+	%8$s
 	<textarea name="%2$s" id="%2$s" %6$s %7$s>%5$s</textarea>
-</p>',
+</div>',
 					implode( ' ', $this->classes ),
 					$this->id,
 					$this->label,
 					null,
 					$value,
 					$attributes,
-					$this->is_readonly ? ' readonly' : ''
+					'',
+					$instructions,
 				);
 			}
 

@@ -210,9 +210,30 @@ namespace Cornell\Governance\Admin\Import_Export {
 					return new WP_Error( 'import', __( 'The import file does not appear to include any data', 'cornell/governance' ) );
 				}
 
+				/**
+				 * Allows you to perform any actions that need to be done before the import is actually
+				 *      performed.
+				 * `do_action( 'cornell/governance/import-export/before-import', $data, $headers )`
+				 *
+				 * @param array `$data` - the full set of data from the import file
+				 * @param array `$headers` - the array of headers from the import file (the first row)
+				 */
+				do_action( 'cornell/governance/import-export/before-import', $this->data, $headers );
+
 				foreach ( $this->data as $row ) {
 					$post = get_post( $row['page_id'] );
 					if ( is_a( $post, 'WP_Post' ) ) {
+						/**
+						 * Allows you to perform any actions that need to be done before information is imported
+						 *      for a specific post
+						 * `do_action( 'cornell/governance/import-export/before-post-import', $post, $row, $headers )`
+						 *
+						 * @param \WP_Post $post - the post being imported
+						 * @param array $row - the information being imported for the current post
+						 * @param array $headers - the array of headers from the import file (the first row)
+						 */
+						do_action( 'cornell/governance/import-export/before-post-import', $post, $row, $headers );
+
 						$post_id         = $post->ID;
 						$governance_meta = get_post_meta( $post_id, 'cornell/governance/information', true );
 						if ( ! is_array( $governance_meta ) ) {
@@ -279,8 +300,28 @@ namespace Cornell\Governance\Admin\Import_Export {
 							}
 							wp_update_post( $post );
 						}
+
+						/**
+						 * Allows you to perform any actions that need to be done after information is imported
+						 *      for a specific post
+						 * `do_action( 'cornell/governance/import-export/after-post-import', $post, $row, $headers )`
+						 *
+						 * @param \WP_Post $post - the post being imported
+						 * @param array $row - the information being imported for the current post
+						 * @param array $headers - the array of headers from the import file (the first row)
+						 */
+						do_action( 'cornell/governance/import-export/after-post-import', $post, $row, $headers );
 					}
 				}
+
+				/**
+				 * Allows you to perform any actions that need to be done after the import is completed
+				 * `do_action( 'cornell/governance/import-export/after-import', $data, $headers )`
+				 *
+				 * @param array `$data` - the full set of data from the import file
+				 * @param array `$headers` - the array of headers from the import file (the first row)
+				 */
+				do_action( 'cornell/governance/import-export/after-import', $this->data, $headers );
 
 				array_unshift( $this->data, $headers );
 

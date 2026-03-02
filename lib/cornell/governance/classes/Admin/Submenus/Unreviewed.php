@@ -41,8 +41,6 @@ namespace Cornell\Governance\Admin\Submenus {
 				'per_page_option' => 'cornell/governance/unreviewed/items_per_page',
 				'description'     => __( 'A list of all governable content on this site that has not been reviewed for governance purposes, yet.', 'cornell/governance' ),
 			) );
-
-			$this->table_class = 'Unreviewed_Table';
 		}
 
 		/**
@@ -71,8 +69,10 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function display() {
 			printf( '<div class="wrap"><h2>%s</h2>', $this->title );
 			$this->table->prepare_items();
+			echo '<form method="get">';
 			$this->do_search_box();
 			$this->table->display();
+			echo '</form>';
 			print( '</div>' );
 		}
 

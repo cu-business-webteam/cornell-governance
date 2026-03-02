@@ -1,0 +1,227 @@
+.steward-dashboard-table-container {
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+  border: 1px solid #999;
+  padding: 1rem;
+
+  h3 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    float: left;
+  }
+}
+
+.governance-liaison-overview {
+  display: grid;
+  gap: 1rem;
+  grid-template-areas:
+    "header header header"
+    "overview overview noncompliant"
+    "performance performance performance"
+    "workflow workflow workflow";
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  > div {
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
+    border: 1px solid #999;
+    padding: 1rem;
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  }
+
+  .governance-portfolio-overview {
+    grid-area: overview;
+    display: grid;
+    grid-template-areas:
+      "header header header"
+      "compliant due overdue"
+      "status status status";
+
+    h3 {
+      grid-area: header;
+    }
+
+    .column {
+      text-align: center;
+
+      .percentage {
+        font-weight: bold;
+        font-size: 3.1rem;
+        line-height: normal;
+        display: block;
+      }
+    }
+
+    .governance-compliance-compliant {
+      grid-area: compliant;
+
+      .percentage {
+        color: #009400;
+      }
+    }
+
+    .governance-compliance-due {
+      grid-area: due;
+
+      .percentage {
+        color: #8f8f00;
+      }
+    }
+
+    .governance-compliance-overdue {
+      grid-area: overdue;
+
+      .percentage {
+        color: red;
+      }
+    }
+
+    .governance-statusbar {
+      padding-top: 1rem;
+      container-name: statusbar;
+      grid-area: status;
+      width: 100%;
+      max-width: 100%;
+      display: grid;
+      grid-template-columns: min-content auto min-content;
+      grid-template-areas: "start progress end";
+      gap: 1rem;
+
+      .statusbar-start,
+      .statusbar-end {
+        line-height: 1.5rem;
+      }
+
+      .governance-compliance-overall-status {
+        grid-area: progress;
+        position: relative;
+        color: white;
+        width: 100%;
+        max-width: 100%;
+        background: #808080;
+        border-radius: 1rem;
+        height: 1rem;
+        display: block;
+        padding: .25rem 0;
+        margin: 0 auto;
+
+        .completion-percentage-label {
+          position: relative;
+          z-index: +1;
+          display: inline-block;
+          vertical-align: top;
+          line-height: 1rem;
+          width: var(--status-percentage);
+          text-align: center;
+        }
+
+        &:after {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          right: auto;
+          border-radius: 1rem;
+          border-bottom-right-radius: 0;
+          border-top-right-radius: 0;
+
+          grid-area: progress;
+          width: var(--status-percentage);
+          background: black;
+          margin: 0 auto 0 0;
+          padding: 0;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    .governance-statusbar[style*="--status-percentage: 100%"] {
+      .governance-compliance-overall-status {
+        &:after {
+          border-top-right-radius: 1rem;
+          border-bottom-right-radius: 1rem;
+        }
+      }
+    }
+
+    .governance-statusbar[style*="--status-percentage: 0%"] {
+      .governance-compliance-overall-status {
+        .completion-percentage-label {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .governance-portfolio-overdue-overview {
+    grid-area: noncompliant;
+
+    p {
+      font-weight: bold;
+
+      &:before {
+        content: "\26A0";
+        color: #000;
+        display: inline-block;
+        margin: 0;
+        padding: 0 0.5rem 0 0;
+        font-size: 1.3rem;
+        vertical-align: baseline;
+        font-weight: normal;
+      }
+    }
+  }
+
+  .governance-portfolio-steward-performance {
+    grid-area: performance;
+
+    .governance-steward-compliance-table {
+      tr {
+        border-bottom: 1px solid #666;
+        border-top: 1px solid #666;
+
+        th,
+        td {
+          border: none;
+          background: transparent;
+          color: black;
+          padding: 0.5rem;
+          margin: 0;
+          text-align: left;
+        }
+      }
+
+      thead,
+      tfoot {
+        tr {
+          border: none;
+
+          th,
+          td {
+            font-weight: bolder;
+            background: #eee;
+          }
+        }
+      }
+    }
+  }
+
+  .governance-liaison-workflow {
+    grid-area: workflow;
+
+    ul, ol {
+      list-style: revert;
+
+      > li {
+        margin-left: 1rem;
+      }
+    }
+  }
+}

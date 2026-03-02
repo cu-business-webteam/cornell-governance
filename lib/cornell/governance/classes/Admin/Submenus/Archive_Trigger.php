@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Submenus {
 	use Cornell\Governance\Config;
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
-	use Cornell\Governance\Wayback\HTML_Table;
+	use Cornell\Governance\Admin\HTML_Table;
 	use Cornell\Governance\Wayback\Trigger;
 
 	class Archive_Trigger extends Base {
@@ -38,10 +38,10 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'       => __( 'Cornell Governance: Wayback Machine Information', 'cornell/governance' ),
+				'title'       => __( 'Cornell Governance: Wayback Machine Archival Information', 'cornell/governance' ),
 				'menu_name'   => __( 'Archive Snapshots', 'cornell/governance' ),
 				'slug'        => 'cornell-governance-archive-trigger',
-				'description' => __( 'View information about Wayback Machine snapshots, and trigger any scheduled snapshots', 'cornell/governance' ),
+				'description' => __( 'View information about Wayback Machine archive snapshots, and trigger any scheduled snapshots', 'cornell/governance' ),
 			) );
 		}
 
@@ -64,20 +64,20 @@ namespace Cornell\Governance\Admin\Submenus {
 		/**
 		 * Trigger any scheduled Archive snapshots
 		 *
+		 * @param string $today the date of the snapshots that need to be triggered
+		 *
 		 * @access protected
 		 * @return void
 		 * @since  0.6.2
 		 */
-		private function trigger_snapshots() {
+		private function trigger_snapshots( string $today ) {
 			$archive_obj = Trigger::instance();
-			if ( Trigger::instance()->get_posts_count() <= 0 ) {
-				$today = date( 'Y-m-d', strtotime( 'tomorrow' ) );
-				Trigger::instance()->set_today( $today );
-				Trigger::instance()->set_initial_vars();
-			}
+			// By default, the Trigger uses today's date; we may need to reset that for a different date
+			$archive_obj->set_today( $today );
+			$archive_obj->set_initial_vars();
 
-			if ( ! empty( $posts ) ) {
-				$done = Trigger::instance()->manual_trigger();
+			if ( $archive_obj->get_posts_count() > 0 ) {
+				$done = $archive_obj->manual_trigger();
 				if ( count( $done ) > 0 ) {
 					$this->output_trigger_results( $done );
 				} else {
@@ -169,13 +169,13 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function display() {
 			printf( '<div class="wrap"><h2>%s</h2><div class="cornell-governance-archive-info">', $this->title );
 
-			printf( '<p>%s</p>', __( 'On this page, you can view information about the Wayback Machine integration and trigger manual snapshots if desired', 'cornell/governance' ) );
+			printf( '<p>%s</p>', __( 'View information about the Wayback Machine integration and trigger manual archival snapshots if desired', 'cornell/governance' ) );
 
 			if ( isset( $_GET['trigger_snapshots'] ) ) {
-				$this->trigger_snapshots();
+				$this->trigger_snapshots($_GET['trigger_snapshots']);
 			}
 
-
+			$this->do_plugin_log();
 
 			print( '</div></div>' );
 		}
@@ -260,8 +260,34 @@ namespace Cornell\Governance\Admin\Submenus {
 				$all_done[$today] = $done;
 			}
 
+			$this->do_historical_table( $all_done );
+
+			printf( '<h3>%s</h3>', __( 'Scheduled Archival Snapshots', 'cornell/governance' ) );
+
+			global $wpdb;
+			$option_name = 'cornell/governance/archive/trigger/posts/%';
+
+			$query = $wpdb->prepare( "SELECT * FROM {$wpdb->options} WHERE option_name LIKE %s", $option_name );
+			$result = $wpdb->get_results( $query );
+
+			foreach ( $result as $row ) {
+				$this->do_upcoming_table( $row );
+			}
+		}
+
+		/**
+		 * Output the historical log table
+		 *
+		 * @param array $all_done the array of completed items
+		 *
+		 * @access private
+		 * @since  1.0.2
+		 * @return void
+		 */
+		private function do_historical_table( array $all_done ) {
 			if ( empty( $all_done ) ) {
 				echo sprintf( '<p>%s</p>', __( 'There are no historical snapshots in the log', 'cornell/governance' ) );
+				return;
 			}
 
 			$headers = array(
@@ -269,7 +295,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				'location' => __( 'Location', 'cornell/governance' ),
 			);
 
-			echo HTML_Table::instance()->open( __( 'Log of Snapshots Created Historically', 'cornell/governance' ) );
+			echo HTML_Table::instance()->open( __( 'Log of Archival Snapshots Created Historically', 'cornell/governance' ) );
 			echo HTML_Table::instance()->get_row( $headers, 'header' );
 			echo HTML_Table::instance()->get_row( $headers, 'footer' );
 			echo HTML_Table::instance()->open_body();
@@ -290,6 +316,65 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			echo HTML_Table::instance()->close_body();
 			echo HTML_Table::instance()->close();
+		}
+
+		/**
+		 * Output a table of scheduled snapshots
+		 *
+		 * @param \stdClass $row the database row being handled
+		 *
+		 * @access private
+		 * @since  1.0.2
+		 * @return void
+		 */
+		private function do_upcoming_table( \stdClass $row ) {
+			$headers = array(
+				'id' => __( 'Page ID', 'cornell/governance' ),
+				'title' => __( 'Page Title', 'cornell/governance' ),
+				'steward' => __( 'Page Steward', 'cornell/governance' ),
+			);
+
+			$to_do = maybe_unserialize( $row->option_value );
+			$today_string = str_replace( 'cornell/governance/archive/trigger/posts/', '', $row->option_name );
+			$today = date( 'M j, Y', strtotime( $today_string ) );
+
+			if ( empty( $to_do ) ) {
+				echo sprintf( '<p>%s</p>', sprintf( __( 'All archival snapshots scheduled for %s have been completed', 'cornell/governance' ), $today ) );
+			} else {
+				echo HTML_Table::instance()->open( sprintf( __( 'Archival snapshots scheduled for %s', 'cornell/governance' ), $today ) );
+				echo HTML_Table::instance()->get_row( $headers, 'header' );
+				echo HTML_Table::instance()->get_row( $headers, 'footer' );
+				echo HTML_Table::instance()->open_body();
+
+				foreach ( $to_do as $id => $item ) {
+					$steward = get_user_by( 'id', $item->post_author );
+					echo HTML_Table::instance()->get_row( array( 'id' => $item->ID, 'title' => sprintf( '<a href="%s">%s</a>', get_permalink( $item->ID ), $item->post_title ), 'steward' => $steward->user_login ) );
+				}
+
+				echo HTML_Table::instance()->close_body();
+				echo HTML_Table::instance()->close();
+
+				$this->do_manual_trigger_button( $today_string );
+			}
+		}
+
+		/**
+		 * Output a form that allows a user to manually trigger scheduled snapshots
+		 *
+		 * @param string $today the date of the snapshots needing to be triggered
+		 *
+		 * @access private
+		 * @return void
+		 *@since  1.0.2
+		 */
+		private function do_manual_trigger_button( string $today ) {
+			echo '<form method="GET">';
+
+			wp_nonce_field( 'cornell-governance-archive-trigger-posts', 'cornell-governance-archive-trigger-nonce' );
+			printf( '<input type="hidden" name="trigger_snapshots" value="%s" />', $today );
+			printf( '<input type="submit" class="button-primary" value="%s" />', sprintf( __( 'Trigger %s Snapshots', 'cornell/governance' ), $today ) );
+
+			echo '</form>';
 		}
 	}
 }

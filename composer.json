@@ -1,7 +1,7 @@
 {
   "name": "cornell/governance",
   "description": "Cornell's In-Page Governance Plugin",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "authors": [
     {
       "name": "Curtiss Grymala",
@@ -29,7 +29,7 @@
   ],
   "require": {
     "php": "^7.4|>=8.2",
-    "erusev/parsedown": "dev-master",
+    "erusev/parsedown": "1.8.*",
     "salesforce/handlebars-php": "3.*",
     "erusev/parsedown-extra": "dev-master",
     "yahnis-elsts/plugin-update-checker": "dev-master",

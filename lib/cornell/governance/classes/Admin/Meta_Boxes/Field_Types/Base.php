@@ -26,6 +26,10 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 */
 			protected $default;
 			/**
+			 * @var string $instructions any instructions that should be included between the label and the field
+			 */
+			protected string $instructions='';
+			/**
 			 * @var bool $is_readonly whether this input should be read-only or not
 			 */
 			protected bool $is_readonly = false;
@@ -46,7 +50,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 			 */
 			public function __construct( array $atts = array() ) {
 				self::$namespace = __NAMESPACE__;
-				foreach ( array( 'id', 'label', 'classes', 'default', 'meta_box' ) as $k ) {
+				foreach ( array( 'id', 'label', 'classes', 'default', 'meta_box', 'instructions' ) as $k ) {
 					if ( array_key_exists( $k, $atts ) ) {
 						$this->{$k} = $atts[ $k ];
 					}

@@ -128,6 +128,11 @@ This library supports a couple of different ways to release updates on GitHub. P
 	$myUpdateChecker->getVcsApi()->enableReleaseAssets();
 	```
 	
+ 	By default, PUC will simply use the first available asset. You can pass a regular expression to `enableReleaseAssets()` to filter assets by name. For example:
+	```php
+	$myUpdateChecker->getVcsApi()->enableReleaseAssets('/\.zip($|[?&#])/i');
+ 	```
+	
 - **Tags** 
 	
 	To release version 1.2.3, create a new Git tag named `v1.2.3` or `1.2.3`. That's it.

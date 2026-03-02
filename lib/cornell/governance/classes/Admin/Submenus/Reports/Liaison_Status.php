@@ -113,6 +113,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 */
 			protected function get_data(): array {
 				$pages = array(
+					'unreviewed' => array(),
 					'overdue'   => array(),
 					'7-days'    => array(),
 					'30-days'   => array(),
@@ -128,11 +129,16 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 
 				$now = time();
 
-				foreach ( $data['last-review'] as $post_id => $datum ) {
-					$cycle = $data['review-cycle'][ $post_id ];
-					$due   = Helpers::calculate_next_review_date( $datum, $cycle );
+				foreach ( $data['review-cycle'] as $post_id => $datum ) {
+					$last_review = array_key_exists( $post_id, $data['last-review'] ) ? $data['last-review'][$post_id] : 0;
+					$cycle = $datum;
+					$due   = Helpers::calculate_next_review_date( $last_review, $datum );
 
-					if ( $due <= $now ) {
+					Helpers::log( sprintf( 'The value of reviewed for %d is %s', $post_id, print_r( $last_review, true ) ), 'info' );
+
+					if ( empty( $last_review ) ) {
+						$pages['unreviewed'][ $post_id ] = $due;
+					} else if ( $due <= $now ) {
 						$pages['overdue'][ $post_id ] = $due;
 					} else if ( strtotime( '+ 60 days' ) < $due ) {
 						$pages['compliant'][ $post_id ] = $due;
@@ -178,6 +184,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					'type'       => 'doughnut',
 					'chartLabel' => __( 'Review Due Date', 'cornell/governance' ),
 					'labels'     => array(
+						__( 'Not Reviewed Yet', 'cornell/governance' ),
 						__( 'Overdue', 'cornell/governance' ),
 						__( 'Due in the next 7 days', 'cornell/governance' ),
 						__( 'Due in the next 30 days', 'cornell/governance' ),
@@ -188,6 +195,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 						array(
 							'label'           => __( 'Review Due Date', 'cornell/governance' ),
 							'data'            => array(
+								count( $data['unreviewed'] ),
 								count( $data['overdue'] ),
 								count( $data['7-days'] ),
 								count( $data['30-days'] ),
@@ -243,6 +251,22 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				print( '</div>' );
 
 				add_action( 'admin_footer', array( Reports::instance(), 'localize_script' ) );
+			}
+
+			/**
+			 * Format the data and prepare it for download as a CSV
+			 *
+			 * @access protected
+			 * @since  0.1
+			 * @return void
+			 */
+			protected function export_data() {
+				$pages = $this->get_data();
+				if ( empty( $pages ) ) {
+					return;
+				}
+
+
 			}
 		}
 	}

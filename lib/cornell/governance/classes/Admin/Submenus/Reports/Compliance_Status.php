@@ -10,6 +10,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 
 	use Cornell\Governance\Admin\Submenus\Reports;
 	use Cornell\Governance\Helpers;
+	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( 'Compliance_Status' ) ) {
 		class Compliance_Status extends Base {
@@ -51,6 +52,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 */
 			protected function get_data(): array {
 				$pages = array(
+					'unreviewed' => array(),
 					'overdue'   => array(),
 					'7-days'    => array(),
 					'30-days'   => array(),
@@ -64,13 +66,19 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					return array();
 				}
 
+
 				$now = time();
 
-				foreach ( $data['last-review'] as $post_id => $datum ) {
-					$cycle = $data['review-cycle'][ $post_id ];
-					$due   = Helpers::calculate_next_review_date( $datum, $cycle );
+				foreach ( $data['review-cycle'] as $post_id => $datum ) {
+					$last_review = array_key_exists( $post_id, $data['last-review'] ) ? $data['last-review'][$post_id] : 0;
+					$cycle = $datum;
+					$due   = Helpers::calculate_next_review_date( $last_review, $datum );
 
-					if ( $due <= $now ) {
+					Helpers::log( sprintf( 'The value of reviewed for %d is %s', $post_id, print_r( $last_review, true ) ), 'info' );
+
+					if ( empty( $last_review ) ) {
+						$pages['unreviewed'][ $post_id ] = $due;
+					} else if ( $due <= $now ) {
 						$pages['overdue'][ $post_id ] = $due;
 					} else if ( strtotime( '+ 60 days' ) < $due ) {
 						$pages['compliant'][ $post_id ] = $due;
@@ -121,6 +129,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 						__( 'Due in the next 30 days', 'cornell/governance' ),
 						__( 'Due in the next 60 days', 'cornell/governance' ),
 						__( 'Fully compliant', 'cornell/governance' ),
+						__( 'Not yet reviewed', 'cornell/governance' ),
 					),
 					'datasets'   => array(
 						array(
@@ -131,6 +140,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 								count( $data['30-days'] ),
 								count( $data['60-days'] ),
 								count( $data['compliant'] ),
+								count( $data['unreviewed'] ),
 							),
 							'backgroundColor' => array(
 								'rgb(255,0,0)',
@@ -178,9 +188,67 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					__( 'Reveal source data for this chart', 'cornell/governance' )
 				);
 
-				print( '</div>' );
-
 				add_action( 'admin_footer', array( Reports::instance(), 'localize_script' ) );
+			}
+
+			/**
+			 * Format the data and prepare it for download as a CSV
+			 *
+			 * @access protected
+			 * @since  0.1
+			 * @return void
+			 */
+			protected function export_data() {
+				$pages = $this->get_data();
+				if ( empty( $pages ) ) {
+					return;
+				}
+
+				$export = \Cornell\Governance\Admin\Import_Export\Generic_Export::instance();
+
+				$headers = array(
+					'page_id'            => __( 'Page ID', 'cornell/governance' ),
+					'page_title'         => __( 'Page Title', 'cornell/governance' ),
+					'page_url'           => __( 'Page URL', 'cornell/governance' ),
+					'primary-audience'   => __( 'Primary Audience', 'cornell/governance' ),
+					'secondary-audience' => __( 'Secondary Audience', 'cornell/governance' ),
+					'last-reviewed'      => __( 'Last Reviewed', 'cornell/governance' ),
+					'review-cycle'       => __( 'Review Cycle', 'cornell/governance' ),
+					'steward'            => __( 'Steward', 'cornell/governance' ),
+					'steward_email'      => __( 'Steward Email', 'cornell/governance' ),
+					'steward_username'   => __( 'Steward Username', 'cornell/governance' ),
+					'supervisor'         => __( 'Secondary Contact', 'cornell/governance' ),
+					'liaison'            => __( 'Liaison', 'cornell/governance' ),
+				);
+
+				$export->set_headers( $headers );
+				$all_data = Reports::instance()->get_var( 'all' );
+				$report_data = array();
+				foreach ( $pages as $page_id => $page_data ) {
+					$report_data[ $page_id ] = array(
+						'page_id' => $page_id,
+						'page_title' => get_the_title( $page_id ),
+						'page_url' => get_permalink( $page_id ),
+						'primary-audience' => $report_data['primary-audience'][$page_id],
+						'secondary-audience' => $report_data['secondary-audience'][$page_id],
+						'last-reviewed' => $report_data['last-review'][$page_id],
+						'review-cycle' => $page_data,
+						'steward' => $report_data['steward'][$page_id],
+						'steward_email' => get_user_by( 'id', $report_data['steward'][$page_id] )->user_email,
+						'steward_username' => get_user_by( 'id', $report_data['steward'][$page_id] )->user_login,
+						'supervisor' => $report_data['supervisor'][$page_id],
+						'liaison' => $report_data['liaison'][$page_id],
+					);
+				}
+
+				$export->set_data( $report_data );
+				$export->set_filename( 'compliance-status' );
+
+				if ( $_REQUEST['export-data'] === 'json' ) {
+					$export->get_file_json();
+				} else {
+					$export->get_file();
+				}
 			}
 		}
 	}

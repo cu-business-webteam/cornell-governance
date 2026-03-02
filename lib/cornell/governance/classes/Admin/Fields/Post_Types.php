@@ -117,6 +117,10 @@ namespace Cornell\Governance\Admin\Fields {
 
 				$types = array();
 
+				if ( is_null( $value ) || empty( $value ) ) {
+					return $types;
+				}
+
 				$all_types = array_keys( $this->get_post_types() );
 				foreach ( array_keys( $value ) as $item ) {
 					if ( in_array( $item, $all_types, true ) ) {

@@ -68,5 +68,10 @@
   padding: 0.25rem;
   border: 1px solid #e2e2e2;
 }
+.cornell-governance-data-charts .governance-action-buttons .button-row, .governance-menu-boxes .governance-action-buttons .button-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
 
 /*# sourceMappingURL=charts.css.map */

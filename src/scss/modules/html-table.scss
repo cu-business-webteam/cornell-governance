@@ -1,0 +1,31 @@
+.cornell-governance-html-table {
+  width: 100%;
+  max-width: calc( 100% - 2rem );
+  padding: 0;
+  margin: 1rem;
+  border-spacing: 0;
+  border-collapse: collapse;
+
+  caption {
+    margin: 1rem auto;
+    font-weight: bold;
+    font-size: .95rem;
+  }
+
+  tr {
+    border: none;
+    padding: 0;
+    margin: 0;
+
+    td, th {
+      padding: .5rem;
+      border: 1px solid #666;
+      margin: 0;
+    }
+
+    th {
+      background: #e2e2e2;
+      font-weight: bolder;
+    }
+  }
+}

@@ -219,7 +219,7 @@
 
       @media all and (max-width: 700px) {
         grid-template-columns: minmax(0, 1fr);
-        grid-template-areas: "legend" "note" "one" "two" "three";
+        grid-template-areas: "legend" "note" "one" "two" "three" "four";
       }
 
       legend {
@@ -272,6 +272,10 @@
         &-liaison {
           grid-area: three;
         }
+
+        &-leader {
+          grid-area: four;
+        }
       }
     }
 
@@ -321,6 +325,29 @@
 
     .cornell-governance-message-title {
       font-size: 1rem;
+    }
+  }
+
+  .help-documentation-content {
+    margin: 1rem auto;
+    padding: 1rem;
+    border: 1px solid #e2e2e2;
+
+    * {
+      font-size: 1rem;
+    }
+
+    ul, ol {
+      margin-left: 1rem;
+      padding-left: 1rem;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ol {
+      list-style: decimal;
     }
   }
 }
@@ -603,3 +630,6 @@
 }
 
 @import "modules/import-export";
+@import "modules/html-table";
+@import "cornell-governance/portfolio-compliance";
+@import "modules/archive-list";

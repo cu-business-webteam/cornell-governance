@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'cornell/governance',
-        'pretty_version' => '0.9.1',
-        'version' => '0.9.1.0',
+        'pretty_version' => '1.0.1.37',
+        'version' => '1.0.1.37',
         'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'cornell/governance' => array(
-            'pretty_version' => '0.9.1',
-            'version' => '0.9.1.0',
+            'pretty_version' => '1.0.1.37',
+            'version' => '1.0.1.37',
             'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
@@ -20,20 +20,18 @@
             'dev_requirement' => false,
         ),
         'erusev/parsedown' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '0b274ac959624e6c6d647e9c9b6c2d20da242004',
+            'pretty_version' => '1.8.0',
+            'version' => '1.8.0.0',
+            'reference' => '96baaad00f71ba04d76e45b4620f54d3beabd6f7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../erusev/parsedown',
-            'aliases' => array(
-                0 => '9999999-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'erusev/parsedown-extra' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'acebd175967ac1224dc710ab6082e5a28c202c85',
+            'reference' => 'b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../erusev/parsedown-extra',
             'aliases' => array(
@@ -44,7 +42,7 @@
         'graham-campbell/result-type' => array(
             'pretty_version' => '1.1.x-dev',
             'version' => '1.1.9999999.9999999-dev',
-            'reference' => 'bdd52c41913b414f4ca7dcb34482babcd0e9bd58',
+            'reference' => 'e01f4a821471308ba86aa202fed6698b6b695e3b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
@@ -53,7 +51,7 @@
         'phpoption/phpoption' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d',
+            'reference' => 'c7c576f3b1245ee34fad8904fa6478c443c8e0bc',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoption/phpoption',
             'aliases' => array(
@@ -100,7 +98,7 @@
         'vlucas/phpdotenv' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '24ac4c74f91ee2c193fa1aaa5c249cb0822809af',
+            'reference' => '2af27192fc6c6bf7c05ef26e67d54afe9a0c39e1',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vlucas/phpdotenv',
             'aliases' => array(
@@ -111,7 +109,7 @@
         'yahnis-elsts/plugin-update-checker' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '8add8143a274c47cafed48512e1259a2be859837',
+            'reference' => '9c044de05f7829e2c88b2c773957e17d5423ffb8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../yahnis-elsts/plugin-update-checker',
             'aliases' => array(

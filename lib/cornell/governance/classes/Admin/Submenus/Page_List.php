@@ -68,8 +68,10 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function display() {
 			printf( '<div class="wrap"><h2>%s</h2>', $this->title );
 			$this->table->prepare_items();
+			echo '<form method="get">';
 			$this->do_search_box();
 			$this->table->display();
+			echo '</form>';
 			print( '</div>' );
 		}
 
