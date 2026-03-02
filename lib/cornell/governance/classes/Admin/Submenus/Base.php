@@ -176,12 +176,12 @@ namespace Cornell\Governance\Admin\Submenus {
 			 * @since  0.1
 			 */
 			protected function do_search_box() {
-				?>
-                <form method="post">
-                    <input type="hidden" name="page" value="<?php echo $this->hook . '_table' ?>"/>
-					<?php $this->table->search_box( __( 'Search:', 'cornell/governance' ), 'search_id' ) ?>
-                </form>
-				<?php
+                if ( ! property_exists( $this, 'table' ) || empty( $this->table ) ) {
+                    return;
+                }
+
+                printf( '<input type="hidden" name="page" value="%s"/>', $this->slug );
+                $this->table->search_box( __( 'Search:', 'cornell/governance' ), 'search_id' );
 			}
 
 			/**

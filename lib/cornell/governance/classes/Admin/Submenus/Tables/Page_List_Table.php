@@ -67,7 +67,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 */
 		function get_visible_columns(): array {
 			return apply_filters( 'cornell/governance/page-list-table/columns/visible', array(
-				'cb'          => '<input type="checkbox"/>',
+				//'cb'          => '<input type="checkbox"/>',
 				'author'      => __( 'Author', 'cornell/governance' ),
 				'title'       => __( 'Page Title', 'cornell/governance' ),
 				'last-review' => __( 'Last Reviewed', 'cornell/governance' ),
@@ -243,18 +243,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 
 			$args = apply_filters( 'cornell/governance/page-list-table/query-args', $args );
 
-			$q = new \WP_Query( $args );
-
-			global $post;
-			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
-				$data[] = $this->prepare_item( $post );
-			endwhile; endif;
-
-			$this->set_pagination_args( array(
-				'total_items' => $q->found_posts,
-				'per_page' => $per_page,
-				'total_pages' => ceil( $q->found_posts / $per_page ),
-			) );
+			$data = $this->do_query( $args );
 
 			if ( false === $natural_sort ) {
 				$this->usort( $data, $orderby );
@@ -270,6 +259,38 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'cornell/governance/page-list-table/data',
 				$data
 			);
+		}
+
+		/**
+		 * Run a query and process the information to be returned
+		 *
+		 * @param array $args the query arguments to be applied
+		 *
+		 * @return array false on error or an array of the retrieved post information
+		 */
+		public function do_query( array $args ): array {
+			$per_page = $args['posts_per_page'];
+
+			$q = new \WP_Query( $args );
+
+			Helpers::log( print_r( $q, true ), 'info' );
+
+			$data = array();
+
+			global $post;
+			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
+				$data[] = $this->prepare_item( $post );
+			endwhile; endif;
+
+			Helpers::log( print_r( $data, true ), 'info' );
+
+			$this->set_pagination_args( array(
+				'total_items' => $q->found_posts,
+				'per_page' => $per_page,
+				'total_pages' => ceil( $q->found_posts / $per_page ),
+			) );
+
+			return $data;
 		}
 
 		/**
@@ -311,6 +332,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 * @since  0.1
 		 */
 		function column_cb( $item ): string {
+			return '';
 			return sprintf( '<input type="checkbox" name="governance[]" value="%d"/>', $item['ID'] );
 		}
 
@@ -389,9 +411,6 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 			$meta = get_post_meta( $post->ID, Info::instance()->get_meta_key(), true );
 			foreach ( $meta as $key => $value ) {
 				switch ( $key ) {
-					case 'supervisor' :
-						$item[ $key ] = get_the_author_meta( 'display_name', $post->post_author );
-						break;
 					case 'tasks' :
 						break;
 					default :

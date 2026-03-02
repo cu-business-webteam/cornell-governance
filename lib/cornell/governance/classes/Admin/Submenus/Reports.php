@@ -87,6 +87,11 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			$ids = false;
 
+			$statuses = array_map( function ( $v ) {
+				return "'" . esc_sql( $v ) . "'";
+			}, Helpers::get_page_status_list() );
+			$statuses = implode( ',', $statuses );
+
 			if ( ! empty( $this->user ) ) {
 				$types = Plugin::instance()->get_post_types();
 				$types = array_map( function ( $v ) {
@@ -94,12 +99,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				}, $types );
 				$types = implode( ',', $types );
 
-				$statuses = array_map( function ( $v ) {
-					return "'" . esc_sql( $v ) . "'";
-				}, Helpers::get_page_status_list() );
-				$statuses = implode( ',', $statuses );
-
-				$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$types}) AND post_author=%d AND post_status IN ({$statuses})", $this->user );
+				$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$types}) AND post_author=%d AND post_status IN ({$statuses}) GROUP BY m.post_id", $this->user );
 
 				$ids = $wpdb->get_col( $query );
 
@@ -108,7 +108,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				}
 			}
 
-			$q = $wpdb->prepare( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key=%s", Plugin::INFO_META_KEY );
+			$q = $wpdb->prepare( "SELECT m.post_id, m.meta_value, p.ID FROM {$wpdb->postmeta} m, {$wpdb->posts} p WHERE meta_key=%s AND m.post_id=p.ID AND p.post_status IN ({$statuses})", Plugin::INFO_META_KEY );
 			if ( false !== $ids && ! is_wp_error( $ids ) ) {
 				if ( empty( $ids ) ) {
 					/* The current user has no content */
@@ -189,6 +189,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				'Stewards',
 			) as $o ) {
 				$classname = $namespace . '\Reports\\' . $o;
+				$classname::instance()->set_page_slug( $this->slug );
 				$classname::instance()->display();
 			}
 

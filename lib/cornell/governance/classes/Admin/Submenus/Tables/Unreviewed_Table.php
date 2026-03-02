@@ -142,7 +142,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'posts_per_page' => $per_page,
 				'paged'          => $current_page,
 				'order'          => strtoupper( $order ),
-				'post_status'    => array( 'publish', 'pending', 'future', 'private' ),
+				'post_status'    => Helpers::get_page_status_list(),
 			);
 
 			$s = $this->get_request_search_query();
@@ -159,12 +159,36 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'compare' => 'NOT EXISTS',
 			);
 
+			$data = $this->do_query( $args );
+
+			return apply_filters(
+				'cornell/governance/unreviewed-table/data',
+				$data
+			);
+		}
+
+		/**
+		 * Run a query and process the information to be returned
+		 *
+		 * @param array $args the query arguments to be applied
+		 *
+		 * @return array false on error or an array of the retrieved post information
+		 */
+		public function do_query( array $args ): array {
+			$per_page = $args['posts_per_page'];
+
 			$q = new \WP_Query( $args );
+
+			Helpers::log( print_r( $q, true ), 'info' );
+
+			$data = array();
 
 			global $post;
 			if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
 				$data[] = $this->prepare_item( $post );
 			endwhile; endif;
+
+			Helpers::log( print_r( $data, true ), 'info' );
 
 			$this->set_pagination_args( array(
 				'total_items' => $q->found_posts,
@@ -172,10 +196,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				'total_pages' => ceil( $q->found_posts / $per_page ),
 			) );
 
-			return apply_filters(
-				'cornell/governance/unreviewed-table/data',
-				$data
-			);
+			return $data;
 		}
 
 		/**

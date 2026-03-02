@@ -41,8 +41,6 @@ namespace Cornell\Governance\Admin\Submenus {
 				'per_page_option' => 'cornell/governance/steward-dashboard/items_per_page',
 				'description'     => __( 'A series of reports specifically about content that you currently own or manage.', 'cornell/governance' ),
 			) );
-
-			$this->table_class = 'Steward_Page_List';
 		}
 
 		/**
@@ -110,8 +108,10 @@ namespace Cornell\Governance\Admin\Submenus {
 			printf( '<div class="wrap"><h2>%s</h2>', $this->title );
 			print( '<div class="steward-dashboard-table-container">' );
 			$this->table->prepare_items();
+			echo '<form method="get">';
 			$this->do_search_box();
 			$this->table->display();
+			echo '</form>';
 			print( '</div><div class="steward-dashboard-chart-container cornell-governance-data-charts">' );
 			Compliance_Status::instance()->display();
 			print( '</div></div>' );

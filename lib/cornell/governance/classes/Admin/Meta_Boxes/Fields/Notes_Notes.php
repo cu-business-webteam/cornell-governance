@@ -24,6 +24,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 					'wysiwyg_settings' => array(
 						'teeny' => true,
 					),
+					'instructions' => sprintf( __( 'This field uses Markdown. <a href="%s" target="cheatsheet">Learn how to write basic Markdown.</a>', 'cornell/governance' ), 'https://www.markdownguide.org/cheat-sheet/' ),
 				);
 
 				$cap = Plugin::instance()->get_capability();

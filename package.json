@@ -1,6 +1,6 @@
 {
   "name": "cornell-governance",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "dependencies": {
     "babel-loader": "^9.2.1",
     "normalize.css": "^8.0.1",
@@ -19,12 +19,14 @@
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
+    "scss-editor": "sass src/scss/editor-style.scss dist/css/cornell-governance/editor-style.css",
     "scss-charts": "sass src/scss/cornell-governance/charts.scss dist/css/cornell-governance/charts.css",
     "scss-main": "sass src/scss/cornell-governance.scss dist/css/cornell-governance.css && sass src/scss/cornell-governance-admin.scss dist/css/cornell-governance-admin.css",
-    "scss": "npm run scss-main && npm run scss-charts",
+    "scss": "npm run scss-editor && npm run scss-main && npm run scss-charts",
+    "cssmin-editor": "cleancss -o dist/css/cornell-governance/editor-style.min.css dist/css/cornell-governance/editor-style.css",
     "cssmin-charts": "cleancss -o dist/css/cornell-governance/charts.min.css dist/css/cornell-governance/charts.css",
     "cssmin-main": "cleancss -o dist/css/cornell-governance.min.css dist/css/cornell-governance.css && cleancss -o dist/css/cornell-governance-admin.min.css dist/css/cornell-governance-admin.css",
-    "cssmin": "npm run cssmin-charts && npm run cssmin-main",
+    "cssmin": "npm run cssmin-editor && npm run cssmin-charts && npm run cssmin-main",
     "webpack": "webpack",
     "uglify-charts": "uglifyjs -o dist/js/cornell-governance/charts.min.js dist/js/cornell-governance/charts.js",
     "uglify-main": "uglifyjs -o dist/js/cornell-governance.min.js dist/js/cornell-governance.js && uglifyjs -o dist/js/cornell-governance-admin.min.js dist/js/cornell-governance-admin.js",

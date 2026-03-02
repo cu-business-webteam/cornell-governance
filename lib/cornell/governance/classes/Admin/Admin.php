@@ -8,12 +8,15 @@ namespace {
 
 namespace Cornell\Governance\Admin {
 
+	use Cornell\Governance\Admin\Fields\Help_Documentation;
 	use Cornell\Governance\Admin\Meta_Boxes\Fields\Commit_Message;
 	use Cornell\Governance\Admin\Meta_Boxes\Info;
 	use Cornell\Governance\Admin\Meta_Boxes\Notes;
 	use Cornell\Governance\Admin\Meta_Boxes\Revisions;
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
+	use Cornell\Governance\Wayback\Save;
+	use ParagonIE\Sodium\Core\Curve25519\H;
 
 	if ( ! class_exists( 'Admin' ) ) {
 		class Admin {
@@ -24,12 +27,27 @@ namespace Cornell\Governance\Admin {
 			private static Admin $instance;
 
 			/**
+			 * @var string $help_documentation
+			 * @access private
+			 */
+			private string $help_documentation='';
+
+			/**
+			 * @var string $liaison_workflow
+			 * @access private
+			 */
+			private string $liaison_workflow='';
+
+			/**
 			 * Creates the Admin object
 			 *
 			 * @access private
 			 * @since  0.1
 			 */
 			private function __construct() {
+				$this->set_help_documentation();
+				$this->set_liaison_workflow();
+
 				add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 				Meta_Boxes::instance();
 				Menu::instance();
@@ -65,6 +83,50 @@ namespace Cornell\Governance\Admin {
 				}
 
 				return self::$instance;
+			}
+
+			/**
+			 * Set the value of the Help Documentation setting
+			 *
+			 * @access private
+			 * @since  1.0.1
+			 * @return void
+			 */
+			private function set_help_documentation() {
+				$this->help_documentation = apply_filters( 'cornell/governance/help-documentation', get_option( 'cornell-governance-help-documentation', '' ) );
+			}
+
+			/**
+			 * Retrieve the value of the Help Documentation setting
+			 *
+			 * @access public
+			 * @since  1.0.1
+			 * @return string the value of the setting
+			 */
+			public function get_help_documentation(): string {
+				return $this->help_documentation;
+			}
+
+			/**
+			 * Set the value of the Liaison Workflow setting
+			 *
+			 * @access private
+			 * @since  1.0.1
+			 * @return void
+			 */
+			private function set_liaison_workflow() {
+				$this->liaison_workflow = apply_filters( 'cornell/governance/liaison-workflow', get_option( 'cornell-governance-liaison-workflow', '' ) );
+			}
+
+			/**
+			 * Retrieve the value of the Help Documentation setting
+			 *
+			 * @access public
+			 * @since  1.0.1
+			 * @return string the value of the setting
+			 */
+			public function get_liaison_workflow(): string {
+				return $this->liaison_workflow;
 			}
 
 			/**
@@ -126,14 +188,7 @@ namespace Cornell\Governance\Admin {
 				Revisions::instance()->save_revision( $post_id, $post, $update );
 
 				if ( Plugin::instance()->get_archive_settings( 'active' ) ) {
-					$tomorrow = date( 'Y-m-d', strtotime( 'tomorrow' ) );
-					$posts    = apply_filters( 'cornell/governance/archive/trigger/posts', get_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, array() ) );
-					if ( array_key_exists( $post_id, $posts ) ) {
-						return;
-					} else {
-						$posts[ $post_id ] = $post;
-						update_option( 'cornell/governance/archive/trigger/posts/' . $tomorrow, $posts );
-					}
+					Save::instance()->schedule_post( $post_id, $post, $update );
 				}
 			}
 

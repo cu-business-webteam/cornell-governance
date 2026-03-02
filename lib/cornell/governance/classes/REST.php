@@ -197,6 +197,26 @@ namespace Cornell\Governance {
 						'permission_callback' => '__return_true',
 					)
 				);
+
+				register_rest_route(
+					'cornell/governance/v1',
+					'/users',
+					array(
+						'methods'             => \WP_REST_Server::READABLE,
+						'callback'            => array( $this, 'get_users_endpoint' ),
+						'permission_callback' => array( $this, 'get_users_permission_callback' ),
+					)
+				);
+
+				register_rest_route(
+					'cornell/governance/v1',
+					'/users/(?P<id>[\d]+)',
+					array(
+						'methods'             => \WP_REST_Server::READABLE,
+						'callback'            => array( $this, 'get_users_endpoint' ),
+						'permission_callback' => '__return_true',
+					)
+				);
 			}
 
 			/**
@@ -221,8 +241,8 @@ namespace Cornell\Governance {
 					return $this->get_single_rest_post( $request['id'] );
 				}
 
-				$per_page = isset( $request['params']['per_page'] ) ? $request['params']['per_page'] : 10;
-				$page     = isset( $request['params']['page'] ) ? $request['params']['page'] : 1;
+				$per_page = ! is_null( $request->get_param( 'per_page' ) ) ? $request->get_param( 'per_page' ) : 10;
+				$page     = ! is_null( $request->get_param( 'page' ) ) ? $request->get_param( 'page' ) : 1;
 
 				$posts = get_posts(
 					array(
@@ -399,7 +419,7 @@ namespace Cornell\Governance {
 					$meta = array_merge( $temp, $meta );
 				}
 
-				return $meta;
+				return apply_filters( 'cornell/governance/rest/data', $meta, $post );
 			}
 
 			/**
@@ -422,6 +442,94 @@ namespace Cornell\Governance {
 				}
 
 				return $term;
+			}
+
+			/**
+			 * Retrieve and return a list of users that can be accessed by any logged-in user
+			 *
+			 * @param \WP_REST_Request $request the REST request being made
+			 *
+			 * @access public
+			 * @return \WP_REST_Response|\WP_Error
+			 * @since  1.0.1
+			 */
+			public function get_users_endpoint( \WP_REST_Request $request ) {
+				$per_page = ! is_null( $request->get_param( 'per_page' ) ) ? $request->get_param( 'per_page' ) : 10;
+				$page     = ! is_null( $request->get_param( 'page' ) ) ? $request->get_param( 'page' ) : 1;
+				$roles    = ! is_null( $request->get_param( 'roles' ) ) ? explode( ',', $request->get_param( 'roles' ) ) : array();
+				$orderby  = ! is_null( $request->get_param( 'orderby' ) ) ? $request->get_param( 'orderby' ) : 'ID';
+				$order    = ! is_null( $request->get_param( 'order' ) ) ? $request->get_param( 'order' ) : 'ASC';
+
+				$fields   = array(
+					'ID',
+					'user_login',
+					'user_nicename',
+					'user_email',
+					'display_name',
+					'user_registered',
+				);
+
+				$args = array(
+					'number'  => $per_page,
+					'paged'   => $page,
+					'fields'  => $fields,
+					'orderby' => $orderby,
+					'order'   => $order,
+				);
+
+				if ( ! empty( $roles ) ) {
+					$args['role__in'] = $roles;
+				}
+
+				if ( isset( $request['id'] ) ) {
+					$args['include'] = array( (int) $request['id'] );
+				}
+
+				$users = get_users( $args );
+
+				if ( empty( $users ) || is_wp_error( $users ) ) {
+					return new \WP_Error(
+						__( 'No users were found', 'cornell/governance' ),
+						__( 'No users could be located', 'cornell/governance' )
+					);
+				}
+
+				$data = array();
+
+				foreach ( $users as $user ) {
+					$data[ $user->ID ] = $user;
+					$data[ $user->ID ]->link = get_author_posts_url( $user->ID );
+					$data[ $user->ID ]->firstname = get_user_meta( $user->ID, 'first_name', true );
+					$data[ $user->ID ]->lastname  = get_user_meta( $user->ID, 'last_name', true );
+				}
+
+				if ( empty( $data ) ) {
+					return new \WP_Error(
+						__( 'No users were found', 'cornell/governance' ),
+						__( 'No users could be located', 'cornell/governance' )
+					);
+				}
+
+				$response = new \WP_REST_Response( $data, 200 );
+
+				return $response;
+			}
+
+			/**
+			 * Determine whether or not the current authenticated user has access to the users endpoint
+			 *
+			 * @access public
+			 * @return bool|\WP_Error whether the user has access
+			 * @since  1.0.1
+			 */
+			public function get_users_permission_callback() {
+				// This won't work for browser-based requests, but should work for GET requests with auth headers set
+				// Sample App Pass (Local-only, not a security risk) = MoVy 3YF0 6WFI SkuL 9gQN eWBv
+				if ( ! current_user_can( 'read' ) ) {
+					return new \WP_Error( 'rest_forbidden', esc_html__( 'You are not allowed to view this API information', 'cornell/governance' ), array( 'status' => 401 ) );
+				}
+
+				return true;
 			}
 		}
 	}

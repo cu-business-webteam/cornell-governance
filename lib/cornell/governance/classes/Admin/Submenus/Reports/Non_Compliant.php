@@ -182,6 +182,22 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					$output
 				);
 			}
+
+			/**
+			 * Format the data and prepare it for download as a CSV
+			 *
+			 * @access protected
+			 * @since  0.1
+			 * @return void
+			 */
+			protected function export_data() {
+				$pages = $this->get_data();
+				if ( empty( $pages ) ) {
+					return;
+				}
+
+
+			}
 		}
 	}
 }

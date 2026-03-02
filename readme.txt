@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 1.0.0  
+Stable tag: 1.0.2  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -169,6 +169,12 @@ By default, they are set to 60 days, 30 days and 15 days.
 1. How many days before a review is due should the first prompt message be sent?
 2. How many days before a review is due should the second prompt message be sent?
 3. How many days before a review is due should the third and final prompt message be sent?
+
+= Help Documentation Settings =
+
+You can optionally add an extra tab to the Governance interface included on the page edit screen with your custom help information.
+
+Simply add your Help content to the WYSIWYG editor in the Help Documentation Settings tab and save the Governance settings, then any information entered in that WYSIWYG field will appear in its own tab within the interface.
 
 = Constants =
 
@@ -375,6 +381,42 @@ _Unreviewed Pages Report_
 
 * `cornell/governance/emails/report-data` - filters the data shared with the email template. The first parameter is the array of report data. The second parameter is the name of the PHP class used to generate the email.
 
+= Import/Export =
+
+* `cornell/governance/import-export/headers` - allows you to add extra headers to import/export (must be used in conjunction with `cornell/governance/import-export/data`)
+* `cornell/governance/import-export/data` - allows you to add additional data (custom fields, taxonomies, etc.) to the import/export (must be used in conjunction with `cornell/governance/import-export/headers`)
+* `cornell/governance/import-export/data-defaults` - allows you to filter the default meta data that should be used for any post where that data is not set
+* `cornell/governance/import-export/sample-descriptions` - filters the descriptions of data fields (second row) in the sample format. It's a good idea to use this if you manipulate the headers
+* `cornell/governance/import-export/sample-data` - filters the sample data included in the sample format (third row). It's a good idea to use this if you manipulate the headers
+
+In addition, the following actions are run during import/export:
+
+* `do_action( 'cornell/governance/import-export/before-import', $data, $headers )`
+    @param array `$data` - the full set of data from the import file  
+    @param array `$headers` - the array of headers from the import file (the first row)  
+
+    Allows you to perform any actions that need to be done before the import is actually performed.
+
+* `do_action( 'cornell/governance/import-export/before-post-import', $post, $row, $headers )`  
+    @param \WP_Post `$post` - the post being imported  
+    @param array `$row` - the information being imported for the current post  
+    @param array `$headers` - the array of headers from the import file (the first row)  
+
+    Allows you to perform any actions that need to be done before information is imported for a specific post
+
+* `do_action( 'cornell/governance/import-export/after-post-import', $post, $row, $headers )`  
+  @param \WP_Post `$post` - the post being imported  
+  @param array `$row` - the information being imported for the current post  
+  @param array `$headers` - the array of headers from the import file (the first row)
+
+  Allows you to perform any actions that need to be done after information is imported for a specific post
+
+* `do_action( 'cornell/governance/import-export/after-import', $data, $headers )`
+  @param array `$data` - the full set of data from the import file  
+  @param array `$headers` - the array of headers from the import file (the first row)
+
+  Allows you to perform any actions that need to be done after the import is completed.
+
 = Miscellaneous =
 
 * `cornell/governance/textarea/value` - filters the value of a textarea field in meta boxes. The first parameter is the current value of the textarea; the second parameter is the HTML ID of the textarea field.
@@ -395,8 +437,26 @@ _Unreviewed Pages Report_
     _An example of the list of recent commit messages_](assets/screenshot-6.png)
 7. [![Page Deletion Request interface](assets/screenshot-7.png)
     _The Page Deletion Request interface_](assets/screenshot-7.png)
+8. [![Optional Help Documentation Tab](assets/screenshot-8.png)
+    _An optional, customizable Help Documentation Tab_](assets/screenshot-8.png)
 
 == Changelog ==
+
+= 1.0.2 =
+
+* Updates Liaison Dashboard
+* Updates Wayback Machine integration
+* Fixes some PHP warnings
+* Fixes incorrect Secondary Contact information in reports
+
+= 1.0.1 =
+
+* Fixes table search functionality on report pages
+* Adds new actions and filters allowing imports and exports to be manipulated
+* Adds export functionality to reports
+* Adds Help Documentation tab to interface
+* Combines the "Documentation" tab with the "Content Updates" tab into "Page Changes" tab
+* Adds new Users API endpoint that is available to any authenticated user (for reporting purposes)
 
 = 1.0.0 =
 
@@ -651,6 +711,14 @@ Bug fixes:
 * 2022-12 - This is the first version
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+
+Improvements: Liaison dashboard and Wayback Machine integration
+
+= 1.0.1 =
+
+Feature: Adds new Help Documentation tab, as well as some extensibility
 
 = 0.6.5 =
 

@@ -8,6 +8,7 @@ namespace {
 
 namespace Cornell\Governance\Admin\Meta_Boxes {
 
+	use Cornell\Governance\Admin\Admin;
 	use Cornell\Governance\Admin\Fields\Initial_Prompt;
 	use Cornell\Governance\Admin\Meta_Boxes\Fields\Edit_Notes_Button;
 	use Cornell\Governance\Admin\Meta_Boxes\Fields\Deletion_Timestamp;
@@ -339,6 +340,14 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				}
 
+				if ( ! empty( Admin::instance()->get_help_documentation() ) ) {
+
+					$output .= $this->get_help_documentation_tab();
+
+				}
+
+				do_action( 'cornell/governance/metabox/after-tabs' );
+
 				$output .= '</div><!--/ .tabs -->';
 
 				return sprintf( '<div class="%1$s">%2$s</div>', implode( ' ', $classes ), $output );
@@ -354,12 +363,11 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			protected function get_tab_handles(): string {
 				$tablist = array(
 					__( 'Steward View', 'cornell/governance' ),
-					__( 'Documentation', 'cornell/governance' ),
-					__( 'Content Updates', 'cornell/governance' ),
+					__( 'Page Changes', 'cornell/governance' ),
 				);
 
 				if ( Plugin::instance()->get_archive_settings( 'active' ) ) {
-					$tablist[] = __( 'Wayback Snapshots', 'cornell/governance' );
+					$tablist[] = __( 'Archive.org Snapshots', 'cornell/governance' );
 				}
 
 				if ( Plugin::instance()->get_mark_for_deletion_active() ) {
@@ -372,7 +380,11 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					$tablist[0] = __( 'Liaison View', 'cornell/governance' );
 				}
 
-				$this->tab_handles = $tablist;
+				if ( ! empty( Admin::instance()->get_help_documentation() ) ) {
+					$tablist[] = __( 'Get Help', 'cornell/governance' );
+				}
+
+				$this->tab_handles = apply_filters( 'cornell/governance/metabox/tab-handles', $tablist );
 
 				$handles = array();
 
@@ -1124,6 +1136,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$output .= $this->get_documentation_fields();
 
+				$output .= $this->get_revisions_fields();
+
 				$output .= sprintf( '</div><!--/ #panel-%1$d -->', $tabindex );
 
 				$this::$tab_index ++;
@@ -1146,10 +1160,16 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$ro_notes = \Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Notes_Notes::instance();
 				$w_notes  = \Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Notes_Notes::instance();
 
+				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-notes-container', __( 'Page Notes', 'cornell/governance' ) );
+
+				$output .= '<p class="cornell-governance-note">' . __( 'A record that captures context, rationale, and stakeholder input behind strategic changes. Used by liaisons to document meetings or decisions with stakeholders.', 'cornell/governance' ) . '</p>';
+
 				if ( current_user_can( $cap ) ) {
-					$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-notes-container', __( 'Page Notes', 'cornell/governance' ) );
 					$output .= '<div class="cornell-governance-viewable-field">';
 					$output .= $ro_notes->get_input();
+
+					$output .= sprintf( '<div class="field-note timestamp-container">%s</div>', Notes_Timestamp::instance()->get_input() );
+
 					$output .= Edit_Notes_Button::instance()->get_input();
 					$output .= '</div>';
 
@@ -1159,16 +1179,20 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					$output .= wp_nonce_field( 'cornell-governance-page-notes', 'cornell-governance-page-notes' . '-nonce', true, false );
 					$output .= sprintf( '<input type="hidden" name="cornell-governance-notes-post-id" value="%d"/>', $post_id );
 					$output .= sprintf( '<input type="hidden" name="cornell-governance-action" value="%s"/>', 'notes' );
+
+					$output .= sprintf( '<div class="field-note timestamp-container">%s</div>', Notes_Timestamp::instance()->get_input() );
+
 					$output .= Save_Notes::instance()->get_input();
 
 					$output .= '</div>';
 
-					$output .= $this->fieldset_close();
 				} else {
 					$output .= $ro_notes->get_input();
+					$output .= sprintf( '<div class="field-note timestamp-container">%s</div>', Notes_Timestamp::instance()->get_input() );
 				}
 
-				$output .= sprintf( '<div class="field-note timestamp-container">%s</div>', Notes_Timestamp::instance()->get_input() );
+				$output .= $this->fieldset_close();
+
 
 				return sprintf( '<div id="%3$s" class="%1$s">%2$s</div><!--/ .cornell-governance-metabox-tab -->', 'cornell-governance-metabox-tab cornell-governance-metabox-tab-notes', $output, 'cornell-governance-page-notes' );
 			}
@@ -1181,11 +1205,13 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			 * @since  0.5.1
 			 */
 			protected function get_revisions_tab(): string {
+				return '';
+
 				$tabindex = $this::$tab_index;
 
 				$output = sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d" hidden>', $tabindex );
 
-				$output .= $this->get_revisions_fields();
+
 
 				$output .= sprintf( '</div><!--/ #panel-%1$d -->', $tabindex );
 
@@ -1232,6 +1258,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$tabindex = $this::$tab_index;
 
 				$output = sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d" hidden>', $tabindex );
+
+				$output .= __( '<p>Below you will find a list of the snapshots that have been captured by archive.org (the Wayback Machine) of this page.</p>', 'cornell/governance' );
 
 				$output .= $this->get_snapshot_list();
 
@@ -1364,6 +1392,45 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				return array_reverse( $messages, true );
 			}
 
+			/**
+			 * Build and return the content of the Help Documentation tab
+			 *
+			 * @access private
+			 * @since  1.0.1
+			 * @return string the HTML for the tab
+			 */
+			private function get_help_documentation_tab(): string {
+				$tabindex = $this::$tab_index;
+
+				$output = sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d" hidden>', $tabindex );
+
+				$output .= $this->get_help_documentation_fields();
+
+				$output .= sprintf( '</div><!--/ #panel-%1$d -->', $tabindex );
+
+				$this::$tab_index ++;
+
+				return $output;
+			}
+
+			/**
+			 * Build and return the Help Documentation content
+			 *
+			 * @access private
+			 * @since  1.0.1
+			 * @return string the content
+			 */
+			private function get_help_documentation_fields(): string {
+				$output = $this->fieldset_open( array( 'cornell-governance-fieldset', 'help-documentation-fieldset' ), __( 'Helpful Information', 'cornell-governance' ) );
+
+				$output .= '<div class="help-documentation-content cornell-governance">';
+				$output .= apply_filters( 'the_content', apply_filters( 'cornell/governance/help-documentation', Admin::instance()->get_help_documentation() ) );
+				$output .= '</div>';
+
+				$output .= $this->fieldset_close();
+
+				return sprintf( '<div id="%3$s" class="%1$s">%2$s</div><!--/ .cornell-governance-metabox-tab -->', 'cornell-governance-metabox-tab cornell-governance-metabox-tab-help-documentation', $output, 'cornell-governance-help-documentation' );
+			}
 		}
 	}
 }

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
   --cornell-red: #b31b1b;
 }
@@ -285,7 +286,7 @@
 @media all and (max-width: 700px) {
   .cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "legend" "note" "one" "two" "three";
+    grid-template-areas: "legend" "note" "one" "two" "three" "four";
   }
 }
 .cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities legend {
@@ -326,6 +327,9 @@
 }
 .cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-liaison {
   grid-area: three;
+}
+.cornell-governance-metabox fieldset.cornell-governance-fieldset-responsibilities .cornell-governance-leader {
+  grid-area: four;
 }
 .cornell-governance-metabox fieldset.cornell-governance-fieldset-confirm-review .cornell-governance-message-title {
   font-weight: bolder;
@@ -387,6 +391,24 @@
 }
 .cornell-governance-metabox .cornell-governance-request-changes .cornell-governance-message-title {
   font-size: 1rem;
+}
+.cornell-governance-metabox .help-documentation-content {
+  margin: 1rem auto;
+  padding: 1rem;
+  border: 1px solid #e2e2e2;
+}
+.cornell-governance-metabox .help-documentation-content * {
+  font-size: 1rem;
+}
+.cornell-governance-metabox .help-documentation-content ul, .cornell-governance-metabox .help-documentation-content ol {
+  margin-left: 1rem;
+  padding-left: 1rem;
+}
+.cornell-governance-metabox .help-documentation-content ul {
+  list-style: disc;
+}
+.cornell-governance-metabox .help-documentation-content ol {
+  list-style: decimal;
 }
 
 .governance-menu-boxes {
@@ -1014,6 +1036,246 @@
   padding: 1rem;
   border: 1px solid #000;
   height: 8rem;
+}
+
+.cornell-governance-html-table {
+  width: 100%;
+  max-width: calc(100% - 2rem);
+  padding: 0;
+  margin: 1rem;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.cornell-governance-html-table caption {
+  margin: 1rem auto;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+.cornell-governance-html-table tr {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.cornell-governance-html-table tr td, .cornell-governance-html-table tr th {
+  padding: 0.5rem;
+  border: 1px solid #666;
+  margin: 0;
+}
+.cornell-governance-html-table tr th {
+  background: #e2e2e2;
+  font-weight: bolder;
+}
+
+.steward-dashboard-table-container {
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+  border: 1px solid #999;
+  padding: 1rem;
+}
+.steward-dashboard-table-container h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  float: left;
+}
+
+.governance-liaison-overview {
+  display: grid;
+  gap: 1rem;
+  grid-template-areas: "header header header" "overview overview noncompliant" "performance performance performance" "workflow workflow workflow";
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.governance-liaison-overview > div {
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+  border: 1px solid #999;
+  padding: 1rem;
+}
+.governance-liaison-overview > div h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.governance-liaison-overview .governance-portfolio-overview {
+  grid-area: overview;
+  display: grid;
+  grid-template-areas: "header header header" "compliant due overdue" "status status status";
+}
+.governance-liaison-overview .governance-portfolio-overview h3 {
+  grid-area: header;
+}
+.governance-liaison-overview .governance-portfolio-overview .column {
+  text-align: center;
+}
+.governance-liaison-overview .governance-portfolio-overview .column .percentage {
+  font-weight: bold;
+  font-size: 3.1rem;
+  line-height: normal;
+  display: block;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-compliance-compliant {
+  grid-area: compliant;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-compliance-compliant .percentage {
+  color: #009400;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-compliance-due {
+  grid-area: due;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-compliance-due .percentage {
+  color: #8f8f00;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-compliance-overdue {
+  grid-area: overdue;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-compliance-overdue .percentage {
+  color: red;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar {
+  padding-top: 1rem;
+  container-name: statusbar;
+  grid-area: status;
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: min-content auto min-content;
+  grid-template-areas: "start progress end";
+  gap: 1rem;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar .statusbar-start,
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar .statusbar-end {
+  line-height: 1.5rem;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar .governance-compliance-overall-status {
+  grid-area: progress;
+  position: relative;
+  color: white;
+  width: 100%;
+  max-width: 100%;
+  background: #808080;
+  border-radius: 1rem;
+  height: 1rem;
+  display: block;
+  padding: 0.25rem 0;
+  margin: 0 auto;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar .governance-compliance-overall-status .completion-percentage-label {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  vertical-align: top;
+  line-height: 1rem;
+  width: var(--status-percentage);
+  text-align: center;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar .governance-compliance-overall-status:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: auto;
+  border-radius: 1rem;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  grid-area: progress;
+  width: var(--status-percentage);
+  background: black;
+  margin: 0 auto 0 0;
+  padding: 0;
+  height: 1.5rem;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar[style*="--status-percentage: 100%"] .governance-compliance-overall-status:after {
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+.governance-liaison-overview .governance-portfolio-overview .governance-statusbar[style*="--status-percentage: 0%"] .governance-compliance-overall-status .completion-percentage-label {
+  width: 100%;
+}
+.governance-liaison-overview .governance-portfolio-overdue-overview {
+  grid-area: noncompliant;
+}
+.governance-liaison-overview .governance-portfolio-overdue-overview p {
+  font-weight: bold;
+}
+.governance-liaison-overview .governance-portfolio-overdue-overview p:before {
+  content: "⚠";
+  color: #000;
+  display: inline-block;
+  margin: 0;
+  padding: 0 0.5rem 0 0;
+  font-size: 1.3rem;
+  vertical-align: baseline;
+  font-weight: normal;
+}
+.governance-liaison-overview .governance-portfolio-steward-performance {
+  grid-area: performance;
+}
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tr {
+  border-bottom: 1px solid #666;
+  border-top: 1px solid #666;
+}
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tr th,
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tr td {
+  border: none;
+  background: transparent;
+  color: black;
+  padding: 0.5rem;
+  margin: 0;
+  text-align: left;
+}
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table thead tr,
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tfoot tr {
+  border: none;
+}
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table thead tr th,
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table thead tr td,
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tfoot tr th,
+.governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tfoot tr td {
+  font-weight: bolder;
+  background: #eee;
+}
+.governance-liaison-overview .governance-liaison-workflow {
+  grid-area: workflow;
+}
+.governance-liaison-overview .governance-liaison-workflow ul, .governance-liaison-overview .governance-liaison-workflow ol {
+  list-style: revert;
+}
+.governance-liaison-overview .governance-liaison-workflow ul > li, .governance-liaison-overview .governance-liaison-workflow ol > li {
+  margin-left: 1rem;
+}
+
+.governance-paginated-list ul.is-hidden {
+  display: none;
+}
+.governance-paginated-list .governance-pagination h4 {
+  display: inline-block;
+  margin: 0 0 0 0.25rem;
+  padding: 0;
+}
+.governance-paginated-list .governance-pagination ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 0.25rem;
+}
+.governance-paginated-list .governance-pagination ul button {
+  display: block;
+  color: black;
+  background: transparent;
+  border: 1px solid #999;
+  padding: 0.2rem;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  font-size: 1rem;
+  margin: 0;
+}
+.governance-paginated-list .governance-pagination ul button:hover, .governance-paginated-list .governance-pagination ul button:focus {
+  background: #FF7276;
+}
+.governance-paginated-list .governance-pagination ul [aria-selected=true] {
+  background: darkred;
+  color: white;
 }
 
 /*# sourceMappingURL=cornell-governance-admin.css.map */

@@ -8,7 +8,7 @@ namespace {
 	}
 }
 
-namespace Cornell\Governance\Wayback {
+namespace Cornell\Governance\Admin {
 	if ( ! class_exists( 'HTML_Table' ) ) {
 		class HTML_Table {
 			/**

@@ -10,6 +10,7 @@ namespace Cornell\Governance\Admin\Submenus {
 
 	use Cornell\Governance\Admin\Submenus\Reports\Compliance_Status;
 	use Cornell\Governance\Admin\Submenus\Reports\Liaison_Status;
+	use Cornell\Governance\Admin\Submenus\Reports\Portfolio_Compliance;
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
@@ -138,12 +139,16 @@ namespace Cornell\Governance\Admin\Submenus {
 			add_filter( 'cornell/governance/reports/current-user', array( $this, 'current_user' ) );
 
 			printf( '<div class="wrap"><h2>%s</h2>', $this->title );
+			Portfolio_Compliance::instance()->display();
 			print( '<div class="steward-dashboard-table-container">' );
 			$this->table->prepare_items();
+			echo '<form method="get">';
+			printf( '<h3>%s</h3>', __( 'Full Liaison Page List', 'cornell/governance' ) );
 			$this->do_search_box();
 			$this->table->display();
-			print( '</div><div class="steward-dashboard-chart-container cornell-governance-data-charts">' );
-			Liaison_Status::instance()->display();
+			echo '</form>';
+			/*print( '</div><div class="steward-dashboard-chart-container cornell-governance-data-charts">' );
+			Liaison_Status::instance()->display();*/
 			print( '</div></div>' );
 
 			remove_filter( 'cornell/governance/reports/current-user', array( $this, 'current_user' ) );

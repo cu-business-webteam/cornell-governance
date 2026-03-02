@@ -4,6 +4,7 @@ import governanceDocs from "./cornell-governance/documentation";
 import governanceTooltip from "./modules/tooltip";
 import governanceTabs from "./modules/tabs";
 import HTMLParser from "./modules/HTMLParser";
+import archiveList from "./modules/archiveList";
 
 class CornellGovernanceAdmin {
     constructor() {
@@ -24,6 +25,7 @@ class CornellGovernanceAdmin {
             return;
         }
 
+        this.handleArchiveLists();
         this.hideSaveInfoInstructions();
 
         this.saveInfoClick = this.saveInfo.bind(this);
@@ -86,7 +88,7 @@ class CornellGovernanceAdmin {
         });
 
         this.tabLists = [];
-        const tabLists = document.querySelectorAll('.cornell-governance-metabox .inside [role="tablist"], .cornell-governance-tablist [role="tablist"]');
+        const tabLists = document.querySelectorAll('.cornell-governance-metabox .inside :not(.governance-paginated-list) [role="tablist"], .cornell-governance-tablist :not(.governance-paginated-list) [role="tablist"]');
         tabLists.forEach((tabList) => {
             this.tabLists.push(new governanceTabs(tabList));
         });
@@ -100,6 +102,22 @@ class CornellGovernanceAdmin {
                 this.hideNotesEditor(editor);
             });
         }
+    }
+
+    handleArchiveLists() {
+        if ( document.querySelectorAll('.cornell-governance-wayback-list').length <= 0 ) {
+            return;
+        }
+
+        this.waybackLists = [];
+
+        let listCounter = 1;
+
+        const archiveLists = document.querySelectorAll('.cornell-governance-wayback-list');
+        archiveLists.forEach((list) => {
+            this.waybackLists.push( new archiveList(list,listCounter) );
+            listCounter++;
+        });
     }
 
     setupLightboxes() {
@@ -227,8 +245,10 @@ class CornellGovernanceAdmin {
             this.activeFormTab = this.currentBox.querySelector('[role="tabpanel"]:not([hidden])');
         }
         this.currentBoxText = head.innerText;
-        this.timestampField = this.currentBox.querySelector('.cornell-governance-timestamp');
-        this.timestampField.querySelector('input[type=hidden]').value = this.getCurrentDateTime();
+        this.timestampField = this.currentBox.querySelectorAll('.cornell-governance-timestamp');
+        this.timestampField.forEach( (field) => {
+            field.querySelector('input[type="hidden"]').value = this.getCurrentDateTime();
+        });
 
         let atts = {
             'ajax_action': 'cornell_governance_save_meta_info',
@@ -262,8 +282,10 @@ class CornellGovernanceAdmin {
             head = this.activeFormTab.querySelector('legend');
         }
         this.currentBoxText = head.innerText;
-        this.timestampField = this.activeFormTab.querySelector('.cornell-governance-timestamp');
-        this.timestampField.querySelector('input[type=hidden]').value = this.getCurrentDateTime();
+        this.timestampField = this.activeFormTab.querySelectorAll('.cornell-governance-timestamp');
+        this.timestampField.forEach( (field) => {
+            field.querySelector('input[type="hidden"]').value = this.getCurrentDateTime();
+        });
 
         this.log('Head: ');
         this.log(head);
@@ -442,8 +464,10 @@ class CornellGovernanceAdmin {
             head = this.currentBox.querySelector('legend');
         }
         this.currentBoxText = head.innerText;
-        this.timestampField = this.activeFormTab.querySelector('.cornell-governance-timestamp');
-        this.timestampField.querySelector('input[type=hidden]').value = this.getCurrentDateTime();
+        this.timestampField = this.activeFormTab.querySelectorAll('.cornell-governance-timestamp');
+        this.timestampField.forEach( (field) => {
+            field.querySelector('input[type="hidden"]').value = this.getCurrentDateTime();
+        });
 
         let atts = {
             'ajax_action': 'cornell_governance_save_meta_notes',
@@ -499,12 +523,14 @@ class CornellGovernanceAdmin {
             this.setTimestamp(document.getElementById('cornell-governance-metabox-tab-info-liaison'));
         }
 
-        const timestampField = target.querySelector('.cornell-governance-timestamp');
-        const timestampInput = timestampField.querySelector('input[type=hidden]');
-        const timestampLabel = timestampField.querySelector('label');
-        const timeValue = timestampInput.value;
-        const originalLabel = timestampInput.getAttribute('data-original-label');
-        timestampLabel.innerText = originalLabel + ': ' + timeValue;
+        const timestampField = target.querySelectorAll('.cornell-governance-timestamp');
+        this.timestampField.forEach( (field) => {
+            const timestampInput = field.querySelector('input[type=hidden]');
+            const timestampLabel = field.querySelector('label');
+            const timeValue = timestampInput.value;
+            const originalLabel = timestampInput.getAttribute('data-original-label');
+            timestampLabel.innerText = originalLabel + ': ' + timeValue;
+        });
     }
 
     getCurrentDateTime() {

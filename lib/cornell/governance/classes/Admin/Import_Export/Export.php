@@ -99,7 +99,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 
 					$author = get_user( $post->post_author );
 
-					$this->data[$post->ID] = array(
+					$this->data[$post->ID] = apply_filters( 'cornell/governance/import-export/data', array(
 						$post->ID,
 						$post->post_title,
 						get_permalink( $post->ID ),
@@ -116,7 +116,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 						$meta['supervisor'],
 						$meta['liaison'],
 						$notes['notes'],
-					);
+					) );
 
 					$this->data[$post->ID] = array_combine( array_keys( $this->headers ), $this->data[$post->ID] );
 				}
@@ -130,7 +130,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 			 * @since  0.6.2
 			 */
 			private function get_default_meta(): array {
-				return array(
+				return apply_filters( 'cornell/governance/import-export/data-defaults', array(
 					'goals'              => '',
 					'problem'            => '',
 					'primary-audience'   => '',
@@ -140,7 +140,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 					'tasks'              => array(),
 					'supervisor'         => '',
 					'liaison'            => '',
-				);
+				) );
 			}
 
 			/**
@@ -151,14 +151,8 @@ namespace Cornell\Governance\Admin\Import_Export {
 			 * @since  0.6.2
 			 */
 			public function get_file() {
-				/*$dir = wp_upload_dir();
-				if ( ! is_dir( $dir['basedir'] . '/governance-exports/' ) ) {
-					mkdir( $dir['basedir'] . '/governance-exports/', 0755, true );
-				}*/
-
 				$ext        = 'csv';
 				$filename   = 'governance-export-' . date( "Y-m-d_H:i:s" ) . '.' . $ext;
-				/*$this->file = wp_upload_dir()['basedir'] . '/governance-export/' . $filename;*/
 
 				$this->get_data();
 
