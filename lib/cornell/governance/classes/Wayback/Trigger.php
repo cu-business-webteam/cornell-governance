@@ -50,7 +50,7 @@ namespace Cornell\Governance\Wayback {
 			 * @since  0.1
 			 */
 			private function __construct() {
-				if ( ! is_admin() && ! isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) ) {
+				if ( ! is_admin() && ! isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) && ! isset( $_REQUEST['cornell/governance/process-snapshots'] ) ) {
 					return;
 				}
 
@@ -137,6 +137,17 @@ namespace Cornell\Governance\Wayback {
 			 * @return void
 			 */
 			public function do_cron() {
+				$started = get_option( 'cornell/governance/trigger-snapshots/triggered', false );
+				if ( $started === false ) {
+					if ( isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) ) {
+						$started = date( 'Y-m-d' );
+						update_option( 'cornell/governance/trigger-snapshots/triggered', $started );
+						wp_die( __( 'Archive snapshots have been triggered. They will be processed soon', 'cornell/governance' ) );
+					} else {
+						wp_die( __( 'Archive snapshots have not yet been triggered; it is likely all have been processed', 'cornell/governance' ) );
+					}
+				}
+
 				foreach ( $this->posts as $post ) {
 					if ( self::$count >= $this->limit ) {
 						continue;
@@ -153,7 +164,9 @@ namespace Cornell\Governance\Wayback {
 					self::$count++;
 				}
 
-				$this->cleanup_database();
+				if ( empty( $this->posts ) ) {
+					$this->cleanup_database();
+				}
 			}
 
 			/**
@@ -179,6 +192,7 @@ namespace Cornell\Governance\Wayback {
 			protected function cleanup_database() {
 				$this->cleanup_triggers();
 				$this->cleanup_snapshots();
+				delete_option( 'cornell/governance/trigger-snapshots/triggered' );
 			}
 
 			/**

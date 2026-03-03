@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'cornell/governance',
-        'pretty_version' => '1.0.2',
-        'version' => '1.0.2.0',
+        'pretty_version' => '1.0.2.2',
+        'version' => '1.0.2.2',
         'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'cornell/governance' => array(
-            'pretty_version' => '1.0.2',
-            'version' => '1.0.2.0',
+            'pretty_version' => '1.0.2.2',
+            'version' => '1.0.2.2',
             'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
@@ -31,7 +31,7 @@
         'erusev/parsedown-extra' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d',
+            'reference' => 'cf4dc29794d22ab441fddd2b336b5c54f7ae2e2f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../erusev/parsedown-extra',
             'aliases' => array(

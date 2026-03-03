@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 1.0.2  
+Stable tag: 1.0.3  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -439,8 +439,15 @@ In addition, the following actions are run during import/export:
     _The Page Deletion Request interface_](assets/screenshot-7.png)
 8. [![Optional Help Documentation Tab](assets/screenshot-8.png)
     _An optional, customizable Help Documentation Tab_](assets/screenshot-8.png)
+9. [![Part of the Liaison Dashboard](assets/screenshot-9.png)
+Some of the reports available in the Liaison Dashboard](assets/screenshot-9.png)
 
 == Changelog ==
+
+= 1.0.3 =
+
+* Fixes tabbed interface on Governance Settings page
+* Cleans up the way Archive snapshots are triggered & processed
 
 = 1.0.2 =
 
@@ -711,6 +718,10 @@ Bug fixes:
 * 2022-12 - This is the first version
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+
+Fixes: Governance settings work properly again
 
 = 1.0.2 =
 
