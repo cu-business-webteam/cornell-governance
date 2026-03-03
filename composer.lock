@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e180c3337239c7a0f0ddde32246bab2c",
+    "content-hash": "25b8c875d1cefa5c3d50d573b81e9855",
     "packages": [
         {
             "name": "erusev/parsedown",
@@ -68,12 +68,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown-extra.git",
-                "reference": "b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d"
+                "reference": "cf4dc29794d22ab441fddd2b336b5c54f7ae2e2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d",
-                "reference": "b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d",
+                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/cf4dc29794d22ab441fddd2b336b5c54f7ae2e2f",
+                "reference": "cf4dc29794d22ab441fddd2b336b5c54f7ae2e2f",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-18T15:50:12+00:00"
+            "time": "2026-03-03T06:52:47+00:00"
         },
         {
             "name": "graham-campbell/result-type",

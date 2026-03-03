@@ -883,7 +883,7 @@ class CornellGovernanceAdmin {
     }
   }
   init() {
-    if (document.querySelectorAll('.cornell-governance-save-info, .cornell-governance-save-notes, ol.repeater-field-set').length <= 0) {
+    if (document.querySelectorAll('.cornell-governance-save-info, .cornell-governance-save-notes, ol.repeater-field-set, .cornell-governance-tablist').length <= 0) {
       return;
     }
     this.handleArchiveLists();
@@ -921,10 +921,12 @@ class CornellGovernanceAdmin {
       });
     }
     const inputs = document.querySelectorAll('.postbox#cornell-governance-page-info .cornell-governance-tabpanel > :not(#cornell-governance-page-notes) :is(input, select, textarea)');
-    inputs.forEach(input => {
-      this.log(input);
-      input.addEventListener('change', this.inputChanged);
-    });
+    if (inputs.length >= 1) {
+      inputs.forEach(input => {
+        this.log(input);
+        input.addEventListener('change', this.inputChanged);
+      });
+    }
     if (document.querySelectorAll('ol.repeater-field-set').length >= 1) {
       this.repeater = new repeater();
       const repeaterButtons = document.querySelectorAll('.postbox#cornell-governance-page-info .cornell-governance-tabpanel > :not(#cornell-governance-page-notes) :is(button.repeater-remove-row, button.repeater-add-row)');
@@ -936,14 +938,18 @@ class CornellGovernanceAdmin {
     this.maybeHideConfirm();
     this.tooltips = [];
     const tooltips = document.querySelectorAll('.governance-tooltip-container');
-    tooltips.forEach(tooltip => {
-      this.tooltips.push(new modules_tooltip(tooltip));
-    });
+    if (tooltips.length >= 1) {
+      tooltips.forEach(tooltip => {
+        this.tooltips.push(new modules_tooltip(tooltip));
+      });
+    }
     this.tabLists = [];
-    const tabLists = document.querySelectorAll('.cornell-governance-metabox .inside :not(.governance-paginated-list) [role="tablist"], .cornell-governance-tablist :not(.governance-paginated-list) [role="tablist"]');
-    tabLists.forEach(tabList => {
-      this.tabLists.push(new tabs(tabList));
-    });
+    const tabLists = document.querySelectorAll('.cornell-governance-metabox .inside :not(.governance-paginated-list) [role="tablist"], .cornell-governance-tablist [role="tablist"]');
+    if (tabLists.length >= 1) {
+      tabLists.forEach(tabList => {
+        this.tabLists.push(new tabs(tabList));
+      });
+    }
     this.updateNotice = new modules_updateNotice();
     if (document.querySelectorAll('.cornell-governance-reveal-toggle-notes-editor button').length >= 1) {
       const notesEditors = document.querySelectorAll('.cornell-governance-reveal-toggle-notes-editor button');

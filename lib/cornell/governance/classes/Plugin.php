@@ -27,7 +27,7 @@ namespace Cornell\Governance {
 			 * @var string $version holds the version number for the plugin
 			 * @access public
 			 */
-			public static string $version = '1.0.2';
+			public static string $version = '1.0.3';
 			/**
 			 * @var string $capability the WP capability required to access settings
 			 * @access private
@@ -139,11 +139,11 @@ namespace Cornell\Governance {
 					}
 				}
 
-				/*if ( $this->get_archive_settings( 'active' ) ) {
-					if ( isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) || isset( $_GET['cornell/governance/daily-cron'] ) ) {
+				if ( $this->get_archive_settings( 'active' ) ) {
+					if ( isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) || isset( $_GET['cornell/governance/process-snapshots'] ) || isset( $_GET['cornell/governance/daily-cron'] ) ) {
 						add_action( 'init', array( $this, 'do_snapshots' ) );
 					}
-				}*/
+				}
 			}
 
 			/**
