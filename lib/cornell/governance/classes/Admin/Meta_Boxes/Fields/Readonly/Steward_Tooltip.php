@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Tooltip;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Steward_Tooltip' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Steward_Tooltip' ) ) {
 		Final class Steward_Tooltip extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Steward_Tooltip {
 			/**
 			 * @var Steward_Tooltip $instance holds the single instance of this class

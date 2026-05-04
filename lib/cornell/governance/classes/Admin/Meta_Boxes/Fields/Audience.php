@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Audience' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Audience' ) ) {
 		abstract class Audience extends Select {
 			function __construct( array $atts = array() ) {
 				if ( array_key_exists( 'classes', $atts ) ) {
@@ -52,7 +52,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return array the array of options
 			 */
 			public function get_options(): array {
-				$options = array( '' => __( '-- Please select an audience --', 'cornell/governance' ) );
+				$options = array( '' => __( '-- Please select an audience --', 'cornell-governance' ) );
 				foreach ( $this->get_audiences() as $audience ) {
 					$options[$audience->slug] = $audience->name;
 				}

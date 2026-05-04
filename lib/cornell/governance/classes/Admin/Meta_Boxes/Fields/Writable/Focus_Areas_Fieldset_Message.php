@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Focus_Areas_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Focus_Areas_Fieldset_Message' ) ) {
 		Final class Focus_Areas_Fieldset_Message extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Focus_Areas_Fieldset_Message {
 			/**
 			 * @var Focus_Areas_Fieldset_Message $instance holds the single instance of this class

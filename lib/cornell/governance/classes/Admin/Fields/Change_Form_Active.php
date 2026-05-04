@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Change_Form_Active' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Change_Form_Active' ) ) {
 		class Change_Form_Active extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -26,7 +26,7 @@ namespace Cornell\Governance\Admin\Fields {
 				parent::__construct( array(
 					'type'      => 'boolean',
 					'id'        => 'change-form-active',
-					'title'     => __( 'Include a link to a form allowing users to request changes to the governance settings for a page?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'Include a link to a form allowing users to request changes to the governance settings for a page?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings-change-form',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-checkbox cornell-governance-admin-boolean',
@@ -48,17 +48,6 @@ namespace Cornell\Governance\Admin\Fields {
 				}
 
 				return self::$instance;
-			}
-
-			/**
-			 * Build the input
-			 *
-			 * @access protected
-			 * @return string
-			 * @since  0.1
-			 */
-			protected function get_input(): string {
-				return $this->get_input_boolean();
 			}
 
 			/**

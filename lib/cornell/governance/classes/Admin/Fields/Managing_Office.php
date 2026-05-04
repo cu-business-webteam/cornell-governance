@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Managing_Office' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Managing_Office' ) ) {
 		class Managing_Office extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -25,11 +25,11 @@ namespace Cornell\Governance\Admin\Fields {
 			protected function __construct() {
 				parent::__construct( array(
 					'id'        => 'managing-office',
-					'title'     => __( 'What is the name of the office that manages Governance for your organization?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'What is the name of the office that manages Governance for your organization?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-text',
-					'default'   => __( 'MarCom', 'cornell/governance' ),
+					'default'   => esc_html( __( 'MarCom', 'cornell-governance' ) ),
 				) );
 			}
 
@@ -47,21 +47,6 @@ namespace Cornell\Governance\Admin\Fields {
 				}
 
 				return self::$instance;
-			}
-
-			/**
-			 * Build the input
-			 *
-			 * @access protected
-			 * @return string
-			 * @since  0.1
-			 */
-			protected function get_input(): string {
-				$current = $this->get_input_value();
-
-				$id = $this->page . '-' . $this->id;
-
-				return sprintf( '<input type="text" name="%1$s" id="%1$s" value="%2$s"/>', $id, esc_attr( $current ) );
 			}
 
 			/**

@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Liaison' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Liaison' ) ) {
 		class Liaison extends Base {
 			/**
 			 * @var Liaison $instance holds the single instance of this class
@@ -110,11 +110,11 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$output = array(
 					'canvasID' => 'liaison-chart',
 					'type'     => 'doughnut',
-					'chartLabel' => sprintf( __( 'Content by %s Liaison', 'cornell/governance' ), Plugin::instance()->get_managing_office() ),
+					'chartLabel' => sprintf( esc_html( __( 'Content by %s Liaison', 'cornell-governance' ) ), Plugin::instance()->get_managing_office() ),
 					'labels' => $labels,
 					'datasets' => array(
 						array(
-							'label' => __( 'Liaison', 'cornell/governance' ),
+							'label' => esc_html( __( 'Liaison', 'cornell-governance' ) ),
 							'data' => $data,
 						),
 					),
@@ -138,7 +138,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				printf(
 					'<h3 id="%2$s-title">%1$s</h3>
 							<canvas role="img" id="%2$s" aria-labelledby="%2$s-title" aria-describedby="%2$s-data"></canvas>',
-					sprintf( __( 'Content by %s Liaison', 'cornell/governance' ), Plugin::instance()->get_managing_office() ),
+					sprintf( esc_html( __( 'Content by %s Liaison', 'cornell-governance' ) ), Plugin::instance()->get_managing_office() ),
 					$output['canvasID']
 				);
 
@@ -156,7 +156,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					'<details id="%2$s-data"><summary>%3$s</summary><dl>%1$s</dl></details>',
 					implode( '', $lists ),
 					$output['canvasID'],
-					__( 'Reveal source data for this chart', 'cornell/governance' )
+					__( 'Reveal source data for this chart', 'cornell-governance' )
 				);
 
 				print( '</div>' );

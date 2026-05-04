@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Input;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Editor' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Editor' ) ) {
 		class Editor extends Input {
 			/**
 			 * @var Editor $instance holds the single instance of this class
@@ -21,7 +21,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-revisions-editor',
-					'label' => __( 'Editor', 'cornell/governance' ),
+					'label' => esc_html( __( 'Editor', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-hidden', 'cornell-governance-editor' ),
 					'default' => get_current_user_id(),
 					'type' => 'hidden',

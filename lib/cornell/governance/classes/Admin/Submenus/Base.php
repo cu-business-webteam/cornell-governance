@@ -6,7 +6,7 @@ namespace Cornell\Governance\Admin\Submenus {
 	use Cornell\Governance\Admin\Menu;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Base' ) ) {
 		abstract class Base {
 			/**
 			 * @var string $hook the menu/page hook
@@ -181,7 +181,7 @@ namespace Cornell\Governance\Admin\Submenus {
                 }
 
                 printf( '<input type="hidden" name="page" value="%s"/>', $this->slug );
-                $this->table->search_box( __( 'Search:', 'cornell/governance' ), 'search_id' );
+                $this->table->search_box( esc_html( __( 'Search:', 'cornell-governance' ) ), 'search_id' );
 			}
 
 			/**

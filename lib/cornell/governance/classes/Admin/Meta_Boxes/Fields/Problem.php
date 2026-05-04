@@ -11,12 +11,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Problem' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Problem' ) ) {
 		abstract class Problem extends Textarea {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-problem',
-					'label' => __( 'Purpose/Problems Solved', 'cornell/governance' ),
+					'label' => esc_html( __( 'Purpose/Problems Solved', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-textarea', 'cornell-governance-problem' ),
 					'default' => '',
 					'meta_box' => 'Info',

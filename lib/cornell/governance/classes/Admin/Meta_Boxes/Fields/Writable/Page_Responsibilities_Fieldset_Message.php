@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Page_Responsibilities_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Page_Responsibilities_Fieldset_Message' ) ) {
 		Final class Page_Responsibilities_Fieldset_Message extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Page_Responsibilities_Fieldset_Message {
 			/**
 			 * @var Page_Responsibilities_Fieldset_Message $instance holds the single instance of this class

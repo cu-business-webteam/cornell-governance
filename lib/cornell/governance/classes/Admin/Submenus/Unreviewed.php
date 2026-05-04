@@ -35,11 +35,11 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'           => __( 'Cornell Governance: Unreviewed Pages', 'cornell/governance' ),
-				'menu_name'       => __( 'Unreviewed Pages', 'cornell/governance' ),
+				'title'           => esc_html( __( 'Cornell Governance: Unreviewed Pages', 'cornell-governance' ) ),
+				'menu_name'       => esc_html( __( 'Unreviewed Pages', 'cornell-governance' ) ),
 				'slug'            => 'cornell-governance-unreviewed',
 				'per_page_option' => 'cornell/governance/unreviewed/items_per_page',
-				'description'     => __( 'A list of all governable content on this site that has not been reviewed for governance purposes, yet.', 'cornell/governance' ),
+				'description'     => esc_html( __( 'A list of all governable content on this site that has not been reviewed for governance purposes, yet.', 'cornell-governance' ) ),
 			) );
 		}
 

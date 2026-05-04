@@ -12,19 +12,24 @@
   margin: 0 auto;
   padding: 1rem 2rem;
 }
+
 .cornell-governance-compliance-widget a {
   color: #000;
 }
+
 .cornell-governance-compliance-widget.cornell-governance-status-due {
   background: #FF7276;
 }
+
 .cornell-governance-compliance-widget.cornell-governance-status-overdue {
   background: var(--cornell-red);
   color: #fff;
 }
+
 .cornell-governance-compliance-widget.cornell-governance-status-overdue a {
   color: #fff;
 }
+
 .cornell-governance-compliance-widget-container {
   max-width: 1200px;
   margin: 0 auto;

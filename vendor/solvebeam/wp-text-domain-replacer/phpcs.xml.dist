@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<ruleset name="SolveBeam WordPress internationalization text domain replacer">
+	<file>.</file>
+
+	<exclude-pattern type="relative">^vendor/*</exclude-pattern>
+
+	<rule ref="PronamicWP">
+
+	</rule>
+</ruleset>

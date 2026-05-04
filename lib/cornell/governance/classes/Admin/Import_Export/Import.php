@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 	use Cornell\Governance\Helpers;
 	use WP_Error;
 
-	if ( ! class_exists( 'Import' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Import_Export\Import' ) ) {
 		class Import extends Base {
 			/**
 			 * @var Import $instance holds the single instance of this class
@@ -174,10 +174,10 @@ namespace Cornell\Governance\Admin\Import_Export {
 							}
 						}
 
-						printf( '<%s data-key="%s">', $cell_type, $key );
-						print( nl2br( $cell ) );
+						printf( '<%s data-key="%s">', esc_attr( $cell_type ), esc_attr( $key ) );
+						print( wp_kses_post( nl2br( $cell ) ) );
 						/*var_dump( $cell );*/
-						printf( '</%s>', $cell_type );
+						printf( '</%s>', esc_attr( $cell_type ) );
 					}
 					print( '</tr>' );
 				}
@@ -198,16 +198,16 @@ namespace Cornell\Governance\Admin\Import_Export {
 				} catch ( \Exception $e ) {
 					echo Import_Export::instance()->generate_error( 'import', $e->getMessage() );
 
-					return new WP_Error( 'import', $e->getMessage() );
+					return new \WP_Error( 'import', $e->getMessage() );
 				}
 
 				if ( count( $this->data ) <= 0 ) {
-					return new WP_Error( 'import', __( 'The import file appears to be empty', 'cornell/governance' ) );
+					return new \WP_Error( 'import', esc_html( __( 'The import file appears to be empty', 'cornell-governance' ) ) );
 				}
 
 				$headers = array_shift( $this->data );
 				if ( empty( $this->data ) ) {
-					return new WP_Error( 'import', __( 'The import file does not appear to include any data', 'cornell/governance' ) );
+					return new \WP_Error( 'import', esc_html( __( 'The import file does not appear to include any data', 'cornell-governance' ) ) );
 				}
 
 				/**

@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin {
     use Cornell\Governance\Helpers;
     use Cornell\Governance\Plugin;
 
-    if ( ! class_exists( 'Settings' ) ) {
+    if ( ! class_exists( '\Cornell\Governance\Admin\Settings' ) ) {
         class Settings {
             /**
              * @var Settings $instance holds the single instance of this class
@@ -75,7 +75,7 @@ namespace Cornell\Governance\Admin {
             public function register_setting(): void {
                 add_settings_section(
                         'cornell-governance-settings',
-                        __( 'Cornell Page Governance Settings', 'cornell/governance' ),
+                        esc_html( __( 'Cornell Page Governance Settings', 'cornell-governance' ) ),
                         array( $this, 'do_settings_section' ),
                         'cornell-governance',
                         array(
@@ -86,7 +86,7 @@ namespace Cornell\Governance\Admin {
 
                 add_settings_section(
                         'cornell-governance-settings-archive',
-                        __( 'Wayback Integration', 'cornell/governance' ),
+                        esc_html( __( 'Wayback Integration', 'cornell-governance' ) ),
                         array( $this, 'do_wayback_settings_section' ),
                         'cornell-governance',
                         array(
@@ -97,7 +97,7 @@ namespace Cornell\Governance\Admin {
 
                 add_settings_section(
                         'cornell-governance-settings-change-form',
-                        __( 'Change Form Settings', 'cornell/governance' ),
+                        esc_html( __( 'Change Form Settings', 'cornell-governance' ) ),
                         array( $this, 'do_change_settings_section' ),
                         'cornell-governance',
                         array(
@@ -108,7 +108,7 @@ namespace Cornell\Governance\Admin {
 
                 add_settings_section(
                         'cornell-governance-settings-prompts',
-                        __( 'Email Prompt Settings', 'cornell/governance' ),
+                        esc_html( __( 'Email Prompt Settings', 'cornell-governance' ) ),
                         array( $this, 'do_prompt_settings_section' ),
                         'cornell-governance',
                         array(
@@ -119,7 +119,7 @@ namespace Cornell\Governance\Admin {
 
                 add_settings_section(
                         'cornell-governance-settings-help',
-                        __( 'Help Documentation', 'cornell/governance' ),
+                        esc_html( __( 'Help Documentation', 'cornell-governance' ) ),
                         array( $this, 'do_help_settings_section' ),
                         'cornell-governance',
                         array(
@@ -199,8 +199,8 @@ namespace Cornell\Governance\Admin {
              */
             public function add_options_page(): void {
                 /*add_options_page(
-                    __( 'Page Governance', 'cornell/governance' ),
-                    __( 'Page Governance', 'cornell/governance' ),
+                    esc_html( __( 'Page Governance', 'cornell-governance' ) ),
+                    esc_html( __( 'Page Governance', 'cornell-governance' ) ),
                     'delete_users',
                     'cornell-governance',
                     array( $this, 'do_options_page' )
@@ -208,8 +208,8 @@ namespace Cornell\Governance\Admin {
 
                 add_submenu_page(
                         Menu::instance()->get_page_slug(),
-                        __( 'Governance Settings', 'cornell/governance' ),
-                        __( 'Governance Settings', 'cornell/governance' ),
+                        esc_html( __( 'Governance Settings', 'cornell-governance' ) ),
+                        esc_html( __( 'Governance Settings', 'cornell-governance' ) ),
                         'delete_users',
                         'cornell-governance-settings',
                         array( $this, 'do_options_page' )
@@ -226,14 +226,14 @@ namespace Cornell\Governance\Admin {
             public function do_options_page(): void {
                 ?>
                 <div class="wrap">
-                    <h2><?php _e( 'Page Governance', 'cornell/governance' ) ?></h2>
+                    <h2><?php esc_html_e( 'Page Governance', 'cornell-governance' ) ?></h2>
                     <form action="options.php" method="POST">
                         <?php settings_fields( 'cornell-governance' ) ?>
                         <?php echo '<div class="tabs cornell-governance-tablist">'; ?>
                         <?php $this->do_tab_handles(); ?>
                         <?php do_settings_sections( 'cornell-governance' ) ?>
                         <?php echo '</div>'; ?>
-                        <?php submit_button( __( 'Save All Settings', 'cornell/governance' ) ); ?>
+                        <?php submit_button( esc_html( __( 'Save All Settings', 'cornell-governance' ) ) ); ?>
                     </form>
                 </div>
                 <?php
@@ -262,7 +262,7 @@ namespace Cornell\Governance\Admin {
              * @since  0.1
              */
             public function do_settings_section( array $args ): void {
-                _e( 'General settings for the Cornell Governance plugin', 'cornell/governance' );
+                esc_html_e( 'General settings for the Cornell Governance plugin', 'cornell-governance' );
             }
 
             /**
@@ -275,8 +275,8 @@ namespace Cornell\Governance\Admin {
              * @since  0.6.2
              */
             public function do_wayback_settings_section( array $args ): void {
-                _e( '<p>Settings for Wayback Machine integration and the Internet Archive</p>', 'cornell/governance' );
-                _e( '<p><em>The Wayback Machine integration is still under development, and is experimental. Please use caution when activating this feature.</em></p>', 'cornell/governance' );
+                printf( '<p>%s</p>', esc_html(  __( 'Settings for Wayback Machine integration and the Internet Archive', 'cornell-governance' ) ) );
+                printf( '<p><em>%s</em></p>', esc_html( __( 'The Wayback Machine integration is still under development, and is experimental. Please use caution when activating this feature.', 'cornell-governance' ) ) );
             }
 
             /**
@@ -289,7 +289,7 @@ namespace Cornell\Governance\Admin {
              * @since  0.1
              */
             public function do_change_settings_section( array $args ) {
-                _e( 'Change Form Options', 'cornell/governance' );
+                esc_html_e( 'Change Form Options', 'cornell-governance' );
             }
 
             /**
@@ -302,7 +302,7 @@ namespace Cornell\Governance\Admin {
              * @since  0.1
              */
             public function do_prompt_settings_section( array $args ) {
-                _e( 'Email message timing', 'cornell/governance' );
+                esc_html_e( 'Email message timing', 'cornell-governance' );
             }
 
             /**
@@ -315,7 +315,7 @@ namespace Cornell\Governance\Admin {
              * @since  1.0.1
              */
             public function do_help_settings_section( array $args ) {
-                _e( 'Help Documentation Settings', 'cornell/governance' );
+                esc_html_e( 'Help Documentation Settings', 'cornell-governance' );
             }
 
             /**
@@ -327,11 +327,11 @@ namespace Cornell\Governance\Admin {
              */
             protected function do_tab_handles() {
                 $tablist = array(
-                        __( 'General Settings', 'cornell/governance' ),
-                        __( 'Wayback Integration Settings', 'cornell/governance' ),
-                        __( 'Change Form Settings', 'cornell/governance' ),
-                        __( 'Email Settings', 'cornell/governance' ),
-                        __( 'Help Documentation', 'cornell/governance' ),
+                        esc_html( __( 'General Settings', 'cornell-governance' ) ),
+                        esc_html( __( 'Wayback Integration Settings', 'cornell-governance' ) ),
+                        esc_html( __( 'Change Form Settings', 'cornell-governance' ) ),
+                        esc_html( __( 'Email Settings', 'cornell-governance' ) ),
+                        esc_html( __( 'Help Documentation', 'cornell-governance' ) ),
                 );
 
                 $handles = array();
@@ -345,12 +345,12 @@ namespace Cornell\Governance\Admin {
       id="tab-%1$d"
       tabindex="0">
       %2$s
-    </button>', ( $i + 1 ), $tablist[ $i ], $selected );
+    </button>', (int) ( $i + 1 ), esc_attr( $tablist[ $i ] ), esc_attr( $selected ) );
                 }
 
                 printf(
                         '<div role="tablist" aria-label="%s">%s</div>',
-                        __( 'Settings Areas', 'cornell/governance' ),
+                        esc_html( __( 'Settings Areas', 'cornell-governance' ) ),
                         implode( '', $handles )
                 );
             }

@@ -11,13 +11,13 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Deletion_Submit' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Deletion_Submit' ) ) {
 		abstract class Deletion_Submit extends Button {
 
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-deletion-submit',
-					'label' => __( 'Submit Deletion Request', 'cornell-governance' ),
+					'label' => esc_html( __( 'Submit Deletion Request', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-button', 'cornell-governance-deletion-submit' ),
 					'default' => '',
 					'meta_box' => 'Info',

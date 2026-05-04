@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Deletion_Reason' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Deletion_Reason' ) ) {
 		class Deletion_Reason extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Deletion_Reason {
 			/**
 			 * @var Deletion_Reason $instance holds the single instance of this class

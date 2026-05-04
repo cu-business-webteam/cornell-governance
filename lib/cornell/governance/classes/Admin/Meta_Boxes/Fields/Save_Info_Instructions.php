@@ -12,12 +12,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Save_Info_Instructions' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Save_Info_Instructions' ) ) {
 		abstract class Save_Info_Instructions extends Message {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-save-instructions',
-					'label'    => __( 'Save your changes:', 'cornell/governance' ),
+					'label'    => esc_html( __( 'Save your changes:', 'cornell-governance' ) ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-message',
@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'If you have made changes to the governance information, you must first save those changes here before you select the page Update button.', 'cornell/governance' );
+				$this->text = esc_html( __( 'If you have made changes to the governance information, you must first save those changes here before you select the page Update button.', 'cornell-governance' ) );
 			}
 
 			/**

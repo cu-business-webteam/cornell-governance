@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Secondary_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Secondary_Prompt' ) ) {
 		class Secondary_Prompt extends Prompt_Time {
 			/**
 			 * @var Secondary_Prompt $instance holds the single instance of this class
@@ -20,7 +20,7 @@ namespace Cornell\Governance\Admin\Fields {
 			protected function __construct( array $atts = array() ) {
 				parent::__construct( array(
 					'id'        => 'secondary-prompt-time',
-					'title'     => __( 'How many days before a review is due should the second prompt message be sent?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'How many days before a review is due should the second prompt message be sent?', 'cornell-governance' ) ),
 					'default'   => 30,
 				) );
 			}

@@ -10,7 +10,7 @@ namespace Cornell\Governance\Emails {
 
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Prompt' ) ) {
 		abstract class Prompt extends Base {
 			/**
 			 * Holds the name of the class being instantiated
@@ -34,8 +34,8 @@ namespace Cornell\Governance\Emails {
 			protected function get_page_list(): string {
 				$rt = '<table cellpadding="1" cellspacing="0" width="100%" style="width: 100%; border: 1px solid #000; background: #e2e2e2; color: #000; border-collapse: collapse">';
 				$rt .= '<tr>';
-				$rt .= sprintf( '<td width="70%" style="border: 1px solid #000">%s</td>', __( 'Page', 'cornell/governance' ) );
-				$rt .= sprintf( '<td>%s</td>', __( 'Due Date', 'cornell/governance' ) );
+				$rt .= sprintf( '<td width="70%" style="border: 1px solid #000">%s</td>', __( 'Page', 'cornell-governance' ) );
+				$rt .= sprintf( '<td>%s</td>', __( 'Due Date', 'cornell-governance' ) );
 				$rt .= '</tr>';
 
 				foreach ( $this->pages as $id => $page ) {
@@ -77,7 +77,7 @@ namespace Cornell\Governance\Emails {
                 $classname = get_called_class();
 
                 $days = 0;
-				$intro = __( 'The following pages are due for review within the next %d days', 'cornell/governance' );
+				$intro = esc_html( __( 'The following pages are due for review within the next %d days', 'cornell-governance' ) );
                 if ( strstr( $classname, 'Tertiary_Prompt' ) ) {
                     $days = 7;
                 } else if ( strstr( $classname, 'Secondary_Prompt' ) ) {
@@ -85,7 +85,7 @@ namespace Cornell\Governance\Emails {
                 } else if ( strstr( $classname, 'Initial_Prompt' ) ) {
                     $days = 60;
                 } else {
-                    $intro = __( '<font color="red"><b>The following pages are overdue for review, and must be remediated immediately.</b></font>', 'cornell/governance' );
+                    $intro = esc_html( __( '<font color="red"><b>The following pages are overdue for review, and must be remediated immediately.</b></font>', 'cornell-governance' ) );
                 }
 
 				ob_start();
@@ -96,10 +96,10 @@ namespace Cornell\Governance\Emails {
 				}
 				?>
 				<p>
-					<?php _e( 'Greetings!', 'cornell/governance' ) ?>
+					<?php _e( 'Greetings!', 'cornell-governance' ) ?>
 				</p>
 				<p>
-					<?php printf( __( 'You have upcoming page review tasks to complete for the %s website.', 'cornell/governance' ), $site_name ) ?>
+					<?php printf( esc_html( __( 'You have upcoming page review tasks to complete for the %s website.', 'cornell-governance' ) ), $site_name ) ?>
 				</p>
                 <p>
                     <?php printf( $intro, $days ); ?>
@@ -110,7 +110,7 @@ namespace Cornell\Governance\Emails {
 				?>
 
 				<p>
-					<?php _e( 'Thank you for your attention to this matter.', 'cornell/governance' ) ?>
+					<?php _e( 'Thank you for your attention to this matter.', 'cornell-governance' ) ?>
 				</p>
 
 				<?php

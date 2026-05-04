@@ -193,14 +193,12 @@ The library will pull update details from the following parts of a release/tag/b
 		'unique-plugin-or-theme-slug'
 	);
 
-	//Optional: If you're using a private repository, create an OAuth consumer
-	//and set the authentication credentials like this:
-	//Note: For now you need to check "This is a private consumer" when
-	//creating the consumer to work around #134:
-	// https://github.com/YahnisElsts/plugin-update-checker/issues/134
+	//Optional: If you're using a private repository, create an API token
+	//with the "read:repository:bitbucket" scope and set the authentication
+	//credentials like this:
 	$myUpdateChecker->setAuthentication(array(
-		'consumer_key' => '...',
-		'consumer_secret' => '...',
+		'username'  => 'example@example.com', //Your BitBucket email address.
+		'api_token' => '...',
 	));
 
 	//Optional: Set the branch that contains the stable release.

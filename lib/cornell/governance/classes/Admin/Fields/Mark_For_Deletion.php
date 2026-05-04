@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Mark_For_Deletion' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Mark_For_Deletion' ) ) {
 		class Mark_For_Deletion extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -26,7 +26,7 @@ namespace Cornell\Governance\Admin\Fields {
 				parent::__construct( array(
 					'type'      => 'boolean',
 					'id'        => 'mark-for-deletion-active',
-					'title'     => __( 'Include a button allowing stewards to mark pages for deletion?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'Include a button allowing stewards to mark pages for deletion?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-checkbox cornell-governance-admin-boolean',

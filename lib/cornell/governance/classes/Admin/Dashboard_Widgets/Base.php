@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Dashboard_Widgets {
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Dashboard_Widgets\Base' ) ) {
 		abstract class Base {
 			/**
 			 * @var string $id the HTML ID for this widget

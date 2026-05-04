@@ -18,7 +18,7 @@ namespace Cornell\Governance\Admin {
 	use Cornell\Governance\Wayback\Save;
 	use ParagonIE\Sodium\Core\Curve25519\H;
 
-	if ( ! class_exists( 'Admin' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Admin' ) ) {
 		class Admin {
 			/**
 			 * @var Admin $instance holds the single instance of this class
@@ -216,7 +216,7 @@ namespace Cornell\Governance\Admin {
 			 */
 			public function revision_fields( array $fields ): array {
 				$key            = 'cornell/governance/commit-message';
-				$fields[ $key ] = __( 'Commit Message', 'cornell/governance' );
+				$fields[ $key ] = esc_html( __( 'Commit Message', 'cornell-governance' ) );
 				add_filter( '_wp_post_revision_field_' . $key, array(
 					Commit_Message::instance(),
 					'revision_field'
@@ -255,7 +255,7 @@ namespace Cornell\Governance\Admin {
 			 */
 			public function rename_author_column( array $columns ): array {
 				if ( array_key_exists( 'author', $columns ) ) {
-					$columns['author'] = __( 'Steward', 'cornell/governance' );
+					$columns['author'] = esc_html( __( 'Steward', 'cornell-governance' ) );
 				}
 
 				return $columns;
@@ -270,7 +270,7 @@ namespace Cornell\Governance\Admin {
 			 */
 			public function change_author_metabox() {
 				global $wp_meta_boxes;
-				$wp_meta_boxes['post']['normal']['core']['authordiv']['title'] = __( 'Steward', 'cornell/governance' );
+				$wp_meta_boxes['post']['normal']['core']['authordiv']['title'] = esc_html( __( 'Steward', 'cornell-governance' ) );
 			}
 
 			/**
@@ -323,7 +323,7 @@ namespace Cornell\Governance\Admin {
 			 * @since  0.1
 			 */
 			public function status_posts_column( array $columns ): array {
-				$columns['governance'] = __( 'Governance Status', 'cornell/governance' );
+				$columns['governance'] = esc_html( __( 'Governance Status', 'cornell-governance' ) );
 
 				return $columns;
 			}
@@ -348,7 +348,7 @@ namespace Cornell\Governance\Admin {
 				$data = get_post_meta( $post_id, Plugin::INFO_META_KEY, true );
 
 				if ( empty( $data['goals'] ) ) {
-					_e( 'Unreviewed', 'cornell/governance' );
+					esc_html_e( 'Unreviewed', 'cornell-governance' );
 
 					return;
 				}
@@ -363,15 +363,15 @@ namespace Cornell\Governance\Admin {
 				$due = Helpers::calculate_next_review_date( $data['last-review'], $data['review-cycle'] );
 
 				if ( $due <= $now ) {
-					_e( 'Overdue', 'cornell/governance' );
+					esc_html_e( 'Overdue', 'cornell-governance' );
 				} else if ( strtotime( '+ 60 days' ) < $due ) {
-					_e( 'Compliant', 'cornell/governance' );
+					esc_html_e( 'Compliant', 'cornell-governance' );
 				} else if ( strtotime( '+ 30 days' ) < $due ) {
-					_e( 'Due in &lt;60 days', 'cornell/governance' );
+					esc_html_e( 'Due in &lt;60 days', 'cornell-governance' );
 				} else if ( strtotime( '+ 7 days' ) < $due ) {
-					_e( 'Due in &lt;30 days', 'cornell/governance' );
+					esc_html_e( 'Due in &lt;30 days', 'cornell-governance' );
 				} else {
-					_e( 'Due in &lt;7 days', 'cornell/governance' );
+					esc_html_e( 'Due in &lt;7 days', 'cornell-governance' );
 				}
 			}
 		}

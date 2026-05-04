@@ -2,10 +2,10 @@
 /*
 Plugin Name: Cornell Business: In-Page Governance
 Description: Allows tracking and adding notes about the content, purpose, audiences, etc of individual pages
-Version: 1.0.2
+Version: 1.0.5
 Author: Curtiss Grymala
 License: GPL2
-Text Domain: cornell/governance
+Text Domain: cornell-governance
 Domain Path: /lang/
 Internal Plugin: Yes
 */
@@ -48,6 +48,6 @@ namespace Cornell\Governance {
 	}
 
 	function load_plugin_textdomain() {
-		\load_plugin_textdomain( 'cornell/governance', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+		\load_plugin_textdomain( 'cornell-governance', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
 	}
 }

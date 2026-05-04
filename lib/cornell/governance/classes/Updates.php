@@ -12,7 +12,7 @@ namespace Cornell\Governance {
 	use YahnisElsts\PluginUpdateChecker\v5p5\Vcs\PluginUpdateChecker;
 	use YahnisElsts\PluginUpdateChecker\v5p5\Vcs\GitLabApi;
 
-	if ( ! class_exists( 'Updates' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Updates' ) ) {
 		class Updates {
 			/**
 			 * @var Updates $instance holds the single instance of this class

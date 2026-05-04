@@ -23,7 +23,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 	use Cornell\Governance\Plugin;
 	use Cornell\Governance\Wayback\Retrieve;
 
-	if ( ! class_exists( 'Info' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Info' ) ) {
 		class Info extends Base {
 			/**
 			 * @var Info $instance holds the single instance of this class
@@ -64,7 +64,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			function __construct() {
 				parent::__construct( array(
 					'id'       => 'cornell-governance-page-info',
-					'title'    => __( 'Page Governance Information', 'cornell/governance' ),
+					'title'    => esc_html( __( 'Page Governance Information', 'cornell-governance' ) ),
 					'context'  => 'advanced',
 					'priority' => 'high',
 					'fields'   => array(
@@ -243,7 +243,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$output = '';
 
 				if ( empty( $post_id ) || 'add' === $this->get_current_screen_action() ) {
-					return __( '<p class="note">You will not be able to set up governance information until you have saved this piece of content for the first time</p>', 'cornell/governance' );
+					return sprintf( '<p class="note">%s</p>', __( 'You will not be able to set up governance information until you have saved this piece of content for the first time', 'cornell-governance' ) );
 					/*} else {
 						$output .= '<p>The current post ID appears to be: ' . $post_id . '</p>';*/
 				}
@@ -362,26 +362,26 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			 */
 			protected function get_tab_handles(): string {
 				$tablist = array(
-					__( 'Steward View', 'cornell/governance' ),
-					__( 'Page Changes', 'cornell/governance' ),
+					esc_html( __( 'Steward View', 'cornell-governance' ) ),
+					esc_html( __( 'Page Changes', 'cornell-governance' ) ),
 				);
 
 				if ( Plugin::instance()->get_archive_settings( 'active' ) ) {
-					$tablist[] = __( 'Archive.org Snapshots', 'cornell/governance' );
+					$tablist[] = esc_html( __( 'Archive.org Snapshots', 'cornell-governance' ) );
 				}
 
 				if ( Plugin::instance()->get_mark_for_deletion_active() ) {
-					$tablist[] = __( 'Request Page Deletion', 'cornell/governance' );
+					$tablist[] = esc_html( __( 'Request Page Deletion', 'cornell-governance' ) );
 				}
 
 				if ( $this->liaison_owned ) {
-					array_unshift( $tablist, __( 'Liaison View', 'cornell/governance' ) );
+					array_unshift( $tablist, __( 'Liaison View', 'cornell-governance' ) );
 				} else if ( Helpers::user_can( 0, Plugin::instance()->get_capability() ) ) {
-					$tablist[0] = __( 'Liaison View', 'cornell/governance' );
+					$tablist[0] = esc_html( __( 'Liaison View', 'cornell-governance' ) );
 				}
 
 				if ( ! empty( Admin::instance()->get_help_documentation() ) ) {
-					$tablist[] = __( 'Get Help', 'cornell/governance' );
+					$tablist[] = esc_html( __( 'Get Help', 'cornell-governance' ) );
 				}
 
 				$this->tab_handles = apply_filters( 'cornell/governance/metabox/tab-handles', $tablist );
@@ -402,7 +402,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				return sprintf(
 					'<div role="tablist" aria-label="%s">%s</div>',
-					__( 'Role Switching', 'cornell/governance' ),
+					esc_html( __( 'Role Switching', 'cornell-governance' ) ),
 					implode( '', $handles )
 				);
 			}
@@ -441,7 +441,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				list( 'due' => $due, 'now' => $now, 'compliance_time' => $compliance_time, 'interval' => $interval ) = $this->get_interval_times();
 
-				$output .= $this->fieldset_open( 'cornell-governance-fieldset', __( 'Focus Areas', 'cornell/governance' ) );
+				$output .= $this->fieldset_open( 'cornell-governance-fieldset', __( 'Focus Areas', 'cornell-governance' ) );
 
 				$classes = array(
 					'Focus_Areas_Fieldset_Message',
@@ -456,7 +456,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$output .= $this->fieldset_close();
 
-				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-audiences', __( 'Audiences', 'cornell/governance' ) );
+				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-audiences', __( 'Audiences', 'cornell-governance' ) );
 
 				$classes = array(
 					'Audiences_Fieldset_Message',
@@ -471,7 +471,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$output .= $this->fieldset_close();
 
-				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-responsibilities', __( 'Responsibilities', 'cornell/governance' ) );
+				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-responsibilities', __( 'Responsibilities', 'cornell-governance' ) );
 
 				$classes = array(
 					'Page_Responsibilities_Fieldset_Message',
@@ -488,7 +488,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$output .= $this->fieldset_close();
 
-				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-review-requirements', __( 'Review Requirements', 'cornell/governance' ) );
+				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-review-requirements', __( 'Review Requirements', 'cornell-governance' ) );
 
 				$classes = array(
 					'Review_Requirements_Message',
@@ -532,7 +532,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					$class        = $namespace . 'Save_Info';
 					$confirmation .= $class::instance()->get_input();
 
-					$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-confirm-review', __( 'Review Confirmation', 'cornell/governance' ) );
+					$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-confirm-review', __( 'Review Confirmation', 'cornell-governance' ) );
 					$output .= $confirmation;
 					$output .= $this->fieldset_close();
 				}
@@ -548,7 +548,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			 * Retrieve and return a list of time-related elements for use in these methods
 			 *
 			 * @access protected
-			 * @return array
+			 * @return array{due: \DateTime, now: \DateTime, compliance_time: mixed, interval: \DateInterval}
 			 * @since  0.4.9
 			 */
 			protected function get_interval_times(): array {
@@ -689,7 +689,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 		<div class="two-thirds">%3$s</div>
 	</div>
 </fieldset>',
-					sprintf( __( 'Current Page Status: %s', 'cornell/governance' ), $legend ),
+					/* translators: the status indicator for the page */
+					esc_html( sprintf( __( 'Current Page Status: %s', 'cornell-governance' ), $legend ) ),
 					$icon,
 					$class::instance()->get_input(),
 					$read_only ? 'compliance-status-fieldset-readonly compliance-status-fieldset' : 'compliance-status-fieldset'
@@ -835,9 +836,9 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				// Steward has completed page review
 				if (
-					array_key_exists( 'cornell-governance-page-info-save', $_POST ) && $_POST['cornell-governance-page-info-save'] == __( 'Confirm Page Review', 'cornell/governance' )
+					array_key_exists( 'cornell-governance-page-info-save', $_POST ) && $_POST['cornell-governance-page-info-save'] == __( 'Confirm Page Review', 'cornell-governance' )
 					||
-					array_key_exists( 'cornell-governance-page-info-save-readonly', $_POST ) && $_POST['cornell-governance-page-info-save-readonly'] == __( 'Confirm Page Review', 'cornell/governance' )
+					array_key_exists( 'cornell-governance-page-info-save-readonly', $_POST ) && $_POST['cornell-governance-page-info-save-readonly'] == __( 'Confirm Page Review', 'cornell-governance' )
 				) {
 					Helpers::log( 'We are preparing to confirm a new page review, and will bail out when we are done' );
 
@@ -1033,7 +1034,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$vars['last-review']     = Helpers::format_date( $due );
 				$vars['next-review']     = Helpers::format_date( $next_review );
 				$vars['permalink']       = get_the_permalink( $post_id );
-				$vars['managing-office'] = get_option( 'cornell-governance-managing-office', __( 'MarCom', 'cornell/governance' ) );
+				$vars['managing-office'] = get_option( 'cornell-governance-managing-office', __( 'MarCom', 'cornell-governance' ) );
 				$vars['post']            = $post;
 				$vars['meta']            = $meta;
 
@@ -1160,9 +1161,9 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$ro_notes = \Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Notes_Notes::instance();
 				$w_notes  = \Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Notes_Notes::instance();
 
-				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-notes-container', __( 'Page Notes', 'cornell/governance' ) );
+				$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-notes-container', __( 'Page Notes', 'cornell-governance' ) );
 
-				$output .= '<p class="cornell-governance-note">' . __( 'A record that captures context, rationale, and stakeholder input behind strategic changes. Used by liaisons to document meetings or decisions with stakeholders.', 'cornell/governance' ) . '</p>';
+				$output .= '<p class="cornell-governance-note">' . __( 'A record that captures context, rationale, and stakeholder input behind strategic changes. Used by liaisons to document meetings or decisions with stakeholders.', 'cornell-governance' ) . '</p>';
 
 				if ( current_user_can( $cap ) ) {
 					$output .= '<div class="cornell-governance-viewable-field">';
@@ -1234,13 +1235,13 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$messages = $this->get_commit_messages( $post_id );
 				$output   .= '<blockquote id="cornell-governance-revisions-list-container">';
-				$output   .= sprintf( '<h3>%s</h3>', __( 'Previous Content Changes', 'cornell/governance' ) );
+				$output   .= sprintf( '<h3>%s</h3>', __( 'Previous Content Changes', 'cornell-governance' ) );
 				if ( count( $messages ) > 0 ) {
 					$output .= '<ol class="commit-messages">';
 					$output .= sprintf( '<li>%s</li>', implode( '</li><li>', $messages ) );
 					$output .= '</ol>';
 				} else {
-					$output .= sprintf( '<p>%s</p>', __( 'There have not been any commit messages added to this page, yet.', 'cornell/governance' ) );
+					$output .= sprintf( '<p>%s</p>', __( 'There have not been any commit messages added to this page, yet.', 'cornell-governance' ) );
 				}
 				$output .= '</blockquote>';
 
@@ -1259,7 +1260,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$output = sprintf( '<div id="panel-%1$d" role="tabpanel" class="cornell-governance-tabpanel" tabindex="0" aria-labelledby="tab-%1$d" hidden>', $tabindex );
 
-				$output .= __( '<p>Below you will find a list of the snapshots that have been captured by archive.org (the Wayback Machine) of this page.</p>', 'cornell/governance' );
+				$output .= sprintf( '<p>%s</p>', __( 'Below you will find a list of the snapshots that have been captured by archive.org (the Wayback Machine) of this page.', 'cornell-governance' ) );
 
 				$output .= $this->get_snapshot_list();
 
@@ -1299,7 +1300,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			 * @since  0.6.2
 			 */
 			protected function get_deletion_fields(): string {
-				$output = $this->fieldset_open( 'cornell-governance-fieldset', __( 'Deletion Request', 'cornell/governance' ) );
+				$output = $this->fieldset_open( 'cornell-governance-fieldset', __( 'Deletion Request', 'cornell-governance' ) );
 
 				$output .= sprintf( '<input type="hidden" name="cornell-governance-deletion-post-id" value="%d"/>', get_the_ID() );
 				$output .= sprintf( '<input type="hidden" name="cornell-governance-action" value="%s"/>', 'delete' );

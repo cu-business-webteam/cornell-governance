@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Archive_Active' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Archive_Active' ) ) {
 		class Archive_Active extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -26,7 +26,7 @@ namespace Cornell\Governance\Admin\Fields {
 				parent::__construct( array(
 					'type'      => 'boolean',
 					'id'        => 'archive-active',
-					'title'     => __( 'Integrate Wayback Machine archival of modified content?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'Integrate Wayback Machine archival of modified content?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings-archive',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-checkbox cornell-governance-admin-boolean',

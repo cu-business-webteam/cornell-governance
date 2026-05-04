@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails\Templates {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Initial_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Templates\Initial_Prompt' ) ) {
 		class Initial_Prompt extends Base {
 			/**
 			 * @var Initial_Prompt $instance holds the single instance of this class

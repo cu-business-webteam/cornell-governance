@@ -49,10 +49,10 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'       => __( 'Cornell Governance: Import / Export', 'cornell/governance' ),
-				'menu_name'   => __( 'Import/Export', 'cornell/governance' ),
+				'title'       => esc_html( __( 'Cornell Governance: Import / Export', 'cornell-governance' ) ),
+				'menu_name'   => esc_html( __( 'Import/Export', 'cornell-governance' ) ),
 				'slug'        => 'cornell-governance-import-export',
-				'description' => __( 'Import or export page governance information', 'cornell/governance' ),
+				'description' => esc_html( __( 'Import or export page governance information', 'cornell-governance' ) ),
 			) );
 		}
 
@@ -89,11 +89,11 @@ namespace Cornell\Governance\Admin\Submenus {
 			} else {
 				print( '<div class="cornell-governance-metabox cornell-governance-import-export-page">' );
 
-				printf( '<h2>%s</h2>', __( 'Governance Settings', 'cornell/governance' ) );
+				printf( '<h2>%s</h2>', __( 'Governance Settings', 'cornell-governance' ) );
 
 				print( '<div class="import-export-wrap">' );
 
-				printf( '<fieldset><legend>%s</legend>', __( 'Settings Import/Export', 'cornell/governance' ) );
+				printf( '<fieldset><legend>%s</legend>', __( 'Settings Import/Export', 'cornell-governance' ) );
 
 				$this->do_export_settings_box();
 
@@ -106,11 +106,11 @@ namespace Cornell\Governance\Admin\Submenus {
 
 				print( '<div class="cornell-governance-metabox cornell-governance-import-export-page">' );
 
-				printf( '<h2>%s</h2>', __( 'Governance Data', 'cornell/governance' ) );
+				printf( '<h2>%s</h2>', __( 'Governance Data', 'cornell-governance' ) );
 
 				print( '<div class="import-export-wrap">' );
 
-				printf( '<fieldset><legend>%s</legend>', __( 'Data Import/Export', 'cornell/governance' ) );
+				printf( '<fieldset><legend>%s</legend>', __( 'Data Import/Export', 'cornell-governance' ) );
 
 				$this->do_export_box();
 
@@ -139,16 +139,16 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function do_export_settings_box() {
 			print( '<div class="export-settings">' );
 
-			printf( '<h3>%s</h3>', __( 'Export Governance Settings', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Export Governance Settings', 'cornell-governance' ) );
 
 			print( '<form method="get">' );
 
-			printf( '<p>%s</p>', __( 'Generate a JSON file with all of the existing Governance Settings for this site.', 'cornell/governance' ) );
+			printf( '<p>%s</p>', __( 'Generate a JSON file with all of the existing Governance Settings for this site.', 'cornell-governance' ) );
 
 			wp_nonce_field( 'cornell-governance-import-export-settings', 'cornell-governance-import-export-settings-nonce' );
 			foreach ( array( 'json' ) as $type ) {
 				$class = 'primary';
-				printf( '<button type="submit" name="governance-settings-action" value="export-%1$s" class="button button-%3$s">%2$s</button>', $type, sprintf( __( 'Export %s', 'cornell/governance' ), strtoupper( $type ) ), $class );
+				printf( '<button type="submit" name="governance-settings-action" value="export-%1$s" class="button button-%3$s">%2$s</button>', $type, sprintf( esc_html( __( 'Export %s', 'cornell-governance' ) ), strtoupper( $type ) ), $class );
 			}
 			print( '</form>' );
 
@@ -158,9 +158,9 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function do_import_settings_box() {
 			print( '<div class="import-settings">' );
 
-			printf( '<h3>%s</h3>', __( 'Import Governance Settings', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Import Governance Settings', 'cornell-governance' ) );
 
-			printf( '<p>%s</p>', __( 'Please upload a JSON file that was generated from a Settings Export on another site', 'cornell/governance' ) );
+			printf( '<p>%s</p>', __( 'Please upload a JSON file that was generated from a Settings Export on another site', 'cornell-governance' ) );
 
 			wp_import_upload_form( 'admin.php?page=cornell-governance-import-export&governance-action=import-settings' );
 
@@ -177,17 +177,17 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function do_export_box() {
 			print( '<div class="export">' );
 
-			printf( '<h3>%s</h3>', __( 'Export Governance Data', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Export Governance Data', 'cornell-governance' ) );
 
 			print( '<form method="get">' );
 
-			printf( '<p>%s</p>', __( 'Generate a CSV or JSON file with all of the existing Governance Information from this site.', 'cornell/governance' ) );
+			printf( '<p>%s</p>', __( 'Generate a CSV or JSON file with all of the existing Governance Information from this site.', 'cornell-governance' ) );
 
 			wp_nonce_field( 'cornell-governance-import-export', 'cornell-governance-import-export-nonce' );
 			print( '<div class="button-row">' );
 			foreach ( array( 'csv', 'json' ) as $type ) {
 				$class = $type === 'csv' ? 'primary' : 'secondary';
-				printf( '<button type="submit" name="governance-action" value="export-%1$s" class="button button-%3$s">%2$s</button>', $type, sprintf( __( 'Export %s', 'cornell/governance' ), strtoupper( $type ) ), $class );
+				printf( '<button type="submit" name="governance-action" value="export-%1$s" class="button button-%3$s">%2$s</button>', $type, sprintf( esc_html( __( 'Export %s', 'cornell-governance' ) ), strtoupper( $type ) ), $class );
 			}
 			print( '</div><!-- .button-row -->' );
 			print( '</form>' );
@@ -205,9 +205,9 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function do_import_box() {
 			print( '<div class="import">' );
 
-			printf( '<h3>%s</h3>', __( 'Import Governance Data', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Import Governance Data', 'cornell-governance' ) );
 
-			printf( '<p>%s</p>', __( 'Please upload a CSV file in the exact format represented by the Export process', 'cornell/governance' ) );
+			printf( '<p>%s</p>', __( 'Please upload a CSV file in the exact format represented by the Export process', 'cornell-governance' ) );
 
 			wp_import_upload_form( 'admin.php?page=cornell-governance-import-export&governance-action=import' );
 
@@ -223,8 +223,8 @@ namespace Cornell\Governance\Admin\Submenus {
 		 */
 		protected function do_sample_table_box() {
 			print( '<div class="export-sample-table full-width">' );
-			printf( '<h3>%s</h3>', __( 'Sample Export Data', 'cornell/governance' ) );
-			printf( '<p>%s</p>', __( 'Below is an HTML table with information about the export format', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Sample Export Data', 'cornell-governance' ) );
+			printf( '<p>%s</p>', __( 'Below is an HTML table with information about the export format', 'cornell-governance' ) );
 			Sample_Format::instance()->output_table();
 			print( '</div><!-- .export-sample-table -->' );
 		}
@@ -238,8 +238,8 @@ namespace Cornell\Governance\Admin\Submenus {
 		 */
 		protected function do_sample_csv_box() {
 			print( '<div class="export-sample-csv full-width">' );
-			printf( '<h3>%s</h3>', __( 'Sample Export CSV Data', 'cornell/governance' ) );
-			printf( '<label for="cornell-governance-sample-csv-data">%s</label>', __( 'Below is sample data you can copy and paste into a blank CSV file to get you started', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Sample Export CSV Data', 'cornell-governance' ) );
+			printf( '<label for="cornell-governance-sample-csv-data">%s</label>', __( 'Below is sample data you can copy and paste into a blank CSV file to get you started', 'cornell-governance' ) );
 			Sample_Format::instance()->output_data();
 			print( '</div><!-- .export-sample-csv -->' );
 		}
@@ -267,7 +267,7 @@ namespace Cornell\Governance\Admin\Submenus {
 
 		private function handle_settings_upload() {
 			if ( false === check_admin_referer( 'import-upload' ) ) {
-				$this->generate_error( 'import', __( 'Nonce could not be verified.', 'cornell/governance' ) );
+				$this->generate_error( 'import', __( 'Nonce could not be verified.', 'cornell-governance' ) );
 			}
 
 			$file = wp_import_handle_upload();
@@ -276,23 +276,23 @@ namespace Cornell\Governance\Admin\Submenus {
 
 				return;
 			} else if ( ! file_exists( $file['file'] ) ) {
-				echo $this->generate_error( 'import', __( 'The settings export file could not be found at <code>%s</code>. It is likely that this was caused by a permissions problem.', 'cornell/governance' ), esc_html( $file['file'] ) );
+				echo $this->generate_error( 'import', esc_html( __( 'The settings export file could not be found at <code>%s</code>. It is likely that this was caused by a permissions problem.', 'cornell-governance' ) ), esc_html( $file['file'] ) );
 
 				return;
 			} else {
-				echo $this->generate_success( 'import', __( 'We appear to have successfully uploaded the file: ' . print_r( $file, true ), 'cornell/governance' ) );
+				echo $this->generate_success( 'import', __( 'We appear to have successfully uploaded the file: ' . print_r( $file, true ), 'cornell-governance' ) );
 			}
 
 			$import = Settings_Import::instance();
 			$import->set_vars( $file );
-			printf( '<div class="wrap"><h2>%s</h2>', __( 'Settings Import', 'cornell/governance' ) );
+			printf( '<div class="wrap"><h2>%s</h2>', __( 'Settings Import', 'cornell-governance' ) );
 			if ( $success = $import->import_data() ) {
 				if ( is_wp_error( $success ) ) {
 					echo $this->generate_error( 'import', $success );
 					return;
 				}
 
-				printf( '<p><strong>%s</strong></p>', __( 'The following data appear to have been imported successfully', 'cornell/governance' ) );
+				printf( '<p><strong>%s</strong></p>', __( 'The following data appear to have been imported successfully', 'cornell-governance' ) );
 
 				$import->output_data();
 			}
@@ -309,7 +309,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		 */
 		private function handle_upload() {
 			if ( false === check_admin_referer( 'import-upload' ) ) {
-				$this->generate_error( 'import', __( 'Nonce could not be verified.', 'cornell/governance' ) );
+				$this->generate_error( 'import', __( 'Nonce could not be verified.', 'cornell-governance' ) );
 			}
 
 			$file = wp_import_handle_upload();
@@ -318,23 +318,23 @@ namespace Cornell\Governance\Admin\Submenus {
 
 				return;
 			} else if ( ! file_exists( $file['file'] ) ) {
-				echo $this->generate_error( 'import', __( 'The export file could not be found at <code>%s</code>. It is likely that this was caused by a permissions problem.', 'cornell/governance' ), esc_html( $file['file'] ) );
+				echo $this->generate_error( 'import', esc_html( __( 'The export file could not be found at <code>%s</code>. It is likely that this was caused by a permissions problem.', 'cornell-governance' ) ), esc_html( $file['file'] ) );
 
 				return;
 			} else {
-				echo $this->generate_success( 'import', __( 'We appear to have successfully uploaded the file: ' . print_r( $file, true ), 'cornell/governance' ) );
+				echo $this->generate_success( 'import', __( 'We appear to have successfully uploaded the file: ' . print_r( $file, true ), 'cornell-governance' ) );
 			}
 
 			$import = Import::instance();
 			$import->set_vars( $file );
-			printf( '<div class="wrap"><h2>%s</h2>', __( 'Import', 'cornell/governance' ) );
+			printf( '<div class="wrap"><h2>%s</h2>', __( 'Import', 'cornell-governance' ) );
 			if ( $success = $import->import_data() ) {
 				if ( is_wp_error( $success ) ) {
 					echo $this->generate_error( 'import', $success );
 					return;
 				}
 
-				printf( '<p><strong>%s</strong></p>', __( 'The following data appear to have been imported successfully', 'cornell/governance' ) );
+				printf( '<p><strong>%s</strong></p>', __( 'The following data appear to have been imported successfully', 'cornell-governance' ) );
 
 				$import->output_data();
 			}
@@ -390,11 +390,11 @@ namespace Cornell\Governance\Admin\Submenus {
 			$classes[] = 'notice-' . $classes[0];
 
 			if ( in_array( 'error', $classes ) ) {
-				return sprintf( '<div class="%3$s"><h2>%1$s</h2><p>%2$s</p></div>', sprintf( __( 'There was an error with the %s', 'cornell/governance' ), $action ), esc_html( $message ), implode( ' ', $classes ) );
+				return sprintf( '<div class="%3$s"><h2>%1$s</h2><p>%2$s</p></div>', sprintf( esc_html( __( 'There was an error with the %s', 'cornell-governance' ) ), $action ), esc_html( $message ), implode( ' ', $classes ) );
 			} else if ( in_array( 'success', $classes ) ) {
-				return sprintf( '<div class="%3$s"><h2>%1$s</h2><p>%2$s</p></div>', sprintf( __( 'The %s appears to have been completed successfully', 'cornell/governance' ), $action ), esc_html( $message ), implode( ' ', $classes ) );
+				return sprintf( '<div class="%3$s"><h2>%1$s</h2><p>%2$s</p></div>', sprintf( esc_html( __( 'The %s appears to have been completed successfully', 'cornell-governance' ) ), $action ), esc_html( $message ), implode( ' ', $classes ) );
 			} else {
-				return sprintf( '<div class="%3$s"><h2>%1$s</h2><p>%2$s</p></div>', sprintf( __( 'A message was generated during the %s', 'cornell/governance' ), $action ), esc_html( $message ), implode( ' ', $classes ) );
+				return sprintf( '<div class="%3$s"><h2>%1$s</h2><p>%2$s</p></div>', sprintf( esc_html( __( 'A message was generated during the %s', 'cornell-governance' ) ), $action ), esc_html( $message ), implode( ' ', $classes ) );
 			}
 		}
 
@@ -423,7 +423,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @return string the HTML of the info message
 		 */
 		public function generate_info_message( string $action, $message ): string {
-			return $this->generate_error( $action, $message, array( 'info', 'is-dismissible' ) );
+			return $this->generate_error( $action, esc_html( $message ), array( 'info', 'is-dismissible' ) );
 		}
 	}
 }

@@ -6,11 +6,18 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'eftec\\bladeone\\' => array($vendorDir . '/eftec/bladeone/lib'),
+    'WP_CLI\\I18n\\' => array($vendorDir . '/wp-cli/i18n-command/src'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
+    'Peast\\' => array($vendorDir . '/mck89/peast/lib/Peast'),
+    'Mustangostang\\' => array($vendorDir . '/wp-cli/mustangostang-spyc/src'),
+    'Mustache\\' => array($vendorDir . '/mustache/mustache/src'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
+    'Gettext\\Languages\\' => array($vendorDir . '/gettext/languages/src'),
+    'Gettext\\' => array($vendorDir . '/gettext/gettext/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Cornell\\Governance\\' => array($baseDir . '/lib/cornell/governance/classes'),
 );

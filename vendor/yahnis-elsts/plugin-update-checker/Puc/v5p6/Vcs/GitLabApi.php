@@ -260,12 +260,7 @@ if ( !class_exists(GitLabApi::class, false) ):
 			$baseUrl = $url;
 			$url = $this->buildApiUrl($url, $queryParams);
 
-			$options = array('timeout' => wp_doing_cron() ? 10 : 3);
-			if ( !empty($this->httpFilterName) ) {
-				$options = apply_filters($this->httpFilterName, $options);
-			}
-
-			$response = wp_remote_get($url, $options);
+			$response = wp_remote_get($url, $this->getApiRequestHttpOptions());
 			if ( is_wp_error($response) ) {
 				do_action('puc_api_error', $response, null, $url, $this->slug);
 				return $response;

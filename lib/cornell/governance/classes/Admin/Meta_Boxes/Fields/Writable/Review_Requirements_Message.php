@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Review_Requirements_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Review_Requirements_Message' ) ) {
 		Final class Review_Requirements_Message extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Review_Requirements_Message {
 			/**
 			 * @var Review_Requirements_Message $instance holds the single instance of this class

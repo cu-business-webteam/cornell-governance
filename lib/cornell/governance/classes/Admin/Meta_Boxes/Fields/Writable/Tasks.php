@@ -14,7 +14,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Tasks' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Tasks' ) ) {
 		Final class Tasks extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Tasks {
 			/**
 			 * @var Tasks $instance holds the single instance of this class

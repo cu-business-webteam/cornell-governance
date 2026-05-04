@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Capability' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Capability' ) ) {
 		class Capability extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -26,7 +26,7 @@ namespace Cornell\Governance\Admin\Fields {
 				parent::__construct( array(
 					'type'      => 'select',
 					'id'        => 'capability',
-					'title'     => __( 'Which capability should be used to determine who can change governance information on a page?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'Which capability should be used to determine who can change governance information on a page?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-select',
@@ -76,10 +76,10 @@ namespace Cornell\Governance\Admin\Fields {
 
 				$options = array();
 				foreach ( $caps as $cap ) {
-					$options[] = sprintf( '<option value="%1$s" %2$s>%1$s</option>', $cap, selected( $cap, $current, false ) );
+					$options[] = sprintf( '<option value="%1$s" %2$s>%1$s</option>', esc_attr( $cap ), selected( $cap, $current, false ) );
 				}
 
-				$id = $this->page . '-' . $this->id;
+				$id = esc_attr( $this->page . '-' . $this->id );
 
 				return sprintf( '<select name="%1$s" id="%1$s">%2$s</select>', $id, implode( '', $options ) );
 			}

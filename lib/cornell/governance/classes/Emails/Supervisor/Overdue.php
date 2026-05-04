@@ -8,7 +8,7 @@ namespace {
 
 namespace Cornell\Governance\Emails\Supervisor {
 
-	if ( ! class_exists( 'Overdue' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Supervisor\Overdue' ) ) {
 		class Overdue extends \Cornell\Governance\Emails\Overdue {
 			/**
 			 * @var Overdue $instance holds the single instance of this class
@@ -23,7 +23,7 @@ namespace Cornell\Governance\Emails\Supervisor {
 				parent::__construct();
 
 				$this->set_vars( array(
-					'subject' => __( '[Secondary Contact Report] [OVERDUE] These pages require your immediate review', 'cornell/governance' ),
+					'subject' => esc_html( __( '[Secondary Contact Report] [OVERDUE] These pages require your immediate review', 'cornell-governance' ) ),
 				) );
 			}
 

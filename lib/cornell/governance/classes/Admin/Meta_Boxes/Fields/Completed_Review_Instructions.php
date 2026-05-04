@@ -12,12 +12,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Completed_Review_Instructions' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Completed_Review_Instructions' ) ) {
 		class Completed_Review_Instructions extends Message {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-completed-review-instructions',
-					'label'    => __( 'Completed Review:', 'cornell/governance' ),
+					'label'    => esc_html( __( 'Completed Review:', 'cornell-governance' ) ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-message',
@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'Once you have completed all of the review tasks, you need to confirm that the page is in compliance for this review cycle.', 'cornell/governance' );
+				$this->text = esc_html( __( 'Once you have completed all of the review tasks, you need to confirm that the page is in compliance for this review cycle.', 'cornell-governance' ) );
 			}
 		}
 	}

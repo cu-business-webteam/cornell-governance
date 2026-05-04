@@ -1,0 +1,39 @@
+{
+	"name": "solvebeam/wp-text-domain-replacer",
+	"description": "A developer tool for replacing WordPress translation text domains in PHP, JavaScript, and `block.json` files.",
+	"authors": [
+		{
+			"name": "SolveBeam",
+			"email": "info@solvebeam.com"
+		}
+	],
+	"bin": [
+		"bin/wptdr"
+	],
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"sort-packages": true
+	},
+	"extra": {
+		"solvebeam-wp-text-domain-replacer": {
+			"dir": "tests",
+			"search": [
+				"old",
+				"older",
+				"block-development-examples"
+			],
+			"replace": "new",
+			"exclude": [
+				"exclude"
+			]
+		}
+	},
+	"require-dev": {
+		"pronamic/wp-coding-standards": "^2.3"
+	},
+	"scripts": {
+		"test": "bin/wptdr --dir=tests --search=old --search=older --search=block-development-examples --replace=new --exclude=exclude"
+	}
+}

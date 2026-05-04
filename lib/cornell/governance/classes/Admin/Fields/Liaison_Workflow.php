@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Fields {
 
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Liaison_Workflow' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Liaison_Workflow' ) ) {
 		class Liaison_Workflow extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Fields {
 			protected function __construct() {
 				parent::__construct( array(
 					'id'        => 'liaison-workflow',
-					'title'     => __( 'What help documentation would you like to provide to liaisons within their dashboard?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'What help documentation would you like to provide to liaisons within their dashboard?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings-help',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-wysiwyg',
@@ -78,7 +78,7 @@ namespace Cornell\Governance\Admin\Fields {
 				$id = $this->page . '-' . $this->id;
 
 				ob_start();
-				wp_editor( $current, $id, array(
+				wp_editor( wp_kses_post( $current ), $id, array(
 					'media_buttons' => false,
 					'drag_drop_upload' => false,
 					'textarea_name' => $id,

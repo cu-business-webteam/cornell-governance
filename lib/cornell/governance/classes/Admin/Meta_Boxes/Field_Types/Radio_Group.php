@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Radio_Group' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Radio_Group' ) ) {
 		abstract class Radio_Group extends Base {
 			/**
 			 * @var string $instructions the fully-qualified class name for the message to be output

@@ -9,7 +9,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin {
-	if ( ! class_exists( 'HTML_Table' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\HTML_Table' ) ) {
 		class HTML_Table {
 			/**
 			 * @var HTML_Table $instance holds the single instance of this class

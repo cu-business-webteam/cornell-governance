@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 	use Cornell\Governance\Admin\Submenus\Reports;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Non_Compliant' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Non_Compliant' ) ) {
 		class Non_Compliant extends Base {
 			/**
 			 * @var Non_Compliant $instance holds the single instance of this class
@@ -94,7 +94,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 */
 			protected function output_data() {
 				$data  = $this->get_data();
-				$title = __( 'Critically Non-Compliant Pages', 'cornell/governance' );
+				$title = esc_html( __( 'Critically Non-Compliant Pages', 'cornell-governance' ) );
 
 				if ( empty( $data ) ) {
 					printf(
@@ -103,14 +103,14 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 								<p>%2$s</p>
 							</div>',
 						$title,
-						__( 'There are currently no pages available for this report', 'cornell/governance' )
+						__( 'There are currently no pages available for this report', 'cornell-governance' )
 					);
 
 					return;
 				} else if ( count( $data['overdue'] ) <= 0 ) {
 					$output = sprintf(
 						'<div class="non-compliant-page-list"><p>%s</p></div>',
-						__( '<strong>Congratulations!</strong> There are currently no pages that are overdue.', 'cornell/governance' )
+						__( '<strong>Congratulations!</strong> There are currently no pages that are overdue.', 'cornell-governance' )
 					);
 
 					printf(
@@ -128,10 +128,10 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$headers = '';
 				foreach (
 					array(
-						'id'      => __( 'ID', 'cornell/governance' ),
-						'title'   => __( 'Title', 'cornell/governance' ),
-						'due'     => __( 'Due Date', 'cornell/governance' ),
-						'steward' => __( 'Steward', 'cornell/governance' ),
+						'id'      => esc_html( __( 'ID', 'cornell-governance' ) ),
+						'title'   => esc_html( __( 'Title', 'cornell-governance' ) ),
+						'due'     => esc_html( __( 'Due Date', 'cornell-governance' ) ),
+						'steward' => esc_html( __( 'Steward', 'cornell-governance' ) ),
 					) as $key => $value
 				) {
 					$headers .= sprintf( '<th class="non-compliant-%1$s">%2$s</th>', $key, $value );

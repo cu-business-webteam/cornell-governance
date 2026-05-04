@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Overdue' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Overdue' ) ) {
 		class Overdue extends Prompt {
 			/**
 			 * Construct our object
@@ -20,7 +20,7 @@ namespace Cornell\Governance\Emails {
 				parent::__construct();
 
 				$this->set_vars( array(
-					'subject' => __( '[OVERDUE] These pages require your immediate review', 'cornell/governance' ),
+					'subject' => esc_html( __( '[OVERDUE] These pages require your immediate review', 'cornell-governance' ) ),
 					'headers' => array(
 						'Priority: Urgent',
 						'X-Priority: 1 (Highest)',

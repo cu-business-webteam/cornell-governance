@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Tertiary_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Tertiary_Prompt' ) ) {
 		class Tertiary_Prompt extends Prompt_Time {
 			/**
 			 * @var Tertiary_Prompt $instance holds the single instance of this class
@@ -20,7 +20,7 @@ namespace Cornell\Governance\Admin\Fields {
 			protected function __construct( array $atts = array() ) {
 				parent::__construct( array(
 					'id'        => 'tertiary-prompt-time',
-					'title'     => __( 'How many days before a review is due should the third and final prompt message be sent?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'How many days before a review is due should the third and final prompt message be sent?', 'cornell-governance' ) ),
 					'default'   => 15,
 				) );
 			}

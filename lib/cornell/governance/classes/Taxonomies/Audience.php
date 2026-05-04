@@ -12,7 +12,7 @@ namespace Cornell\Governance\Taxonomies {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Audience' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Taxonomies\Audience' ) ) {
 		class Audience extends Base {
 			const HANDLE = 'audience';
 
@@ -149,7 +149,7 @@ namespace Cornell\Governance\Taxonomies {
 			 */
 			protected function get_args(): array {
 				return array(
-					'label'                 => __( 'Audiences', 'cornell/governance' ),
+					'label'                 => esc_html( __( 'Audiences', 'cornell-governance' ) ),
 					'labels'                => $this->get_labels(),
 					'public'                => true,
 					'publicly_queryable'    => false,
@@ -175,8 +175,8 @@ namespace Cornell\Governance\Taxonomies {
 			 */
 			protected function get_labels(): array {
 				$labels = array(
-					'name'          => esc_html__( 'Audiences', 'cornell/governance' ),
-					'singular_name' => esc_html__( 'Audience', 'cornell/governance' ),
+					'name'          => esc_html__( 'Audiences', 'cornell-governance' ),
+					'singular_name' => esc_html__( 'Audience', 'cornell-governance' ),
 				);
 
 				return $this->populate_labels( $labels );

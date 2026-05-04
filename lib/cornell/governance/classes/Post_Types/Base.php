@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Post_Types {
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Post_Types\Base' ) ) {
 		abstract class Base {
 			abstract protected function __construct();
 

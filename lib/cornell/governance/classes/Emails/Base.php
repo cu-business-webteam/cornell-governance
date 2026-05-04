@@ -10,7 +10,7 @@ namespace Cornell\Governance\Emails {
 
 	use Cornell\Governance\Config;
 
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Base' ) ) {
 		abstract class Base {
 			/**
 			 * Our headers array
@@ -136,7 +136,7 @@ namespace Cornell\Governance\Emails {
 			 */
 			protected function send(): bool {
 				if ( isset( $_GET['cornell/governance/debug'] ) ) {
-					echo '<p>' . __( 'Preparing to output email debug information rather than actually sending messages', 'cornell/governance' ) . '</p>';
+					echo '<p>' . __( 'Preparing to output email debug information rather than actually sending messages', 'cornell-governance' ) . '</p>';
 
 					return $this->fake_send();
 				}
@@ -272,7 +272,7 @@ namespace Cornell\Governance\Emails {
 			 * @since  2024.06.26
 			 */
 			public function get_email_from_name( string $email ): string {
-				return __( 'Website Governance', 'cornell/governance' );
+				return esc_html( __( 'Website Governance', 'cornell-governance' ) );
 			}
 
 			/**

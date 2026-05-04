@@ -16,7 +16,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 	use Cornell\Governance\Admin\HTML_Table;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Portfolio_Compliance' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Portfolio_Compliance' ) ) {
 		class Portfolio_Compliance extends Base {
 			/**
 			 * @var Portfolio_Compliance $instance holds the single instance of this class
@@ -177,7 +177,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 * @since  0.1
 			 */
 			protected function output_data() {
-				$title = __( 'Portfolio Compliance Overview', 'cornell/governance' );
+				$title = esc_html( __( 'Portfolio Compliance Overview', 'cornell-governance' ) );
 
 				$data = $this->get_data();
 
@@ -236,12 +236,12 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$due_pct   = $due_total / $total * 100;
 
 				$output = '<div class="governance-portfolio-overview">';
-				$output .= sprintf( '<h3 class="governance-portfolio-overview-title">%s</h3>', __( 'Portfolio Compliance Overview', 'cornell/governance' ) );
-				$output .= sprintf( '<div class="column governance-compliance-compliant"><span class="percentage">%s</span><p class="percentage-label">%s</p></div>', $compliant_pct . '%', __( 'Compliant Pages', 'cornell/governance' ) );
-				$output .= sprintf( '<div class="column governance-compliance-due"><span class="percentage">%s</span><p class="percentage-label">%s</p></div>', $due_pct . '%', __( 'Due in Next 60 days', 'cornell/governance' ) );
-				$output .= sprintf( '<div class="column governance-compliance-overdue"><span class="percentage">%s</span><p class="percentage-label">%s</p></div>', $overdue_pct . '%', __( 'Overdue Pages', 'cornell/governance' ) );
+				$output .= sprintf( '<h3 class="governance-portfolio-overview-title">%s</h3>', __( 'Portfolio Compliance Overview', 'cornell-governance' ) );
+				$output .= sprintf( '<div class="column governance-compliance-compliant"><span class="percentage">%s</span><p class="percentage-label">%s</p></div>', $compliant_pct . '%', __( 'Compliant Pages', 'cornell-governance' ) );
+				$output .= sprintf( '<div class="column governance-compliance-due"><span class="percentage">%s</span><p class="percentage-label">%s</p></div>', $due_pct . '%', __( 'Due in Next 60 days', 'cornell-governance' ) );
+				$output .= sprintf( '<div class="column governance-compliance-overdue"><span class="percentage">%s</span><p class="percentage-label">%s</p></div>', $overdue_pct . '%', __( 'Overdue Pages', 'cornell-governance' ) );
 				$output .= $this->do_compliance_progress_bar( $compliant_pct );
-				$output .= sprintf( '<p class="column governance-compliance-total-compliant">%s</p>', sprintf( __( 'Total Pages in Compliance: %d', 'cornell/governance' ), $compliant_total ) );
+				$output .= sprintf( '<p class="column governance-compliance-total-compliant">%s</p>', sprintf( esc_html( __( 'Total Pages in Compliance: %d', 'cornell-governance' ) ), $compliant_total ) );
 				$output .= '</div>';
 
 				echo $output;
@@ -262,7 +262,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$format .= '<div class="governance-compliance-overall-status"> <span class="completion-percentage-label">%1$s</span> </div>';
 				$format .= '<span class="statusbar-end">%3$s</span>';
 				$format .= '</div>';
-				return sprintf( $format, $compliant_pct . '%', __( '0%', 'cornell/governance' ), __( '100%', 'cornell/governance' ) );
+				return sprintf( $format, $compliant_pct . '%', esc_html( __( '0%', 'cornell-governance' ) ), __( '100%', 'cornell-governance' ) );
 			}
 
 			/**
@@ -291,14 +291,14 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				krsort( $pages, SORT_NUMERIC );
 
 				$output = '<div class="governance-portfolio-overdue-overview">';
-				$output .= sprintf( '<h3 class="governance-portfolio-overdue-overview-heading">%s</h3>', __( 'Non-Compliant Pages', 'cornell/governance' ) );
+				$output .= sprintf( '<h3 class="governance-portfolio-overdue-overview-heading">%s</h3>', __( 'Non-Compliant Pages', 'cornell-governance' ) );
 
 				$headers = array(
-					'date' => __( 'Due Date', 'cornell/governance' ),
-					'count' => __( 'Pages', 'cornell/governance' ),
+					'date' => esc_html( __( 'Due Date', 'cornell-governance' ) ),
+					'count' => esc_html( __( 'Pages', 'cornell-governance' ) ),
 				);
 
-				$output .= HTML_Table::instance()->open( __( 'Count of Pages that are Overdue', 'cornell/governance' ) );
+				$output .= HTML_Table::instance()->open( __( 'Count of Pages that are Overdue', 'cornell-governance' ) );
 				$output .= HTML_Table::instance()->get_row( $headers, 'header' );
 				$output .= HTML_Table::instance()->get_row( $headers, 'footer' );
 				$output .= HTML_Table::instance()->open_body();
@@ -309,7 +309,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					}
 
 					if ( $key === 0 ) {
-						$date = __( 'Not yet reviewed', 'cornell/governance' );
+						$date = esc_html( __( 'Not yet reviewed', 'cornell-governance' ) );
 					} else {
 						$date = date( get_option( 'date_format' ), $key );
 						//$date = $key;
@@ -363,19 +363,19 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				}
 
 				$output = '<div class="governance-portfolio-steward-performance">';
-				$output .= sprintf( '<h3 class="governance-portfolio-steward-performance-heading">%s</h3>', __( 'Steward Performance', 'cornell/governance' ) );
+				$output .= sprintf( '<h3 class="governance-portfolio-steward-performance-heading">%s</h3>', __( 'Steward Performance', 'cornell-governance' ) );
 
 				$table = HTML_Table::instance();
 
-				$output .= $table->open( __( 'Overview of Steward Compliance and Responsibility', 'cornell/governance' ), array( 'governance-steward-compliance-table' ) );
+				$output .= $table->open( esc_html( __( 'Overview of Steward Compliance and Responsibility', 'cornell-governance' ) ), array( 'governance-steward-compliance-table' ) );
 
 				$headers = array(
-					'steward'   => __( 'Steward', 'cornell/governance' ),
-					'pages'     => __( 'Assigned Pages', 'cornell/governance' ),
-					'compliant' => __( 'Compliant Pages', 'cornell/governance' ),
-					'due'       => __( 'Review Due Pages', 'cornell/governance' ),
-					'overdue'   => __( 'Overdue Pages', 'cornell/governance' ),
-					'unreviewed' => __( 'Unreviewed Pages', 'cornell/governance' ),
+					'steward'   => esc_html( __( 'Steward', 'cornell-governance' ) ),
+					'pages'     => esc_html( __( 'Assigned Pages', 'cornell-governance' ) ),
+					'compliant' => esc_html( __( 'Compliant Pages', 'cornell-governance' ) ),
+					'due'       => esc_html( __( 'Review Due Pages', 'cornell-governance' ) ),
+					'overdue'   => esc_html( __( 'Overdue Pages', 'cornell-governance' ) ),
+					'unreviewed' => esc_html( __( 'Unreviewed Pages', 'cornell-governance' ) ),
 				);
 				$output .= $table->get_row( $headers, 'header' );
 				$output .= $table->get_row( $headers, 'footer' );
@@ -444,7 +444,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					$author_name = get_the_author_meta( 'user_login', $author );
 				}
 				if ( empty( $author_name ) ) {
-					$author_name = sprintf( __( 'User with ID %d not found', 'cornell/governance' ), $author );
+					$author_name = sprintf( esc_html( __( 'User with ID %d not found', 'cornell-governance' ) ), $author );
 				}
 
 				return $author_name;
@@ -462,7 +462,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 
 				if ( ! empty( Admin::instance()->get_liaison_workflow() ) ) {
 					$output .= '<div class="column governance-liaison-workflow">';
-					$output .= sprintf( '<h3 class="governance-liaison-workflow-heading">%s</h3>', __( 'Liaison Responsibilities', 'cornell/governance' ) );
+					$output .= sprintf( '<h3 class="governance-liaison-workflow-heading">%s</h3>', __( 'Liaison Responsibilities', 'cornell-governance' ) );
 					$output .= '<div class="governance-liaison-workflow-content">';
 					$output .= Admin::instance()->get_liaison_workflow();
 					$output .= '</div>';
@@ -488,18 +488,18 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$export = \Cornell\Governance\Admin\Import_Export\Generic_Export::instance();
 
 				$headers = array(
-					'page_id'            => __( 'Page ID', 'cornell/governance' ),
-					'page_title'         => __( 'Page Title', 'cornell/governance' ),
-					'page_url'           => __( 'Page URL', 'cornell/governance' ),
-					'primary-audience'   => __( 'Primary Audience', 'cornell/governance' ),
-					'secondary-audience' => __( 'Secondary Audience', 'cornell/governance' ),
-					'last-reviewed'      => __( 'Last Reviewed', 'cornell/governance' ),
-					'review-cycle'       => __( 'Review Cycle', 'cornell/governance' ),
-					'steward'            => __( 'Steward', 'cornell/governance' ),
-					'steward_email'      => __( 'Steward Email', 'cornell/governance' ),
-					'steward_username'   => __( 'Steward Username', 'cornell/governance' ),
-					'supervisor'         => __( 'Secondary Contact', 'cornell/governance' ),
-					'liaison'            => __( 'Liaison', 'cornell/governance' ),
+					'page_id'            => esc_html( __( 'Page ID', 'cornell-governance' ) ),
+					'page_title'         => esc_html( __( 'Page Title', 'cornell-governance' ) ),
+					'page_url'           => esc_html( __( 'Page URL', 'cornell-governance' ) ),
+					'primary-audience'   => esc_html( __( 'Primary Audience', 'cornell-governance' ) ),
+					'secondary-audience' => esc_html( __( 'Secondary Audience', 'cornell-governance' ) ),
+					'last-reviewed'      => esc_html( __( 'Last Reviewed', 'cornell-governance' ) ),
+					'review-cycle'       => esc_html( __( 'Review Cycle', 'cornell-governance' ) ),
+					'steward'            => esc_html( __( 'Steward', 'cornell-governance' ) ),
+					'steward_email'      => esc_html( __( 'Steward Email', 'cornell-governance' ) ),
+					'steward_username'   => esc_html( __( 'Steward Username', 'cornell-governance' ) ),
+					'supervisor'         => esc_html( __( 'Secondary Contact', 'cornell-governance' ) ),
+					'liaison'            => esc_html( __( 'Liaison', 'cornell-governance' ) ),
 				);
 
 				$export->set_headers( $headers );

@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Confirm;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Mark_For_Deletion' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Mark_For_Deletion' ) ) {
 		class Mark_For_Deletion extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Mark_For_Deletion {
 			/**
 			 * @var Mark_For_Deletion $instance holds the single instance of this class

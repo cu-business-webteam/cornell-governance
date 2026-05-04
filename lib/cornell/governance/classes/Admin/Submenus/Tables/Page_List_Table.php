@@ -6,7 +6,7 @@ namespace {
 	}
 
 	// Loading table class
-	if ( ! class_exists( 'WP_List_Table' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Tables\WP_List_Table' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 	}
 }
@@ -68,13 +68,13 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		function get_visible_columns(): array {
 			return apply_filters( 'cornell/governance/page-list-table/columns/visible', array(
 				//'cb'          => '<input type="checkbox"/>',
-				'author'      => __( 'Author', 'cornell/governance' ),
-				'title'       => __( 'Page Title', 'cornell/governance' ),
-				'last-review' => __( 'Last Reviewed', 'cornell/governance' ),
-				'next-review' => __( 'Next Review Due', 'cornell/governance' ),
-				'status'      => __( 'Status', 'cornell/governance' ),
-				'modified'    => __( 'Modified', 'cornell/governance' ),
-				'type'        => __( 'Post Type', 'cornell/governance' ),
+				'author'      => esc_html( __( 'Author', 'cornell-governance' ) ),
+				'title'       => esc_html( __( 'Page Title', 'cornell-governance' ) ),
+				'last-review' => esc_html( __( 'Last Reviewed', 'cornell-governance' ) ),
+				'next-review' => esc_html( __( 'Next Review Due', 'cornell-governance' ) ),
+				'status'      => esc_html( __( 'Status', 'cornell-governance' ) ),
+				'modified'    => esc_html( __( 'Modified', 'cornell-governance' ) ),
+				'type'        => esc_html( __( 'Post Type', 'cornell-governance' ) ),
 			) );
 		}
 
@@ -87,12 +87,12 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 */
 		function get_hidden_columns(): array {
 			return apply_filters( 'cornell/governance/page-list-table/columns/hidden', array(
-				'ID'                 => __( 'ID', 'cornell/governance' ),
-				'latest-commit'      => __( 'Commit Message', 'cornell/governance' ),
-				'supervisor'         => __( 'Secondary', 'cornell/governance' ),
-				'liaison'            => __( 'Liaison', 'cornell/governance' ),
-				'primary-audience'   => __( 'Primary Audience', 'cornell/governance' ),
-				'secondary-audience' => __( 'Secondary Audience', 'cornell/governance' ),
+				'ID'                 => esc_html( __( 'ID', 'cornell-governance' ) ),
+				'latest-commit'      => esc_html( __( 'Commit Message', 'cornell-governance' ) ),
+				'supervisor'         => esc_html( __( 'Secondary', 'cornell-governance' ) ),
+				'liaison'            => esc_html( __( 'Liaison', 'cornell-governance' ) ),
+				'primary-audience'   => esc_html( __( 'Primary Audience', 'cornell-governance' ) ),
+				'secondary-audience' => esc_html( __( 'Secondary Audience', 'cornell-governance' ) ),
 			) );
 		}
 
@@ -353,12 +353,12 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 					if ( current_user_can( 'edit_post', $item['ID'] ) ) {
 						$link                 = admin_url( 'admin.php' );
 						$link                 = add_query_arg( array( 'page' => 'cornell-governance-page-meta', 'post' => $item['ID'] ), $link );
-						$actions['view_meta'] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'View Governance Info', 'cornell/governance' ) );
+						$actions['view_meta'] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'View Governance Info', 'cornell-governance' ) );
 					}
 				case 'next-review' :
 					$date = Helpers::get_date_time( $item[ $column_name ] );
 					if ( false === $date ) {
-						return __( 'Not reviewed, yet', 'cornell/governance' ) . $this->row_actions( $actions );
+						return __( 'Not reviewed, yet', 'cornell-governance' ) . $this->row_actions( $actions );
 					}
 
 					return Helpers::format_date( $date->format('U') ) . $this->row_actions( $actions );
@@ -366,12 +366,12 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				case 'title' :
 					$title = $item['title'];
 					if ( empty( $title ) ) {
-						$title = __( '[No Specified Title]', 'cornell/governance' );
+						$title = esc_html( __( '[No Specified Title]', 'cornell-governance' ) );
 					}
 					$link = get_edit_post_link( $item['ID'] );
 
-					$actions['edit_page'] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'Edit', 'cornell/governance' ) );
-					$actions['view_page'] = sprintf( '<a href="%1$s">%2$s</a>', get_permalink( $item['ID'] ), __( 'View', 'cornell/governance' ) );
+					$actions['edit_page'] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'Edit', 'cornell-governance' ) );
+					$actions['view_page'] = sprintf( '<a href="%1$s">%2$s</a>', get_permalink( $item['ID'] ), __( 'View', 'cornell-governance' ) );
 
 					return sprintf( '<a href="%1$s" target="editor">%2$s</a>%3$s', $link, $title, $this->row_actions( $actions ) );
 					break;
@@ -431,16 +431,16 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 				$status = Helpers::get_compliance_status( $meta );
 			}
 
-			$item['status'] = __( 'Compliant', 'cornell/governance' );
+			$item['status'] = esc_html( __( 'Compliant', 'cornell-governance' ) );
 			if ( array_key_exists( 'overdue', $status ) && $status['overdue'] ) {
-				$item['status'] = __( 'Overdue', 'cornell/governance' );
+				$item['status'] = esc_html( __( 'Overdue', 'cornell-governance' ) );
 			} else if ( array_key_exists( 'due', $status ) && $status['due'] ) {
-				$item['status'] = __( 'Due', 'cornell/governance' );
+				$item['status'] = esc_html( __( 'Due', 'cornell-governance' ) );
 			} else if ( ! array_key_exists( 'next_review', $status ) || null === $status['next_review'] ) {
 				$tmp = array_merge( array( 'next_review' => null, 'last-review' => null, 'review-cycle' => null ), $meta, $status );
-				Helpers::log( __( 'It does not appear that this page has been reviewed.', 'cornell/governance' ), 'alert' );
-				Helpers::log( sprintf( __( 'The next review looks like: %s, the last review looks like: %s and the review cycle looks like: %s', 'cornell/governance' ), $tmp['next_review'], $tmp['last-review'], $tmp['review-cycle'] ), 'alert' );
-				$item['status'] = __( 'Never Reviewed', 'cornell/governance' );
+				Helpers::log( esc_html( __( 'It does not appear that this page has been reviewed.', 'cornell-governance' ) ), 'alert' );
+				Helpers::log( sprintf( esc_html( __( 'The next review looks like: %s, the last review looks like: %s and the review cycle looks like: %s', 'cornell-governance' ) ), $tmp['next_review'], $tmp['last-review'], $tmp['review-cycle'] ), 'alert' );
+				$item['status'] = esc_html( __( 'Never Reviewed', 'cornell-governance' ) );
 			}
 
 			$commit = Revisions::instance()->get_latest_commit( $post->ID );
@@ -460,9 +460,9 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 */
 		public function no_items() {
 			if ( isset( $_REQUEST['s'] ) ) {
-				_e( 'There are no pages that match the specified criteria', 'cornell/governance' );
+				_e( 'There are no pages that match the specified criteria', 'cornell-governance' );
 			} else {
-				_e( 'There are no pages to display', 'cornell/governance' );
+				_e( 'There are no pages to display', 'cornell-governance' );
 			}
 		}
 

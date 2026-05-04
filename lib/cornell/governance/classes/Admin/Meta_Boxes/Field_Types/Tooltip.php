@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
-	if ( ! class_exists( 'Tooltip' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Tooltip' ) ) {
 		abstract class Tooltip extends Base {
 			/**
 			 * @var string $type the input type
@@ -72,7 +72,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 					$this->label,
 					implode( ' ', $classes['tooltip'] ),
 					$this->content,
-					__( 'Close this tooltip', 'cornell/governance' )
+					__( 'Close this tooltip', 'cornell-governance' )
 				);
 			}
 

@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Goals' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Goals' ) ) {
 		Final class Goals extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Goals {
 			/**
 			 * @var Goals $instance holds the single instance of this class

@@ -38,11 +38,11 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'           => __( 'Cornell Governance: Liaison Dashboard', 'cornell/governance' ),
-				'menu_name'       => __( 'Liaison Dashboard', 'cornell/governance' ),
+				'title'           => esc_html( __( 'Cornell Governance: Liaison Dashboard', 'cornell-governance' ) ),
+				'menu_name'       => esc_html( __( 'Liaison Dashboard', 'cornell-governance' ) ),
 				'slug'            => 'cornell-governance-liaison-dashboard',
 				'per_page_option' => 'cornell-governance-liaison-dashboard-items_per_page',
-				'description'     => __( 'A series of reports specifically about content that you currently manage as the liaison.', 'cornell/governance' ),
+				'description'     => esc_html( __( 'A series of reports specifically about content that you currently manage as the liaison.', 'cornell-governance' ) ),
 			) );
 		}
 
@@ -143,7 +143,7 @@ namespace Cornell\Governance\Admin\Submenus {
 			print( '<div class="steward-dashboard-table-container">' );
 			$this->table->prepare_items();
 			echo '<form method="get">';
-			printf( '<h3>%s</h3>', __( 'Full Liaison Page List', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Full Liaison Page List', 'cornell-governance' ) );
 			$this->do_search_box();
 			$this->table->display();
 			echo '</form>';

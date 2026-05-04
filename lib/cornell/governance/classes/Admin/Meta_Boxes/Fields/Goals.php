@@ -11,12 +11,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Goals' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Goals' ) ) {
 		abstract class Goals extends Textarea {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-goals',
-					'label' => __( 'Page Goal', 'cornell/governance' ),
+					'label' => esc_html( __( 'Page Goal', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-textarea', 'cornell-governance-goals' ),
 					'default' => '',
 					'meta_box' => 'Info',

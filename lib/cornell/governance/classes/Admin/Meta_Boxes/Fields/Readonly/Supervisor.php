@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Supervisor' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Supervisor' ) ) {
 		Final class Supervisor extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Supervisor {
 			/**
 			 * @var Supervisor $instance holds the single instance of this class

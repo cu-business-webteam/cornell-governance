@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Fields {
 
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Default_Tasks' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Default_Tasks' ) ) {
 		class Default_Tasks extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -49,17 +49,17 @@ namespace Cornell\Governance\Admin\Fields {
 			protected function __construct() {
 				parent::__construct( array(
 					'id'      => 'default-tasks',
-					'title'   => __( 'Global Tasks', 'cornell/governance' ),
+					'title'   => esc_html( __( 'Global Tasks', 'cornell-governance' ) ),
 					'page'    => 'cornell-governance',
 					'section' => 'cornell-governance-settings',
 					'class'   => 'cornell-governance-admin-field cornell-governance-admin-repeater',
 					'default' => $this->get_default_content(),
 				) );
 
-				$this->add_text    = __( 'Add New Task', 'cornell/governance' );
-				$this->remove_text = __( 'Remove This Task', 'cornell/governance' );
-				$this->description = __( 'If there are on-page content review tasks that should be included on every page, add them here:', 'cornell/governance' );
-				$this->short_name  = __( 'Task', 'cornell/governance' );
+				$this->add_text    = esc_html( __( 'Add New Task', 'cornell-governance' ) );
+				$this->remove_text = esc_html( __( 'Remove This Task', 'cornell-governance' ) );
+				$this->description = esc_html( __( 'If there are on-page content review tasks that should be included on every page, add them here:', 'cornell-governance' ) );
+				$this->short_name  = esc_html( __( 'Task', 'cornell-governance' ) );
 			}
 
 			/**
@@ -116,12 +116,12 @@ namespace Cornell\Governance\Admin\Fields {
 		<input type="%3$s" name="%4$s[%5$d]" id="%1$s_%5$d" value="%6$s"/>
 	</div>
 </li>',
-						$id,
-						$this->short_name,
-						$this->type,
-						$id,
-						$i,
-						$item
+						esc_attr( $id ),
+						esc_html( $this->short_name ),
+						esc_attr( $this->type ),
+						esc_attr( $id ),
+						(int) $i,
+						esc_attr( $item )
 					);
 
 					$i ++;

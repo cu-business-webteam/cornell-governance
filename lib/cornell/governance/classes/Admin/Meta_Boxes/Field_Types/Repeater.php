@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
 	use Cornell\Governance\Admin\Meta_Boxes\Info;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Repeater' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Repeater' ) ) {
 		abstract class Repeater extends Input {
 			/**
 			 * @var string $type the input type

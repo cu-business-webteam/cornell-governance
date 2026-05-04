@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Import_Export {
 
 	use Cornell\Governance\Admin\Submenus\Import_Export;
 
-	if ( ! class_exists( 'Generic_Export' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Import_Export\Generic_Export' ) ) {
 		class Generic_Export extends Base {
 			/**
 			 * @var Generic_Export $instance holds the single instance of this class

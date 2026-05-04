@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Deletion_Submit' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Deletion_Submit' ) ) {
 		class Deletion_Submit extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Deletion_Submit {
 			/**
 			 * @var Deletion_Submit $instance holds the single instance of this class

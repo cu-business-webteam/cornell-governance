@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Commit_Message_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Commit_Message_Message' ) ) {
 		class Commit_Message_Message extends Message {
 			/**
 			 * @var Commit_Message_Message $instance holds the single instance of this class
@@ -34,7 +34,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'Use this field to document content changes you\'ve made, e.g. \'update instructor image\' or \'changed page tile\'.', 'cornell/governance' );
+				$this->text = esc_html( __( 'Use this field to document content changes you\'ve made, e.g. \'update instructor image\' or \'changed page tile\'.', 'cornell-governance' ) );
 			}
 
 

@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Deletion' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Deletion' ) ) {
 		class Deletion extends Prompt {
 			/**
 			 * @var array $template_vars the template variables to be sent to the template instance
@@ -30,7 +30,7 @@ namespace Cornell\Governance\Emails {
 				parent::__construct();
 
 				$this->set_vars( array(
-					'subject' => __( 'Page Marked For Deletion', 'cornell/governance' ),
+					'subject' => esc_html( __( 'Page Marked For Deletion', 'cornell-governance' ) ),
 				) );
 			}
 
@@ -71,7 +71,7 @@ namespace Cornell\Governance\Emails {
 
 				if ( array_key_exists( 'post_title', $vars['post'] ) ) {
 					$this->set_vars( array(
-						'subject' => sprintf( __( 'Page Marked For Deletion - %s', 'cornell/governance' ), $vars['post']['post_title'] ),
+						'subject' => sprintf( esc_html( __( 'Page Marked For Deletion - %s', 'cornell-governance' ) ), $vars['post']['post_title'] ),
 					) );
 				}
 			}

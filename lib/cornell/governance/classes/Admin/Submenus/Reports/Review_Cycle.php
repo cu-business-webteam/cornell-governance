@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 
 	use Cornell\Governance\Admin\Submenus\Reports;
 
-	if ( ! class_exists( 'Review_Cycle' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Review_Cycle' ) ) {
 		class Review_Cycle extends Base {
 			/**
 			 * @var Review_Cycle $instance holds the single instance of this class
@@ -49,7 +49,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 * Retrieve the data to be displayed in the chart
 			 *
 			 * @access protected
-			 * @return array the data to be included in the chart
+			 * @return array{3-month: array, 6-month: array, 12-month: array} the data to be included in the chart
 			 * @since  0.1
 			 */
 			protected function get_data(): array {
@@ -89,15 +89,15 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$output = array(
 					'canvasID' => 'review-cycle-chart',
 					'type'     => 'pie',
-					'chartLabel' => __( 'Review Cycle', 'cornell/governance' ),
+					'chartLabel' => esc_html( __( 'Review Cycle', 'cornell-governance' ) ),
 					'labels' => array(
-						__( 'Every 3 Months', 'cornell/governance' ),
-						__( 'Every 6 Months', 'cornell/governance' ),
-						__( 'Every 12 Months', 'cornell/governance' ),
+						esc_html( __( 'Every 3 Months', 'cornell-governance' ) ),
+						esc_html( __( 'Every 6 Months', 'cornell-governance' ) ),
+						esc_html( __( 'Every 12 Months', 'cornell-governance' ) ),
 					),
 					'datasets' => array(
 						array(
-							'label' => __( 'Review Cycle', 'cornell/governance' ),
+							'label' => esc_html( __( 'Review Cycle', 'cornell-governance' ) ),
 							'data' => array(
 								count( $data['3-month'] ),
 								count( $data['6-month'] ),
@@ -126,7 +126,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				printf(
 					'<h3 id="%2$s-title">%1$s</h3>
 							<canvas role="img" id="%2$s" aria-labelledby="%2$s-title" aria-describedby="%2$s-data"></canvas>',
-					__( 'Review Cycle Breakdown', 'cornell/governance' ),
+					esc_html( __( 'Review Cycle Breakdown', 'cornell-governance' ) ),
 					$output['canvasID']
 				);
 
@@ -144,7 +144,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					'<details id="%2$s-data"><summary>%3$s</summary><dl>%1$s</dl></details>',
 					implode( '', $lists ),
 					$output['canvasID'],
-					__( 'Reveal source data for this chart', 'cornell/governance' )
+					__( 'Reveal source data for this chart', 'cornell-governance' )
 				);
 
 				$this->action_buttons();
@@ -168,18 +168,18 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$export = \Cornell\Governance\Admin\Import_Export\Generic_Export::instance();
 
 				$headers = array(
-					'page_id'            => __( 'Page ID', 'cornell/governance' ),
-					'page_title'         => __( 'Page Title', 'cornell/governance' ),
-					'page_url'           => __( 'Page URL', 'cornell/governance' ),
-					'primary-audience'   => __( 'Primary Audience', 'cornell/governance' ),
-					'secondary-audience' => __( 'Secondary Audience', 'cornell/governance' ),
-					'last-reviewed'      => __( 'Last Reviewed', 'cornell/governance' ),
-					'review-cycle'       => __( 'Review Cycle', 'cornell/governance' ),
-					'steward'            => __( 'Steward', 'cornell/governance' ),
-					'steward_email'      => __( 'Steward Email', 'cornell/governance' ),
-					'steward_username'   => __( 'Steward Username', 'cornell/governance' ),
-					'supervisor'         => __( 'Secondary Contact', 'cornell/governance' ),
-					'liaison'            => __( 'Liaison', 'cornell/governance' ),
+					'page_id'            => esc_html( __( 'Page ID', 'cornell-governance' ) ),
+					'page_title'         => esc_html( __( 'Page Title', 'cornell-governance' ) ),
+					'page_url'           => esc_html( __( 'Page URL', 'cornell-governance' ) ),
+					'primary-audience'   => esc_html( __( 'Primary Audience', 'cornell-governance' ) ),
+					'secondary-audience' => esc_html( __( 'Secondary Audience', 'cornell-governance' ) ),
+					'last-reviewed'      => esc_html( __( 'Last Reviewed', 'cornell-governance' ) ),
+					'review-cycle'       => esc_html( __( 'Review Cycle', 'cornell-governance' ) ),
+					'steward'            => esc_html( __( 'Steward', 'cornell-governance' ) ),
+					'steward_email'      => esc_html( __( 'Steward Email', 'cornell-governance' ) ),
+					'steward_username'   => esc_html( __( 'Steward Username', 'cornell-governance' ) ),
+					'supervisor'         => esc_html( __( 'Secondary Contact', 'cornell-governance' ) ),
+					'liaison'            => esc_html( __( 'Liaison', 'cornell-governance' ) ),
 				);
 
 				$export->set_headers( $headers );

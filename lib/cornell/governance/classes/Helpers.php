@@ -10,7 +10,7 @@ namespace Cornell\Governance {
 
 	use Cornell\Governance\Admin\Fields\Initial_Prompt;
 
-	if ( ! class_exists( 'Helpers' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Helpers' ) ) {
 		final class Helpers {
 			/**
 			 * Custom logging function that can be short-circuited
@@ -348,14 +348,14 @@ namespace Cornell\Governance {
 					$overdue = ( $now_date >= $due_date );
 					$due     = ( $now_date->add( $compare ) >= $due_date );
 
-					$legend = $due ? __( 'This page is due for review', 'cornell/governance' ) : __( 'This page is in compliance', 'cornell/governance' );
+					$legend = $due ? esc_html( __( 'This page is due for review', 'cornell-governance' ) ) : esc_html( __( 'This page is in compliance', 'cornell-governance' ) );
 					if ( $overdue ) {
-						$legend = __( 'This page is out of compliance', 'cornell/governance' );
+						$legend = esc_html( __( 'This page is out of compliance', 'cornell-governance' ) );
 					}
 				} else {
-					Helpers::log( sprintf( __( 'The page does not appear to have been reviewed. %s', 'cornell/governance' ), print_r( $meta, true ) ), 'alert' );
+					Helpers::log( sprintf( esc_html( __( 'The page does not appear to have been reviewed. %s', 'cornell-governance' ) ), print_r( $meta, true ) ), 'alert' );
 					$next_review = null;
-					$legend      = __( 'Never Reviewed', 'cornell/governance' );
+					$legend      = esc_html( __( 'Never Reviewed', 'cornell-governance' ) );
 				}
 
 				return array(

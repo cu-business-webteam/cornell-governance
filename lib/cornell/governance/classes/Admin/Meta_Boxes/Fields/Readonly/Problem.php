@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Problem' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Problem' ) ) {
 		Final class Problem extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Problem {
 			/**
 			 * @var Problem $instance holds the single instance of this class

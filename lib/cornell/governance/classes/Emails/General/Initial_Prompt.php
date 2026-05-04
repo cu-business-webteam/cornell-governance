@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Emails\General {
-	if ( ! class_exists( 'Initial_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\General\Initial_Prompt' ) ) {
 		class Initial_Prompt extends \Cornell\Governance\Emails\Initial_Prompt {
 			/**
 			 * @var Initial_Prompt $instance holds the single instance of this class
@@ -24,7 +24,7 @@ namespace Cornell\Governance\Emails\General {
 				$prompt_time = get_option( 'cornell-governance-initial-prompt-time', 60 );
 
 				$this->set_vars( array(
-					'subject' => sprintf( __( '[Website Report] Pages needing review in the next %d days', 'cornell/governance' ), $prompt_time )
+					'subject' => sprintf( esc_html( __( '[Website Report] Pages needing review in the next %d days', 'cornell-governance' ) ), $prompt_time )
 				) );
 			}
 

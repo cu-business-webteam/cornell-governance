@@ -1,6 +1,6 @@
 {
   "name": "cornell-governance",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "dependencies": {
     "babel-loader": "^10.0.0",
     "normalize.css": "^8.0.1",
@@ -15,7 +15,7 @@
     "concat": "^1.0.3",
     "sass": "^1.97.3",
     "uglify-js": "^3.19.3",
-    "webpack": "5.105.3",
+    "webpack": "5.105.4",
     "webpack-cli": "^6.0.1"
   },
   "scripts": {

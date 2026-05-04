@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Liaison' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Liaison' ) ) {
 		Final class Liaison extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Liaison {
 			/**
 			 * @var Liaison $instance holds the single instance of this class

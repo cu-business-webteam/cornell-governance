@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Page_Responsibilities_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Page_Responsibilities_Fieldset_Message' ) ) {
 		abstract class Page_Responsibilities_Fieldset_Message extends Message {
 			function __construct() {
 				$atts = array(
@@ -29,7 +29,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'This section identifies the person responsible for updating the page content, as well as their backup and the liaison attached to this page content.', 'cornell/governance' );
+				$this->text = esc_html( __( 'This section identifies the person responsible for updating the page content, as well as their backup and the liaison attached to this page content.', 'cornell-governance' ) );
 			}
 		}
 	}

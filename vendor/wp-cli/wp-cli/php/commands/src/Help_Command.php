@@ -1,0 +1,428 @@
+<?php
+
+use cli\Shell;
+use WP_CLI\Dispatcher;
+use WP_CLI\Utils;
+use WP_CLI\Process;
+
+class Help_Command extends WP_CLI_Command {
+
+	/**
+	 * Gets help on WP-CLI, or on a specific command.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [<command>...]
+	 * : Get help on a specific command.
+	 *
+	 * [--full]
+	 * : Show the full help, including help for all subcommands.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     # get help for `core` command
+	 *     wp help core
+	 *
+	 *     # get help for `core download` subcommand
+	 *     wp help core download
+	 *
+	 *     # get full help for `core`, including all subcommands
+	 *     wp help core --full
+	 *
+	 * @param string[] $args
+	 * @param array    $assoc_args
+	 */
+	public function __invoke( $args, $assoc_args ) {
+		$r = WP_CLI::get_runner()->find_command_to_run( $args, Utils\get_env_or_config( 'WP_CLI_AUTOCORRECT' ) ? 'auto' : 'confirm' );
+
+		if ( is_array( $r ) ) {
+			list( $command ) = $r;
+
+			if ( ! empty( $assoc_args['full'] ) ) {
+				$out = self::get_help_full( $command );
+				self::pass_through_pager( $out );
+			} else {
+				self::show_help( $command );
+			}
+			exit;
+		}
+	}
+
+	private static function show_help( $command ) {
+		self::pass_through_pager( self::get_help_as_string( $command ) );
+	}
+
+	private static function rewrap_param_desc( $matches ) {
+		$param = $matches[1];
+		$desc  = self::indent( "\t\t", $matches[2] );
+		return "\t$param\n$desc\n\n";
+	}
+
+	private static function indent( $whitespace, $text ) {
+		$lines = explode( "\n", $text );
+		foreach ( $lines as &$line ) {
+			$line = $whitespace . $line;
+		}
+		return implode( "\n", $lines );
+	}
+
+	/**
+	 * Locate an executable binary or command by name using a platform-appropriate detector.
+	 *
+	 * On Windows, this uses `where`, and on POSIX systems it uses `command -v`.
+	 * This may not work accurately in PowerShell.
+	 *
+	 * @param string $binary Name of the binary or command to be found.
+	 * @return bool True if this command has determined that the binary or other command exists, false otherwise.
+	 */
+	public static function binary_exists( $binary ) {
+		if ( Utils\is_windows() ) {
+			// This may not work in PowerShell; see https://stackoverflow.com/a/304447
+			// If this needs to be adjusted to use 'where.exe' for PowerShell,
+			// then we will need to add a way of detecting whether wp-cli is running in PowerShell.
+			$detector = 'where';
+		} else {
+			// POSIX method to detect whether a command exists
+			// This sometimes detects aliases.
+			$detector = 'command -v';
+		}
+
+		$result = Process::create( $detector . ' ' . escapeshellarg( $binary ), null, null )->run();
+
+		if ( 0 !== $result->return_code ) {
+			// We could not reliably determine that the binary exists
+			return false;
+		} else {
+			// POSIX binaries: command -v will return the path and exit 0
+			// aliases: command -v may return the alias command and exit 0
+			return true;
+		}
+	}
+
+	/**
+	 * Determine whether to use `less` or `more` as a pager
+	 *
+	 * This caches the determined pager.
+	 *
+	 * @return string The command to use for the pager. Defaults to `more`.
+	 */
+	public static function locate_pager() {
+		static $pager = null;
+
+		if ( empty( $pager ) ) {
+			if ( self::binary_exists( 'less' ) ) {
+				// less is not available in all systems
+				$pager = 'less -R';
+			} else {
+				// more is part of the POSIX definition, and is also available on Windows.
+				$pager = 'more';
+			}
+		}
+
+		return $pager;
+	}
+
+	/**
+	 * Pass a given set of output through the system's terminal pager.
+	 *
+	 * @param string $out The output to be run through the pager.
+	 * @return mixed Termination status of the pager as reported by https://www.php.net/manual/en/function.proc-close.php
+	 */
+	private static function pass_through_pager( $out ) {
+
+		if ( ! Utils\check_proc_available( null /*context*/, true /*return*/ ) ) {
+			WP_CLI::line( $out );
+			WP_CLI::debug( 'Warning: check_proc_available() failed in pass_through_pager().', 'help' );
+			return -1;
+		}
+
+		$pager = getenv( 'PAGER' );
+		// if '' we should assume that the user has explicitly disabled the pager by setting `PAGER=`
+		if ( '' === $pager ) {
+			WP_CLI::line( $out );
+			return 0;
+		}
+		if ( false === $pager ) {
+			$pager = self::locate_pager();
+		}
+
+		// If pager doesn't support ANSI colors, strip them from output.
+		// Common pagers that don't support colors: more, pg, cat, and less without -R.
+		// Pagers with color support typically use -R flag (less -R, most -R).
+		if ( ! preg_match( '/(-R|--RAW-CONTROL-CHARS|--raw-control-chars)/i', $pager )
+			&& preg_match( '/(^|[\s\/\\\\])(less|more|pg|cat)(\s|$)/i', $pager ) ) {
+			$out = \cli\Colors::decolorize( $out );
+			WP_CLI::debug( 'Stripping ANSI color codes for pager without color support: ' . $pager, 'help' );
+		}
+
+		// For Windows 7 need to set code page to something other than Unicode (65001) to get around "Not enough memory." error with `more.com` on PHP 7.1+.
+		if ( 'more' === $pager && defined( 'PHP_WINDOWS_VERSION_MAJOR' ) && PHP_WINDOWS_VERSION_MAJOR < 10 ) {
+			// Note will also apply to Windows 8 (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724832.aspx) but probably harmless anyway.
+			$cp = (int) Utils\get_env_or_config( 'WP_CLI_WINDOWS_CODE_PAGE' ) ?: 1252; // Code page 1252 is the most used so probably the most compat.
+			sapi_windows_cp_set( $cp );
+		}
+
+		// Convert string to file handle.
+		$fd = fopen( 'php://temp', 'r+b' );
+		if ( $fd ) {
+			fwrite( $fd, $out );
+			rewind( $fd );
+		}
+
+		/**
+		 * @var array<resource> $descriptorspec
+		 */
+		$descriptorspec = [
+			0 => $fd,
+			1 => STDOUT,
+			2 => STDERR,
+		];
+
+		$process = Utils\proc_open_compat( $pager, $descriptorspec, $pipes );
+		return $process ? proc_close( $process ) : -1;
+	}
+
+	private static function get_initial_markdown( $command, $longdesc_with_links = null ) {
+		$name = implode( ' ', Dispatcher\get_path( $command ) );
+
+		$binding = [
+			'name'      => $name,
+			'shortdesc' => $command->get_shortdesc(),
+		];
+
+		$binding['synopsis'] = "$name " . $command->get_synopsis();
+
+		$alias = $command->get_alias();
+		if ( $alias ) {
+			$binding['alias'] = $alias;
+		}
+		$hook_name        = $command->get_hook();
+		$hook_description = $hook_name ? Utils\get_hook_description( $hook_name ) : null;
+		if ( $hook_description && 'after_wp_load' !== $hook_name ) {
+			if ( $command->can_have_subcommands() ) {
+				$binding['shortdesc'] .= "\n\nUnless overridden, these commands run on the '$hook_name' hook, $hook_description";
+			} else {
+				$binding['shortdesc'] .= "\n\nThis command runs on the '$hook_name' hook, $hook_description";
+			}
+		}
+
+		// Add description paragraphs from longdesc to shortdesc for DESCRIPTION section
+		if ( null === $longdesc_with_links ) {
+			$longdesc_with_links = self::parse_reference_links( $command->get_longdesc() );
+		}
+		$longdesc_description = self::get_longdesc_description( $longdesc_with_links );
+		if ( $longdesc_description ) {
+			$binding['shortdesc'] .= "\n\n" . $longdesc_description;
+		}
+
+		if ( $command->can_have_subcommands() ) {
+			$binding['has-subcommands']['subcommands'] = self::render_subcommands( $command );
+		}
+
+		$binding['root_command'] = $command instanceof WP_CLI\Dispatcher\RootCommand;
+
+		return Utils\mustache_render( 'man.mustache', $binding );
+	}
+
+	private static function render_subcommands( $command ) {
+		$subcommands = [];
+		foreach ( $command->get_subcommands() as $subcommand ) {
+			$disabled_reason = WP_CLI::get_runner()->get_command_disabled_reason( $subcommand );
+
+			$subcommands[ $subcommand->get_name() ] = [
+				'desc'            => $subcommand->get_shortdesc(),
+				'disabled_reason' => $disabled_reason,
+			];
+		}
+
+		$max_len = self::get_max_len( array_keys( $subcommands ) );
+
+		$lines = [];
+		foreach ( $subcommands as $name => $data ) {
+			$desc = $data['desc'];
+			if ( false !== $data['disabled_reason'] ) {
+				$padded_name  = str_pad( $name, $max_len );
+				$colored_name = WP_CLI::colorize( '%r' . $name . '%n' ) . substr( $padded_name, strlen( $name ) );
+			} else {
+				$colored_name = str_pad( $name, $max_len );
+			}
+
+			$lines[] = $colored_name . "\t\t\t" . $desc;
+
+			if ( false !== $data['disabled_reason'] ) {
+				$indent  = str_repeat( ' ', $max_len ) . "\t\t\t";
+				$reason  = $data['disabled_reason'] ?: 'disabled';
+				$lines[] = $indent . WP_CLI::colorize( '%w' . $reason . '%n' );
+			}
+		}
+
+		return $lines;
+	}
+
+	private static function get_help_full( $command ) {
+		$out = self::get_help_as_string( $command );
+
+		if ( $command->can_have_subcommands() ) {
+			foreach ( $command->get_subcommands() as $subcommand ) {
+				if ( WP_CLI::get_runner()->is_command_disabled( $subcommand ) ) {
+					continue;
+				}
+				$out .= "\n---\n\n" . self::get_help_full( $subcommand );
+			}
+		}
+
+		return $out;
+	}
+
+	private static function get_help_as_string( $command ) {
+		$longdesc_with_links = self::parse_reference_links( $command->get_longdesc() );
+		$out                 = self::get_initial_markdown( $command, $longdesc_with_links );
+
+		$subcommands       = '';
+		$column_subpattern = '[ \t]+[^\t]+\t+';
+		if ( preg_match( '/(^## SUBCOMMANDS[^\n]*\n+' . $column_subpattern . '.+?)(?:^##|\z)/ms', $out, $matches, PREG_OFFSET_CAPTURE ) ) {
+			$subcommands        = $matches[1][0];
+			$subcommands_header = "## SUBCOMMANDS\n";
+			$out                = substr_replace( $out, $subcommands_header, $matches[1][1], strlen( $subcommands ) );
+		}
+
+		$longdesc_sections = self::get_longdesc_sections( $longdesc_with_links );
+		$out              .= $longdesc_sections;
+
+		$out = (string) preg_replace_callback( '/([^\n]+)\n: (.+?)(\n\n|$)/s', [ __CLASS__, 'rewrap_param_desc' ], $out );
+		$out = (string) preg_replace( '/^((?! |\t|##).)/m', "\t$1", $out );
+
+		$tab = str_repeat( ' ', 2 );
+		$out = str_replace( "\t", $tab, $out );
+
+		$wordwrap_width = Shell::columns();
+
+		$out = (string) preg_replace_callback(
+			'/^( *)([^\n]+)\n/m',
+			static function ( $matches ) use ( $wordwrap_width ) {
+				return $matches[1] . str_replace( "\n", "\n{$matches[1]}", wordwrap( $matches[2], $wordwrap_width - strlen( $matches[1] ) ) ) . "\n";
+			},
+			$out
+		);
+
+		if ( $subcommands ) {
+			$subcommands = (string) preg_replace_callback(
+				'/^(' . $column_subpattern . ')([^\n]+)\n/m',
+				static function ( $matches ) use ( $wordwrap_width, $tab ) {
+					$matches[1]  = str_replace( "\t", $tab, $matches[1] );
+					$matches[2]  = str_replace( "\t", $tab, $matches[2] );
+					$padding_len = strlen( $matches[1] );
+					$padding     = str_repeat( ' ', $padding_len );
+					return $matches[1] . str_replace( "\n", "\n$padding", wordwrap( $matches[2], $wordwrap_width - $padding_len ) ) . "\n";
+				},
+				$subcommands
+			);
+
+			$out = str_replace( $subcommands_header, $subcommands, $out );
+		}
+
+		$out = (string) preg_replace( '/^## ([A-Z ]+)/m', WP_CLI::colorize( '%9\1%n' ), $out );
+
+		return $out;
+	}
+
+	private static function get_max_len( $strings ) {
+		$max_len = 0;
+		foreach ( $strings as $str ) {
+			$len = strlen( $str );
+			if ( $len > $max_len ) {
+				$max_len = $len;
+			}
+		}
+
+		return $max_len;
+	}
+
+	/**
+	 * Parse reference links from longdescription.
+	 *
+	 * @param  string $longdesc The longdescription from the `$command->get_longdesc()`.
+	 * @return string The longdescription which has links as footnote.
+	 */
+	private static function parse_reference_links( $longdesc ) {
+		$description = self::extract_before_sections( $longdesc );
+
+		// Process if there is description text at the head of `$longdesc`.
+		if ( trim( $description ) ) {
+			$links   = []; // An array of URLs from the description.
+			$pattern = '/\[.+?\]\((https?:\/\/.+?)\)/';
+			$newdesc = (string) preg_replace_callback(
+				$pattern,
+				static function ( $matches ) use ( &$links ) {
+					static $count = 0;
+					$count++;
+					$links[] = $matches[1];
+					return str_replace( '(' . $matches[1] . ')', '[' . $count . ']', $matches[0] );
+				},
+				$description
+			);
+
+			$footnote = '';
+			foreach ( $links as $i => $link ) {
+				$n         = $i + 1;
+				$footnote .= '[' . $n . '] ' . $link . "\n";
+			}
+
+			if ( $footnote ) {
+				$newdesc  = trim( $newdesc ) . "\n\n---\n" . $footnote;
+				$longdesc = str_replace( trim( $description ), trim( $newdesc ), $longdesc );
+			}
+		}
+
+		return $longdesc;
+	}
+
+	/**
+	 * Extract description paragraphs from longdesc (content before first section header).
+	 *
+	 * @param  string $longdesc The longdescription from the command.
+	 * @return string The description paragraphs only.
+	 */
+	private static function get_longdesc_description( $longdesc ) {
+		return trim( self::extract_before_sections( $longdesc ) );
+	}
+
+	/**
+	 * Extract section content from longdesc (content from first section header onwards).
+	 *
+	 * @param  string $longdesc The longdescription from the command.
+	 * @return string The section content only (OPTIONS, EXAMPLES, etc.).
+	 */
+	private static function get_longdesc_sections( $longdesc ) {
+		$sections    = '';
+		$in_sections = false;
+		foreach ( explode( "\n", $longdesc ) as $line ) {
+			if ( ! $in_sections && 0 === strpos( $line, '##' ) ) {
+				$in_sections = true;
+			}
+			if ( $in_sections ) {
+				$sections .= $line . "\n";
+			}
+		}
+
+		return $sections;
+	}
+
+	/**
+	 * Extract content before first section header (##).
+	 *
+	 * @param  string $text The text to extract from.
+	 * @return string Content before first section header.
+	 */
+	private static function extract_before_sections( $text ) {
+		$before_sections = '';
+		foreach ( explode( "\n", $text ) as $line ) {
+			if ( 0 === strpos( $line, '##' ) ) {
+				break;
+			}
+			$before_sections .= $line . "\n";
+		}
+
+		return $before_sections;
+	}
+}

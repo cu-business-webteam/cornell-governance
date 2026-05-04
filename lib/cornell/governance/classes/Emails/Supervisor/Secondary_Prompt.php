@@ -10,7 +10,7 @@ namespace Cornell\Governance\Emails\Supervisor {
 
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 
-	if ( ! class_exists( 'Secondary_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Supervisor\Secondary_Prompt' ) ) {
 		class Secondary_Prompt extends \Cornell\Governance\Emails\Secondary_Prompt {
 			/**
 			 * @var Secondary_Prompt $instance holds the single instance of this class
@@ -27,7 +27,7 @@ namespace Cornell\Governance\Emails\Supervisor {
 				$prompt_time = get_option( 'cornell-governance-secondary-prompt-time', 30 );
 
 				$this->set_vars( array(
-					'subject' => sprintf( __( '[Secondary Contact Report] [Website Report] Pages needing review in the next %d days', 'cornell/governance' ), $prompt_time )
+					'subject' => sprintf( esc_html( __( '[Secondary Contact Report] [Website Report] Pages needing review in the next %d days', 'cornell-governance' ) ), $prompt_time )
 				) );
 			}
 

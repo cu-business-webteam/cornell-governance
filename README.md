@@ -1,10 +1,10 @@
 # Cornell In-Page Governance
-Contributors: cgrymala  
+Contributors: cgrymala, skeith  
 Donate link: https://cornell.edu  
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 1.0.2  
+Stable tag: 1.0.5  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -32,7 +32,8 @@ It also adds automated review messages that can be emailed out to a list of rele
 6. [REST API Information](#rest-api-information)
     1. [WordPress Native REST Requests](#wordpress-native-rest-requests)
     2. [Custom Governance REST Endpoint](#custom-governance-rest-endpoint)
-7. [Installation](#installation)
+7. [Cron Triggers](#cron-triggers)
+8. [Installation](#installation)
 8. [Frequently Asked Questions](#frequently-asked-questions)
 9. [Screenshots](#screenshots)
 10. [Changelog](#changelog)
@@ -230,12 +231,10 @@ If you would like to build custom templates, you can do so by including them in 
     - Supervisor/
       - Due.handlebars
       - Overdue.handlebars
-      - ~~Secondary_Prompt.handlebars~~
       - Tertiary_Prompt.handlebars
     - Liaison/
       - Due.handlebars
       - Overdue.handlebars
-      - ~~Tertiary_Prompt.handlebars~~
 
 The template files are built as [Handlebars templates](https://handlebarsjs.com/). The following data are available by default to the template files:
 
@@ -323,6 +322,21 @@ The properties included in this response are:
         - `email` - the user's email address
       - `timestamp` - the UNIX timestamp of the update message
       - `date` - the WP-formatted date and time of the update message
+
+## Cron Triggers
+
+A handful of cron triggers are available in this plugin to automate some tasks.
+
+In all of these cases, if you are going to use these query parameters to trigger cron actions, we recommend setting the values of those parameters to a unique timestamp in order to avoid any caching issues.
+
+1. `cornell/governance/run-email-cron` - Adding this string as a query parameter will trigger any scheduled emails to be sent through this plugin. We recommend running this cron job every hour.
+2. `cornell/governance/trigger-snapshots` - Instantiates the job that will send a request to the Wayback API telling it to capture a snapshot of each page that was edited throughout the past day. We recommend only running this job once a day.
+3. `cornell/governance/process-snapshots` - If the snapshot trigger is active, this will loop through all scheduled snapshots and request that they be handled by the Archive API. We recommend running this every few minutes.
+4. `cornell/governance/retrieve-snapshots` - If you would like to prime the lists of snapshots displayed within the Governance metabox while editing a page, you can run this cron job in order to make those requests in the background, rather than trying to run them when a user edits a page.
+
+## Credits
+
+This plugin was created by Shelley Keith and developed by Curtiss Grymala for the Cornell SC Johnson College of Business.
 
 ## Installation
 
@@ -439,8 +453,29 @@ In addition, the following actions are run during import/export:
     _The Page Deletion Request interface_](assets/screenshot-7.png)
 8. [![Optional Help Documentation Tab](assets/screenshot-8.png)
     _An optional, customizable Help Documentation Tab_](assets/screenshot-8.png)
+9. [![Part of the Liaison Dashboard](assets/screenshot-9.png)
+Some of the reports available in the Liaison Dashboard](assets/screenshot-9.png)
 
 ## Changelog
+
+### 1.0.5
+
+* Update capability used to allow users to view Archive log page (since, in some prod environments, even Super Admins are not allowed to delete plugins)
+* Update the way historical Archive.org logs are stored and the information stored in them
+* Namespace all `class_exists` calls to avoid collision
+* Remove Email Test and Archive submenus from Admin menu if those settings are disabled
+
+### 1.0.4
+
+* Added documentation for cron triggers in the plugin
+* Performance improvements:
+  * Added the retrieve-snapshots cron trigger to prime the list of snapshots
+  * Added a 1-hour transient any time a page retrieves no results from the Archive API in order to avoid querying that API on every editor page load
+
+### 1.0.3
+
+* Fixes tabbed interface on Governance Settings page
+* Cleans up the way Archive snapshots are triggered & processed
 
 ### 1.0.2
 
@@ -711,6 +746,18 @@ Bug fixes:
 * 2022-12 - This is the first version
 
 ## Upgrade Notice
+
+### 1.0.5
+
+Fixes the Archive.org snapshot log for admins
+
+### 1.0.4
+
+Performance improvements: Off-load some expensive Archive.org queries
+
+### 1.0.3
+
+Fixes: Governance settings work properly again
 
 ### 1.0.2
 

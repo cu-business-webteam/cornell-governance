@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails\Templates {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Due' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Templates\Due' ) ) {
 		class Due extends Base {
 			/**
 			 * @var Due $instance holds the single instance of this class

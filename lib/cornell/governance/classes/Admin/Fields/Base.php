@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Base' ) ) {
 		abstract class Base {
 			/**
 			 * @var string $type the input type
@@ -111,7 +111,24 @@ namespace Cornell\Governance\Admin\Fields {
 			 * @access protected
 			 * @since  0.1
 			 */
-			abstract protected function get_input(): string;
+			protected function get_input(): string {
+				$current = $this->get_input_value();
+				switch ( $this->type ) {
+					case 'boolean':
+						return $this->get_input_boolean();
+						break;
+					case 'url':
+						$current = esc_url( $current );
+						break;
+					default:
+						$current = esc_attr( $current );
+						break;
+				}
+
+				$id = esc_attr( $this->page . '-' . $this->id );
+
+				return sprintf( '<input type="%3$s" name="%1$s" id="%1$s" value="%2$s"/>', $id, empty( $current ) ? '' : $current, $this->type );
+			}
 
 			/**
 			 * Build and return a boolean field
@@ -121,7 +138,7 @@ namespace Cornell\Governance\Admin\Fields {
 			 * @return string the HTML for the boolean field
 			 */
 			protected function get_input_boolean(): string {
-				$id = $this->page . '-' . $this->id;
+				$id = esc_attr( $this->page . '-' . $this->id );
 
 				$current = $this->get_input_value();
 

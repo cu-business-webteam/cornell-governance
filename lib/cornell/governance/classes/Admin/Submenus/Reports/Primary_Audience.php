@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 	use Cornell\Governance\Admin\Submenus\Reports;
 	use Cornell\Governance\Taxonomies\Audience;
 
-	if ( ! class_exists( 'Primary_Audience' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Primary_Audience' ) ) {
 		class Primary_Audience extends Base {
 			/**
 			 * @var Primary_Audience $instance holds the single instance of this class
@@ -110,11 +110,11 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$output = array(
 					'canvasID' => 'primary-audience-chart',
 					'type'     => 'bar',
-					'chartLabel' => __( 'Content by Primary Audience', 'cornell/governance' ),
+					'chartLabel' => esc_html( __( 'Content by Primary Audience', 'cornell-governance' ) ),
 					'labels' => $labels,
 					'datasets' => array(
 						array(
-							'label' => __( 'Primary Audience', 'cornell/governance' ),
+							'label' => esc_html( __( 'Primary Audience', 'cornell-governance' ) ),
 							'data' => $data,
 						),
 					),
@@ -134,7 +134,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				printf(
 					'<h3 id="%2$s-title">%1$s</h3>
 							<canvas role="img" id="%2$s" aria-labelledby="%2$s-title" aria-describedby="%2$s-data"></canvas>',
-					__( 'Content by Primary Audience', 'cornell/governance' ),
+					esc_html( __( 'Content by Primary Audience', 'cornell-governance' ) ),
 					$output['canvasID']
 				);
 
@@ -152,7 +152,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					'<details id="%2$s-data"><summary>%3$s</summary><dl>%1$s</dl></details>',
 					implode( '', $lists ),
 					$output['canvasID'],
-					__( 'Reveal source data for this chart', 'cornell/governance' )
+					__( 'Reveal source data for this chart', 'cornell-governance' )
 				);
 
 				print( '</div>' );

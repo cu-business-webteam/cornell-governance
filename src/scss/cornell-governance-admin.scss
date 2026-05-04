@@ -1,3 +1,6 @@
+@use "sass:meta";
+@use "modules/tooltip";
+
 :root {
   --cornell-red: #b31b1b;
 }
@@ -105,7 +108,7 @@
         align-items: start;
       }
 
-      @import "modules/calendar-icon";
+      @include meta.load-css("modules/calendar-icon");
 
       .calendar-icon {
         margin: 2rem;
@@ -315,7 +318,7 @@
     bottom: 0;
     background: rgba(0, 0, 0, .7);
 
-    @import "modules/loader";
+    @include meta.load-css("modules/loader");
   }
 
   .cornell-governance-request-changes {
@@ -418,22 +421,20 @@
   }
 }
 
-@import "modules/slist";
-@import "modules/repeater";
-@import "modules/update-notice";
-@import "cornell-governance/documentation";
-@import "modules/imageLightbox";
+@include meta.load-css("modules/slist");
+@include meta.load-css("modules/repeater");
+@include meta.load-css("modules/update-notice");
+@include meta.load-css("cornell-governance/documentation");
+@include meta.load-css("modules/imageLightbox");
 
-.governance-tooltip-container {
-  @import "modules/tooltip";
-}
+@include tooltip.tooltip();
 
 .governance_page_cornell-governance-settings {
-  @import "cornell-governance/admin-settings";
+  @include meta.load-css("cornell-governance/admin-settings");
 }
 
 #cornell-governance-compliance-widget, .governance_page_cornell-governance-reports {
-  @import "cornell-governance/dashboard-widget";
+  @include meta.load-css("cornell-governance/dashboard-widget");
 }
 
 .cornell-governance-email-testing {
@@ -629,7 +630,7 @@
   }
 }
 
-@import "modules/import-export";
-@import "modules/html-table";
-@import "cornell-governance/portfolio-compliance";
-@import "modules/archive-list";
+@include meta.load-css("modules/import-export");
+@include meta.load-css("modules/html-table");
+@include meta.load-css("cornell-governance/portfolio-compliance");
+@include meta.load-css("modules/archive-list");

@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails\Templates {
 	use Cornell\Governance\Helpers;
 	use Handlebars\Handlebars;
 
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Templates\Base' ) ) {
 		abstract class Base {
 			/**
 			 * @protected array $template_data the data to be processed for the email template
@@ -184,7 +184,7 @@ namespace Cornell\Governance\Emails\Templates {
 					'site_name'       => get_option( 'blogname' ),
 					'user'            => $recipient,
 					'report'          => $data,
-					'managing-office' => get_option( 'cornell-governance-managing-office', __( 'MarCom', 'cornell/governance' ) ),
+					'managing-office' => get_option( 'cornell-governance-managing-office', __( 'MarCom', 'cornell-governance' ) ),
 					'prompt-times'    => $prompt_times,
 					'prompt-words'    => $prompt_words,
 				), get_class( $this ) );

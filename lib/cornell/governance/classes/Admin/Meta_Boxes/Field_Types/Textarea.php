@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
-	if ( ! class_exists( 'Textarea' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Textarea' ) ) {
 		abstract class Textarea extends Base {
 			/**
 			 * @var string $type the input type

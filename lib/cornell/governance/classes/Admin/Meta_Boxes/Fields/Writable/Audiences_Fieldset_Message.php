@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Audiences_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Audiences_Fieldset_Message' ) ) {
 		Final class Audiences_Fieldset_Message extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Audiences_Fieldset_Message {
 			/**
 			 * @var Audiences_Fieldset_Message $instance holds the single instance of this class

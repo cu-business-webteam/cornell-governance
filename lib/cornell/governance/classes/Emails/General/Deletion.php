@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails\General {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Deletion' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\General\Deletion' ) ) {
 		class Deletion extends \Cornell\Governance\Emails\Deletion {
 			/**
 			 * @var Deletion $instance holds the single instance of this class

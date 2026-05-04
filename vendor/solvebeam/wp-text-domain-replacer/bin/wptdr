@@ -1,0 +1,334 @@
+#!/usr/bin/env php
+<?php
+
+$options = getopt(
+	'',
+	[
+		'dir::',
+		'exclude::',
+		'search:',
+		'replace:',
+	]
+);
+
+// Load configuration from composer.json.
+$composer_config = [];
+
+$composer_file = getcwd() . '/composer.json';
+
+if ( file_exists( $composer_file ) ) {
+	$composer_json = json_decode( file_get_contents( $composer_file ), true );
+	if ( isset( $composer_json['extra']['solvebeam-wp-text-domain-replacer'] ) ) {
+		$composer_config = $composer_json['extra']['solvebeam-wp-text-domain-replacer'];
+	}
+}
+
+// Start with composer.json values.
+$dir     = $composer_config['dir'] ?? getcwd();
+$exclude = $composer_config['exclude'] ?? [];
+$search  = $composer_config['search'] ?? null;
+$replace = $composer_config['replace'] ?? null;
+
+// Override with CLI options.
+if ( array_key_exists( 'dir', $options ) ) {
+	$dir = $options['dir'];
+}
+
+if ( array_key_exists( 'exclude', $options ) ) {
+	$exclude = $options['exclude'];
+}
+
+if ( array_key_exists( 'search', $options ) ) {
+	$search = $options['search'];
+}
+
+if ( array_key_exists( 'replace', $options ) ) {
+	$replace = $options['replace'];
+}
+
+// Normalize exclude to array.
+if ( ! is_array( $exclude ) ) {
+	$exclude = [ $exclude ];
+}
+
+// Normalize search domain to array.
+if ( ! is_array( $search ) ) {
+	$search = [ $search ];
+}
+
+// Validate required parameters.
+if ( $search === null ) {
+	fwrite( STDERR, "Error: --search is required (via command-line or composer.json)\n" );
+	exit( 1 );
+}
+
+if ( $replace === null ) {
+	fwrite( STDERR, "Error: --replace is required (via command-line or composer.json)\n" );
+	exit( 1 );
+}
+
+echo 'Working directory: ', $dir, PHP_EOL;
+echo 'Excluding directories: ', implode( ', ', $exclude ), PHP_EOL;
+echo 'Search domains: ', implode( ', ', $search ), PHP_EOL;
+echo 'Replace domain: ', $replace, PHP_EOL;
+
+$directory_iterator = new RecursiveDirectoryIterator(
+	$dir,
+	RecursiveDirectoryIterator::SKIP_DOTS
+);
+
+$exclude_filter_iterator = new RecursiveCallbackFilterIterator(
+	$directory_iterator,
+	function ( $current ) use ( $exclude ) {
+		return ! in_array( $current->getFilename(), $exclude, true );
+	}
+);
+
+$block_json_filter_iterator = new RecursiveCallbackFilterIterator(
+	$exclude_filter_iterator,
+	function ( $current ) {
+		if ( $current->isDir() ) {
+			return true;
+		}
+
+		return $current->isFile() && $current->getFilename() === 'block.json';
+	}
+);
+
+$block_json_files = new RecursiveIteratorIterator( $block_json_filter_iterator );
+
+foreach ( $block_json_files as $file ) {
+	echo "[INFO] Processing: ", $file->getPathname(), PHP_EOL;
+
+	$contents = file_get_contents( $file );
+
+	$pattern = '/(?<prefix>"textdomain"\s*:\s*")(?<domain>[a-zA-Z0-9_-]+)(?<suffix>")/';
+
+	$replaced = preg_replace_callback(
+		$pattern,
+		function ( $matches ) use ( $search, $replace ) {
+			if ( in_array( $matches['domain'], $search, true ) ) {
+				return $matches['prefix'] . $replace . $matches['suffix'];
+			}
+
+			return $matches[0];
+		},
+		$contents
+	);
+
+	if ( $replaced !== $contents ) {
+		file_put_contents( $file, $replaced );
+
+		echo "[SUCCESS] Text domain replaced in: ", $file->getPathname(), PHP_EOL;
+	} else {
+		echo "[SKIP] No replacement needed for: ", $file->getPathname(), PHP_EOL;
+	}
+}
+
+/**
+ * Helper.
+ */
+function create_patterns( $functions ) {
+	$patterns = [];
+
+	foreach ( $functions as $function => $item ) {
+		$pattern = [];
+
+		$pattern[] = '(?<![a-zA-Z0-9_])';
+
+		$pattern[] = '(?<prefix>' . $function . '\s*\(' . str_repeat( '\s*[^,]+,', $item['position'] - 1 ) . '\s*)';
+		$pattern[] = '(?<quote>["\'])';
+		$pattern[] = '(?<domain>[a-zA-Z0-9_-]+)';
+		$pattern[] = '\k<quote>';
+
+		$patterns[] = '/' . implode( '', $pattern ) . '/';
+	}
+
+	return $patterns;
+}
+
+/**
+ * PHP functions.
+ *
+ * @link https://github.com/WordPress/WordPress-Coding-Standards/blob/38168bc542ec3565c04f2a88498a2024cdfd9ba1/WordPress/Sniffs/Utils/I18nTextDomainFixerSniff.php#L72-L229
+ */
+$php_functions = [
+	'load_textdomain'             => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+	'load_plugin_textdomain'      => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+	'load_muplugin_textdomain'    => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+	'load_theme_textdomain'       => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+	'load_child_theme_textdomain' => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+	'load_script_textdomain'      => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'unload_textdomain'           => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+
+	'__'                          => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'_e'                          => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'_x'                          => [
+		'position' => 3,
+		'name'     => 'domain',
+	],
+	'_ex'                         => [
+		'position' => 3,
+		'name'     => 'domain',
+	],
+	'_n'                          => [
+		'position' => 4,
+		'name'     => 'domain',
+	],
+	'_nx'                         => [
+		'position' => 5,
+		'name'     => 'domain',
+	],
+	'_n_noop'                     => [
+		'position' => 3,
+		'name'     => 'domain',
+	],
+	'_nx_noop'                    => [
+		'position' => 4,
+		'name'     => 'domain',
+	],
+	'translate_nooped_plural'     => [
+		'position' => 3,
+		'name'     => 'domain',
+	],
+
+	'esc_html__'                  => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'esc_html_e'                  => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'esc_html_x'                  => [
+		'position' => 3,
+		'name'     => 'domain',
+	],
+	'esc_attr__'                  => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'esc_attr_e'                  => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'esc_attr_x'                  => [
+		'position' => 3,
+		'name'     => 'domain',
+	],
+
+	'is_textdomain_loaded'        => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+	'get_translations_for_domain' => [
+		'position' => 1,
+		'name'     => 'domain',
+	],
+];
+
+/**
+ * JavaScript functions.
+ *
+ * @link https://github.com/WordPress/gutenberg/blob/ab5c79cd40adbb68898536c50e035b0a734338ea/packages/i18n/src/index.js#L9-L12
+ */
+$js_functions = [
+	'__'  => [
+		'position' => 2,
+		'name'     => 'domain',
+	],
+	'_x'  => [
+		'position' => 3,
+		'name'     => 'domain',
+	],
+	'_n'  => [
+		'position' => 4,
+		'name'     => 'domain',
+	],
+	'_nx' => [
+		'position' => 5,
+		'name'     => 'domain',
+	],
+];
+
+/**
+ * Types
+ */
+$types = [
+	'js'  => $js_functions,
+	'php' => $php_functions,
+];
+
+foreach ( $types as $type => $functions ) {
+	$patterns = create_patterns( $functions );
+
+	$filter_iterator = new RecursiveCallbackFilterIterator(
+		$exclude_filter_iterator,
+		function ( $current ) use ( $type ) {
+			if ( $current->isDir() ) {
+				return true;
+			}
+
+			return $current->isFile() && $current->getExtension() === $type;
+		}
+	);
+
+	$files = new RecursiveIteratorIterator( $filter_iterator );
+
+	foreach ( $files as $file ) {
+		echo "[INFO] Processing: ", $file->getPathname(), PHP_EOL;
+
+		$original = file_get_contents( $file );
+
+		$contents = $original;
+
+		foreach ( $patterns as $pattern ) {
+			$contents = preg_replace_callback(
+				$pattern,
+				function ( $matches ) use ( $search, $replace ) {
+					if ( in_array( $matches['domain'], $search, true ) ) {
+						return $matches['prefix'] . $matches['quote'] . $replace . $matches['quote'];
+					}
+
+					return $matches[0];
+				},
+				$contents
+			);
+		}
+
+		if ( $original !== $contents ) {
+			file_put_contents( $file, $contents );
+
+			echo "[SUCCESS] Text domain replaced in: ", $file->getPathname(), PHP_EOL;
+		} else {
+			echo "[SKIP] No replacement needed for: ", $file->getPathname(), PHP_EOL;
+		}
+	}
+}

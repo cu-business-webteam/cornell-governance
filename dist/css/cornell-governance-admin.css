@@ -471,16 +471,19 @@
   padding: 0;
   margin: 0;
 }
+
 .slist li {
   margin: 10px;
   padding: 15px;
   border: 1px solid #dfdfdf;
   background: #f5f5f5;
 }
+
 .slist li.hint {
   border: 1px solid #ffc49a;
   background: #feffb4;
 }
+
 .slist li.active {
   border: 1px solid #ffa5a5;
   background: #ffe7e7;
@@ -493,9 +496,11 @@
   width: 100%;
   position: relative;
 }
+
 .repeater-input-container input {
   padding-right: 32px;
 }
+
 .repeater-input-container button.repeater-remove-row {
   position: absolute;
   top: 0;
@@ -506,6 +511,7 @@
   margin: 5px;
   padding: 0;
 }
+
 .repeater-input-container button.repeater-remove-row span {
   text-indent: -9999rem;
   display: block;
@@ -515,6 +521,7 @@
   width: 0;
   overflow: hidden;
 }
+
 .repeater-input-container button.repeater-remove-row:after {
   content: "\f15d";
   font-family: "Dashicons";
@@ -536,6 +543,7 @@
   -webkit-animation: fadeout 6s linear forwards;
   animation: fadeout 6s linear forwards;
 }
+
 .cornell-governance-notice.updated {
   border-color: black;
   background: #008020;
@@ -565,11 +573,13 @@
   padding: 1rem;
   background: white;
 }
+
 .cornell-governance-documentation ul {
   list-style: initial;
   margin: 1rem 0 0 1rem;
   padding: 0 0 0 1rem;
 }
+
 .cornell-governance-documentation ol:has(li > a > img + em) {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -577,6 +587,7 @@
   margin: 0;
   padding: 0;
 }
+
 .cornell-governance-documentation li:has(a > img + em) {
   text-align: center;
   padding: 1rem;
@@ -584,6 +595,7 @@
   background: #e2e2e2;
   border: 1px solid #666;
 }
+
 .cornell-governance-documentation li:has(a > img + em) img {
   border: 1px solid #666;
   width: 100%;
@@ -592,6 +604,7 @@
   margin: 0 auto;
   display: block;
 }
+
 .cornell-governance-documentation li:has(a > img + em) em {
   text-align: center;
   display: block;
@@ -607,30 +620,36 @@
   background: rgba(0, 0, 0, 0.7);
   z-index: 999999;
 }
+
 .cornell-governance-lightbox.hidden {
   display: none;
 }
+
 .cornell-governance-lightbox .lightbox {
   position: relative;
   margin: 2rem;
   width: calc(100% - 2rem);
   height: auto;
 }
+
 .cornell-governance-lightbox .lightbox button {
   position: absolute;
   right: 2rem;
   top: 2rem;
   z-index: 9999999;
 }
+
 .cornell-governance-lightbox .lightbox figure {
   display: grid;
   grid-template-rows: minmax(0, max-content) minmax(0, max-content);
 }
+
 .cornell-governance-lightbox .lightbox figure img {
   max-height: 80%;
   display: block;
   margin: 0 auto;
 }
+
 .cornell-governance-lightbox .lightbox figure figcaption {
   display: block;
   color: #fff;
@@ -639,6 +658,7 @@
   text-align: center;
   margin: 0 auto;
 }
+
 .cornell-governance-lightbox .lightbox figure figcaption.hidden {
   width: 0;
   height: 0;
@@ -650,10 +670,10 @@
   overflow: hidden;
 }
 
-.governance-tooltip-container[data-purpose=tooltip-container] {
+[data-purpose=tooltip-container] {
   position: relative;
 }
-.governance-tooltip-container[data-purpose=tooltip-container] [role=tooltip] {
+[data-purpose=tooltip-container] [role=tooltip] {
   visibility: hidden;
   position: absolute;
   top: auto;
@@ -664,10 +684,10 @@
   padding: 2rem;
   border: 1px solid #666;
 }
-.governance-tooltip-container[data-purpose=tooltip-container] [role=tooltip].open {
+[data-purpose=tooltip-container] [role=tooltip].open {
   visibility: visible;
 }
-.governance-tooltip-container[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer {
+[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer {
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
@@ -680,7 +700,7 @@
   height: 2.5em;
   border-radius: 0.375em;
 }
-.governance-tooltip-container[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:before, .governance-tooltip-container[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:after {
+[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:before, [data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:after {
   content: "";
   position: absolute;
   width: 2.25em;
@@ -689,23 +709,23 @@
   border-radius: 0.125em;
   top: 1em;
 }
-.governance-tooltip-container[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:before {
+[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:before {
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   transform: rotate(45deg);
   left: 0.125em;
 }
-.governance-tooltip-container[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:after {
+[data-purpose=tooltip-container] [role=tooltip] .tooltip-closer:after {
   -webkit-transform: rotate(-45deg);
   -moz-transform: rotate(-45deg);
   transform: rotate(-45deg);
   right: 0.125em;
 }
-.governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener, .governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener::after {
+[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener, [data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener::after {
   width: 1rem;
   height: 1rem;
 }
-.governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener {
+[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener {
   display: inline-block;
   text-indent: -9999rem;
   border: none;
@@ -717,7 +737,7 @@
   padding: 0;
   vertical-align: middle;
 }
-.governance-tooltip-container[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener::after {
+[data-purpose=tooltip-container].cornell-governance-inline-tooltip .governance-tooltip-opener::after {
   content: "?";
   background: var(--cornell-red);
   color: #fff;
@@ -963,16 +983,19 @@
 .cornell-governance-import-export-page h2 {
   font-size: 1.25rem;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset {
   display: grid;
   gap: 3rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   line-height: 2;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset > legend {
   font-size: 1.1rem;
   font-weight: bold;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset > div {
   border: 1px solid lightblue;
   border-radius: 1rem;
@@ -983,23 +1006,28 @@
   max-width: calc(100% - 2rem);
   overflow: auto;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset > div.full-width {
   grid-column: 1/-1;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset > div .button-row {
   display: grid;
   gap: 1rem;
   grid-template-columns: auto;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset .import p,
 .cornell-governance-import-export-page .import-export-wrap fieldset .import-settings p {
   font-style: italic;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset .import label,
 .cornell-governance-import-export-page .import-export-wrap fieldset .import-settings label {
   display: block;
   font-style: normal;
 }
+
 .cornell-governance-import-export-page .import-export-wrap fieldset .import input[type=file],
 .cornell-governance-import-export-page .import-export-wrap fieldset .import-settings input[type=file] {
   font-style: normal;
@@ -1010,6 +1038,7 @@
   padding: 1rem;
   border: 1px solid #666;
 }
+
 .cornell-governance-import-export-page .import-export-wrap table {
   display: block;
   width: 100%;
@@ -1018,17 +1047,20 @@
   background: white;
   border-collapse: collapse;
 }
+
 .cornell-governance-import-export-page .import-export-wrap table caption {
   font-size: 1.2em;
   font-weight: bold;
   margin: 1rem auto;
 }
+
 .cornell-governance-import-export-page .import-export-wrap table th, .cornell-governance-import-export-page .import-export-wrap table td {
   padding: 0.25rem;
   border: 1px solid #000;
   vertical-align: text-top;
   margin: 0;
 }
+
 .cornell-governance-import-export-page .import-export-wrap textarea[readonly] {
   background: #ccc;
   width: 100%;
@@ -1046,21 +1078,25 @@
   border-spacing: 0;
   border-collapse: collapse;
 }
+
 .cornell-governance-html-table caption {
   margin: 1rem auto;
   font-weight: bold;
   font-size: 0.95rem;
 }
+
 .cornell-governance-html-table tr {
   border: none;
   padding: 0;
   margin: 0;
 }
+
 .cornell-governance-html-table tr td, .cornell-governance-html-table tr th {
   padding: 0.5rem;
   border: 1px solid #666;
   margin: 0;
 }
+
 .cornell-governance-html-table tr th {
   background: #e2e2e2;
   font-weight: bolder;
@@ -1072,6 +1108,7 @@
   border: 1px solid #999;
   padding: 1rem;
 }
+
 .steward-dashboard-table-container h3 {
   font-size: 1.4rem;
   font-weight: bold;
@@ -1086,51 +1123,64 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
 .governance-liaison-overview > div {
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
   border-radius: 0.5rem;
   border: 1px solid #999;
   padding: 1rem;
 }
+
 .governance-liaison-overview > div h3 {
   font-size: 1.4rem;
   font-weight: bold;
 }
+
 .governance-liaison-overview .governance-portfolio-overview {
   grid-area: overview;
   display: grid;
   grid-template-areas: "header header header" "compliant due overdue" "status status status";
 }
+
 .governance-liaison-overview .governance-portfolio-overview h3 {
   grid-area: header;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .column {
   text-align: center;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .column .percentage {
   font-weight: bold;
   font-size: 3.1rem;
   line-height: normal;
   display: block;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-compliance-compliant {
   grid-area: compliant;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-compliance-compliant .percentage {
   color: #009400;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-compliance-due {
   grid-area: due;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-compliance-due .percentage {
   color: #8f8f00;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-compliance-overdue {
   grid-area: overdue;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-compliance-overdue .percentage {
   color: red;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar {
   padding-top: 1rem;
   container-name: statusbar;
@@ -1142,10 +1192,12 @@
   grid-template-areas: "start progress end";
   gap: 1rem;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar .statusbar-start,
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar .statusbar-end {
   line-height: 1.5rem;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar .governance-compliance-overall-status {
   grid-area: progress;
   position: relative;
@@ -1159,6 +1211,7 @@
   padding: 0.25rem 0;
   margin: 0 auto;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar .governance-compliance-overall-status .completion-percentage-label {
   position: relative;
   z-index: 1;
@@ -1168,6 +1221,7 @@
   width: var(--status-percentage);
   text-align: center;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar .governance-compliance-overall-status:after {
   content: "";
   position: absolute;
@@ -1185,19 +1239,24 @@
   padding: 0;
   height: 1.5rem;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar[style*="--status-percentage: 100%"] .governance-compliance-overall-status:after {
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
 }
+
 .governance-liaison-overview .governance-portfolio-overview .governance-statusbar[style*="--status-percentage: 0%"] .governance-compliance-overall-status .completion-percentage-label {
   width: 100%;
 }
+
 .governance-liaison-overview .governance-portfolio-overdue-overview {
   grid-area: noncompliant;
 }
+
 .governance-liaison-overview .governance-portfolio-overdue-overview p {
   font-weight: bold;
 }
+
 .governance-liaison-overview .governance-portfolio-overdue-overview p:before {
   content: "⚠";
   color: #000;
@@ -1208,13 +1267,16 @@
   vertical-align: baseline;
   font-weight: normal;
 }
+
 .governance-liaison-overview .governance-portfolio-steward-performance {
   grid-area: performance;
 }
+
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tr {
   border-bottom: 1px solid #666;
   border-top: 1px solid #666;
 }
+
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tr th,
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tr td {
   border: none;
@@ -1224,10 +1286,12 @@
   margin: 0;
   text-align: left;
 }
+
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table thead tr,
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tfoot tr {
   border: none;
 }
+
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table thead tr th,
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table thead tr td,
 .governance-liaison-overview .governance-portfolio-steward-performance .governance-steward-compliance-table tfoot tr th,
@@ -1235,12 +1299,15 @@
   font-weight: bolder;
   background: #eee;
 }
+
 .governance-liaison-overview .governance-liaison-workflow {
   grid-area: workflow;
 }
+
 .governance-liaison-overview .governance-liaison-workflow ul, .governance-liaison-overview .governance-liaison-workflow ol {
   list-style: revert;
 }
+
 .governance-liaison-overview .governance-liaison-workflow ul > li, .governance-liaison-overview .governance-liaison-workflow ol > li {
   margin-left: 1rem;
 }
@@ -1248,17 +1315,20 @@
 .governance-paginated-list ul.is-hidden {
   display: none;
 }
+
 .governance-paginated-list .governance-pagination h4 {
   display: inline-block;
   margin: 0 0 0 0.25rem;
   padding: 0;
 }
+
 .governance-paginated-list .governance-pagination ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   gap: 0.25rem;
 }
+
 .governance-paginated-list .governance-pagination ul button {
   display: block;
   color: black;
@@ -1270,9 +1340,11 @@
   font-size: 1rem;
   margin: 0;
 }
+
 .governance-paginated-list .governance-pagination ul button:hover, .governance-paginated-list .governance-pagination ul button:focus {
   background: #FF7276;
 }
+
 .governance-paginated-list .governance-pagination ul [aria-selected=true] {
   background: darkred;
   color: white;

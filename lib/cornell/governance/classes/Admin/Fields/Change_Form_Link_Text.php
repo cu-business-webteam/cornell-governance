@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Change_Form_Link_Text' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Change_Form_Link_Text' ) ) {
 		class Change_Form_Link_Text extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -26,11 +26,11 @@ namespace Cornell\Governance\Admin\Fields {
 				parent::__construct( array(
 					'type'      => 'text',
 					'id'        => 'change-form-link-text',
-					'title'     => __( 'What text would you like to use for the "Change Form" link?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'What text would you like to use for the "Change Form" link?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings-change-form',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-text',
-					'default'   => __( 'Request changes to page governance settings', 'cornell/governance' ),
+					'default'   => esc_html( __( 'Request changes to page governance settings', 'cornell-governance' ) ),
 				) );
 			}
 
@@ -48,21 +48,6 @@ namespace Cornell\Governance\Admin\Fields {
 				}
 
 				return self::$instance;
-			}
-
-			/**
-			 * Build the input
-			 *
-			 * @access protected
-			 * @return string
-			 * @since  0.1
-			 */
-			protected function get_input(): string {
-				$current = $this->get_input_value();
-
-				$id = $this->page . '-' . $this->id;
-
-				return sprintf( '<input type="%3$s" name="%1$s" id="%1$s" value="%2$s"/>', $id, sanitize_text_field( $current ), $this->type );
 			}
 
 			/**

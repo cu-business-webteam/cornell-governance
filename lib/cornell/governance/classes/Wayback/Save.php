@@ -1,9 +1,8 @@
 <?php
 
 namespace {
-	if ( ! defined( 'ABSPATH' ) ) {
+	if ( ! defined( 'ABSPATH' ) )
 		die( 'You do not have permission to access this file directly.' );
-	}
 }
 
 namespace Cornell\Governance\Wayback {
@@ -11,7 +10,10 @@ namespace Cornell\Governance\Wayback {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Save' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Wayback\Save' ) ) {
+		/**
+		 * The class that controls firing and saving results of an Archive snapshot
+		 */
 		class Save {
 			/**
 			 * @var Save $instance holds the single instance of this class
@@ -53,11 +55,11 @@ namespace Cornell\Governance\Wayback {
 			/**
 			 * Trigger a Wayback Machine snapshot
 			 *
-			 * @param int|\WP_Post the post for which the snapshot is being requested
+			 * @param int|\WP_Post $post the post for which the snapshot is being requested
 			 *
 			 * @access public
 			 * @since  0.6.2
-			 * @return string|\WP_Error the content location header on success; error on failure
+			 * @return array|\WP_Error an array of request and response data on success; error on failure
 			 */
 			public function trigger_snapshot( $post ) {
 				if ( is_numeric( $post ) ) {
@@ -77,38 +79,63 @@ namespace Cornell\Governance\Wayback {
 			 * @param string $url the URL of the item for which the snapshot is being requested
 			 *
 			 * @access public
-			 * @return string|\WP_Error the content location on success; error on failure
+			 * @return array|\WP_Error an array of request and response data on success; error on failure
 			 * @since  0.6.2
 			 */
 			public function trigger_snapshot_by_url( string $url ) {
+				$rt = array();
+
 				// Ping archive machine.
 				$save_url = trailingslashit( $this->api_base ) . $url;
 
 				$env = Helpers::get_environment();
 				if ( 'production' !== $env ) {
-					return sprintf( 'If this were a production environment, we would have queried the following URL: %s', $save_url );
+					$rt['location'] = esc_html( __( 'This is not a production environment.', 'cornell-governance' ) );
+					$rt['content-url'] = esc_url( $url );
+					$rt['request-url'] = esc_url( $save_url );
+					$rt['capture-time'] = time();
+					$rt['headers'] = esc_html( sprintf( 'If this were a production environment, we would have queried the following URL: %s', esc_url( $save_url ) ) );
+
+					return $rt;
 				}
 
 				$response = wp_remote_get( $save_url );
 
 				$archive_link = '';
 
+				$headers = wp_remote_retrieve_headers( $response );
+
+				$rt['location'] = '';
+				$rt['content-url'] = esc_url( $url );
+				$rt['request-url'] = esc_url( $save_url );
+				$rt['capture-time'] = time();
+				$rt['headers'] = json_encode( (array) $headers );
+
 				if ( is_wp_error( $response ) ) {
 					return $response;
-				} elseif ( ! empty( $response['headers']['x-archive-wayback-runtime-error'] ) ) {
-					return new \WP_Error( 'wayback_machine_error', $response['headers']['x-archive-wayback-runtime-error'], $response );
-				} elseif ( ! empty( $response['headers']['content-location'] ) ) {
-					return $response['headers']['content-location'];
-				} elseif ( ! empty( wp_remote_retrieve_header( $response, 'link' ) ) ) {
-					preg_match( '/rel="memento.*?(((http|https):\/\/){0,1}(web\.archive\.org\/web\/[0-9]{14}\/.*?))>/', wp_remote_retrieve_header( $response, 'link' ), $matches, 0, 0 );
+				} elseif ( ! empty( $headers['x-archive-wayback-runtime-error'] ) ) {
+					return new \WP_Error( 'wayback_machine_error', $headers['x-archive-wayback-runtime-error'], $response );
+				} elseif ( ! empty( $headers['content-location'] ) ) {
+					$rt['location'] = $headers['content-location'];
+
+					return $rt;
+				} elseif ( ! empty( $headers['link'] ) ) {
+					preg_match( '/rel="memento.*?(((http|https):\/\/){0,1}(web\.archive\.org\/web\/[0-9]{14}\/.*?))>/', $headers['link'], $matches, 0, 0 );
 					if ( count( $matches ) >= 2 ) {
-						return $matches[1];
+						$rt['location'] = $matches[1];
+						return $rt;
 					}
+				} elseif ( ( ! empty( $headers['x-ts'] ) && 429 === (int) $headers['x-ts'] ) ) {
+					$rt['location'] = esc_html( __( 'The resource has already been archived more than the dailty limit today, for some reason', 'cornell-governance' ) );
+
+					return $rt;
 				} else {
-					return print_r( wp_remote_retrieve_headers( $response ), true );
+					$rt['location'] = esc_html( __( 'Could not parse location header', 'cornell-governance' ) );
+
+					return $rt;
 				}
 
-				return '';
+				return array();
 			}
 
 			/**
@@ -132,7 +159,7 @@ namespace Cornell\Governance\Wayback {
 				}
 
 				$types = Plugin::instance()->get_post_types();
-				if ( ! in_array( $post->post_type, $types ) && 'revision' !== $post->post_type ) {
+				if ( ( ! in_array( $post->post_type, $types ) && 'revision' !== $post->post_type ) ) {
 					return;
 				}
 

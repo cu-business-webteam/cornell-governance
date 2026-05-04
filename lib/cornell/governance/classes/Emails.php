@@ -14,7 +14,7 @@ namespace Cornell\Governance {
 	use Cornell\Governance\Admin\Meta_Boxes\Info;
 	use Cornell\Governance\Emails\Prompt;
 
-	if ( ! class_exists( 'Emails' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails' ) ) {
 		class Emails {
 			/**
 			 * @var Emails $instance holds the single instance of this class
@@ -648,25 +648,25 @@ namespace Cornell\Governance {
 
 				$this->filter_recipients_lists();
 
-				$subject = __( 'Your web pages due for review soon', 'cornell/governance' );
+				$subject = esc_html( __( 'Your web pages due for review soon', 'cornell-governance' ) );
 				$class   = '';
 
 				switch ( $prompt ) {
 					case 'initial' :
 						$class   = '\Cornell\Governance\Emails\General\Initial_Prompt';
-						$subject = __( 'Your web pages due for review in less than ' . get_option( 'cornell-governance-initial-prompt-time', 60 ) . ' days', 'cornell/governance' );
+						$subject = esc_html( __( 'Your web pages due for review in less than ' . get_option( 'cornell-governance-initial-prompt-time', 60 ) . ' days', 'cornell-governance' ) );
 						break;
 					case 'secondary' :
 						$class   = '\Cornell\Governance\Emails\General\Secondary_Prompt';
-						$subject = __( 'Your web pages due for review in less than ' . get_option( 'cornell-governance-secondary-prompt-time', 30 ) . ' days', 'cornell/governance' );
+						$subject = esc_html( __( 'Your web pages due for review in less than ' . get_option( 'cornell-governance-secondary-prompt-time', 30 ) . ' days', 'cornell-governance' ) );
 						break;
 					case 'tertiary' :
 						$class   = '\Cornell\Governance\Emails\General\Tertiary_Prompt';
-						$subject = __( 'Your web pages due for review in less than ' . get_option( 'cornell-governance-tertiary-prompt-time', 7 ) . ' days', 'cornell/governance' );
+						$subject = esc_html( __( 'Your web pages due for review in less than ' . get_option( 'cornell-governance-tertiary-prompt-time', 7 ) . ' days', 'cornell-governance' ) );
 						break;
 					case 'overdue' :
 						$class   = '\Cornell\Governance\Emails\General\Tertiary_Prompt';
-						$subject = __( 'Your web pages that are overdue for review', 'cornell/governance' );
+						$subject = esc_html( __( 'Your web pages that are overdue for review', 'cornell-governance' ) );
 						break;
 				}
 
@@ -827,7 +827,7 @@ namespace Cornell\Governance {
 
 				if ( array_key_exists( 'sent-all', $this->{$key} ) ) {
 					if ( isset( $_GET['cornell/governance/debug'] ) ) {
-						echo '<p>' . __( 'Sent all of the ' . $key . ' messages already' ) . '</p>';
+						echo '<p>' . __( 'Sent all of the ' . $key . ' messages already', 'cornell-governance' ) . '</p>';
 					}
 
 					return;
@@ -835,7 +835,7 @@ namespace Cornell\Governance {
 
 				if ( empty( $this->{$key} ) ) {
 					if ( isset( $_GET['cornell/governance/debug'] ) ) {
-						echo '<p>' . __( 'Sent all of the ' . $key . ' messages already' ) . '</p>';
+						echo '<p>' . __( 'Sent all of the ' . $key . ' messages already', 'cornell-governance' ) . '</p>';
 					}
 					update_option( $this->keys[ $key ], array( 'sent-all' => date( 'c' ) ) );
 				}
@@ -844,7 +844,7 @@ namespace Cornell\Governance {
 					// Authors, Supervisors or Liaisons
 					if ( empty( $reports ) ) {
 						if ( isset( $_GET['cornell/governance/debug'] ) ) {
-							echo '<p>' . __( 'There are no reports to send for ' . $audience ) . '</p>';
+							echo '<p>' . __( 'There are no reports to send for ' . $audience, 'cornell-governance' ) . '</p>';
 						}
 						continue;
 					}
@@ -852,7 +852,7 @@ namespace Cornell\Governance {
 						// initial, secondary, tertiary, overdue, compliant
 						if ( empty( $user ) ) {
 							if ( isset( $_GET['cornell/governance/debug'] ) ) {
-								echo '<p>' . __( 'There are no reports to send for ' . $user ) . '</p>';
+								echo '<p>' . __( 'There are no reports to send for ' . $user, 'cornell-governance' ) . '</p>';
 							}
 							continue;
 						}

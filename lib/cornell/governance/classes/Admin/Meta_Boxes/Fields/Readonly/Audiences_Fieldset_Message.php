@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Audiences_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Audiences_Fieldset_Message' ) ) {
 		Final class Audiences_Fieldset_Message extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Audiences_Fieldset_Message {
 			/**
 			 * @var Audiences_Fieldset_Message $instance holds the single instance of this class
@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 
 				$this->is_readonly = true;
 
-				$this->text = __( 'Verify that these are still the correct target audiences.', 'cornell/governance' );
+				$this->text = esc_html( __( 'Verify that these are still the correct target audiences.', 'cornell-governance' ) );
 			}
 
 			/**

@@ -42,11 +42,11 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'           => __( 'Cornell Governance: Content Governance Meta', 'cornell/governance' ),
-				'menu_name'       => __( 'Page Meta', 'cornell/governance' ),
+				'title'           => esc_html( __( 'Cornell Governance: Content Governance Meta', 'cornell-governance' ) ),
+				'menu_name'       => esc_html( __( 'Page Meta', 'cornell-governance' ) ),
 				'slug'            => 'cornell-governance-page-meta',
 				'per_page_option' => 'cornell/governance/steward-dashboard/items_per_page',
-				'description'     => __( 'Governance information for a specific page or piece of content.', 'cornell/governance' ),
+				'description'     => esc_html( __( 'Governance information for a specific page or piece of content.', 'cornell-governance' ) ),
 			) );
 		}
 
@@ -122,7 +122,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				$this->display_info();
 
 				print( '<div class="governance-box info-meta">' );
-				printf( '<h3>%s</h3>', __( 'Additional Details', 'cornell/governance' ) );
+				printf( '<h3>%s</h3>', __( 'Additional Details', 'cornell-governance' ) );
 
 				$this->display_notes();
 				$this->display_revisions();
@@ -144,7 +144,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function no_page_selected() {
 			$link = admin_url( 'admin.php' );
 			$link = add_query_arg( array( 'page' => $this->page ), $link );
-			wp_die( sprintf( __( 'There is no content selected, so there is no information to display. Please <a href="%s">return to the governance reports</a> and select a page to view.', 'cornell/governance' ), $link ) );
+			wp_die( sprintf( esc_html( __( 'There is no content selected, so there is no information to display. Please <a href="%s">return to the governance reports</a> and select a page to view.', 'cornell-governance' ) ), $link ) );
 		}
 
 		/**
@@ -157,7 +157,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function no_permissions() {
 			$link = admin_url( 'admin.php' );
 			$link = add_query_arg( array( 'page' => $this->page ), $link );
-			wp_die( sprintf( __( 'You do not appear to have permission to manage the selected piece of content. Please <a href="%s">return to the governance reports</a> and select a page to view.', 'cornell/governance' ), $link ) );
+			wp_die( sprintf( esc_html( __( 'You do not appear to have permission to manage the selected piece of content. Please <a href="%s">return to the governance reports</a> and select a page to view.', 'cornell-governance' ) ), $link ) );
 		}
 
 		/**
@@ -174,7 +174,7 @@ namespace Cornell\Governance\Admin\Submenus {
 			$this->info_meta = Info::instance()->meta;
 
 			print( '<div class="governance-box info-meta">' );
-			printf( '<h3 class="large-heading">%s</h3>', __( 'General Governance Information', 'cornell/governance' ) );
+			printf( '<h3 class="large-heading">%s</h3>', __( 'General Governance Information', 'cornell-governance' ) );
 			$this->display_responsibility_section();
 			$this->display_audience_section();
 			$this->display_details_section();
@@ -199,18 +199,18 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			print( '<details class="responsibility page-meta-section" open>' );
-			printf( '<summary>%s</summary>', __( 'Responsibility', 'cornell/governance' ) );
+			printf( '<summary>%s</summary>', __( 'Responsibility', 'cornell-governance' ) );
 			$list               = array();
 			$list['steward']    = array(
-				'label' => __( 'Primary Steward', 'cornell/governance' ),
+				'label' => esc_html( __( 'Primary Steward', 'cornell-governance' ) ),
 				'value' => $steward,
 			);
 			$list['supervisor'] = array(
-				'label' => __( 'Secondary contact email', 'cornell/governance' ),
+				'label' => esc_html( __( 'Secondary contact email', 'cornell-governance' ) ),
 				'value' => $this->info_meta['supervisor'],
 			);
 			$list['liaison']    = array(
-				'label' => sprintf( __( '%s Liaison', 'cornell/governance' ), Plugin::instance()->get_managing_office() ),
+				'label' => sprintf( esc_html( __( '%s Liaison', 'cornell-governance' ) ), Plugin::instance()->get_managing_office() ),
 				'value' => $this->info_meta['liaison'],
 			);
 			print( '<dl class="responsibility-list">' );
@@ -230,10 +230,10 @@ namespace Cornell\Governance\Admin\Submenus {
 		 */
 		protected function display_audience_section() {
 			print( '<details class="audiences page-meta-section">' );
-			printf( '<summary>%s</summary>', __( 'Content Audiences', 'cornell/governance' ) );
+			printf( '<summary>%s</summary>', __( 'Content Audiences', 'cornell-governance' ) );
 			print( '<dl class="audience-list">' );
-			printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'Primary Audience', 'cornell/governance' ), $this->info_meta['primary-audience'] );
-			printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'Secondary Audience', 'cornell/governance' ), $this->info_meta['secondary-audience'] );
+			printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'Primary Audience', 'cornell-governance' ) ), $this->info_meta['primary-audience'] );
+			printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'Secondary Audience', 'cornell-governance' ) ), $this->info_meta['secondary-audience'] );
 			print( '</dl>' );
 			print( '</details>' );
 		}
@@ -247,14 +247,14 @@ namespace Cornell\Governance\Admin\Submenus {
 		 */
 		protected function display_details_section() {
 			print( '<details class="details page-meta-section">' );
-			printf( '<summary>%s</summary>', __( 'Page Details', 'cornell/governance' ) );
+			printf( '<summary>%s</summary>', __( 'Page Details', 'cornell-governance' ) );
 			print( '<dl class="audience-list">' );
-			printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'Page Goal', 'cornell/governance' ), $this->info_meta['goals'] );
-			printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'What problem are we trying to solve for the user?', 'cornell/governance' ), $this->info_meta['problem'] );
+			printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'Page Goal', 'cornell-governance' ) ), $this->info_meta['goals'] );
+			printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'What problem are we trying to solve for the user?', 'cornell-governance' ) ), $this->info_meta['problem'] );
 			if ( ! empty( $this->info_meta['tasks'] ) ) {
-				printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'On-page tasks', 'cornell/governance' ), sprintf( '<ol><li>%s</li></ol>', implode( '</li><li>', $this->info_meta['tasks'] ) ) );
+				printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'On-page tasks', 'cornell-governance' ) ), sprintf( '<ol><li>%s</li></ol>', implode( '</li><li>', $this->info_meta['tasks'] ) ) );
 			} else {
-				printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'On-page tasks', 'cornell/governance' ), sprintf( '<p>%s</p>', __( 'There are no additional tasks for this page.', 'cornell/governance' ) ) );
+				printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'On-page tasks', 'cornell-governance' ) ), sprintf( '<p>%s</p>', __( 'There are no additional tasks for this page.', 'cornell-governance' ) ) );
 			}
 			print( '</dl>' );
 			print( '</details>' );
@@ -269,7 +269,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		 */
 		protected function display_review_section() {
 			print( '<details class="review page-meta-section">' );
-			printf( '<summary>%s</summary>', __( 'Review', 'cornell/governance' ) );
+			printf( '<summary>%s</summary>', __( 'Review', 'cornell-governance' ) );
 			print( '<dl class="review-information">' );
 
 			$value_text = array();
@@ -278,13 +278,13 @@ namespace Cornell\Governance\Admin\Submenus {
 					$value_text[] = $label;
 				}
 			}
-			printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'Review Cycle', 'cornell/governance' ), implode( ' ', $value_text ) );
+			printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'Review Cycle', 'cornell-governance' ) ), implode( ' ', $value_text ) );
 
 			$last_reviewed = $this->info_meta['last-review'];
 			$next_review   = Helpers::calculate_next_review_date( $last_reviewed, $this->info_meta['review-cycle'] );
 
-			printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'Last Reviewed', 'cornell/governance' ), Helpers::format_date( $last_reviewed ) );
-			printf( '<dt>%1$s</dt><dd>%2$s</dd>', __( 'Next Review Due', 'cornell/governance' ), Helpers::format_date( $next_review ) );
+			printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'Last Reviewed', 'cornell-governance' ) ), Helpers::format_date( $last_reviewed ) );
+			printf( '<dt>%1$s</dt><dd>%2$s</dd>', esc_html( __( 'Next Review Due', 'cornell-governance' ) ), Helpers::format_date( $next_review ) );
 			print( '</dl>' );
 			print( '</details>' );
 		}
@@ -303,7 +303,7 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			$this->notes_meta = Meta_Boxes\Notes::instance()->meta;
 
-			printf( '<details class="notes page-meta-section"><summary>%s</summary>', __( 'Page Notes', 'cornell/governance' ) );
+			printf( '<details class="notes page-meta-section"><summary>%s</summary>', __( 'Page Notes', 'cornell-governance' ) );
 			printf( '<div class="notes-details">%s</div>', $this->notes_meta['notes'] );
 			print( '</details>' );
 		}
@@ -328,11 +328,11 @@ namespace Cornell\Governance\Admin\Submenus {
 				$output .= '</ol>';
 				$output .= '</details>';
 			} else {
-				$output .= sprintf( '<p>%s</p>', __( 'There are no recent commit messages to display for this page', 'cornell/governance' ) );
+				$output .= sprintf( '<p>%s</p>', __( 'There are no recent commit messages to display for this page', 'cornell-governance' ) );
 			}
 
 			print( '<details class="commit-messages page-meta-section">' );
-			printf( '<summary>%s</summary>', __( 'Recent Commit Messages', 'cornell/governance' ) );
+			printf( '<summary>%s</summary>', __( 'Recent Commit Messages', 'cornell-governance' ) );
 			echo $output;
 			print( '</div>' );
 		}

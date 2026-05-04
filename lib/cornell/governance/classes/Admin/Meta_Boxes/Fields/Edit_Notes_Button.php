@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Button;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Edit_Notes_Button' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Edit_Notes_Button' ) ) {
 		class Edit_Notes_Button extends Button {
 			/**
 			 * @var Edit_Notes_Button $instance holds the single instance of this class
@@ -21,7 +21,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-notes-edit-notes',
-					'label' => __( 'Edit Documentation', 'cornell/governance' ),
+					'label' => esc_html( __( 'Edit Documentation', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-reveal-toggle-notes-editor', 'cornell-governance-field', 'cornell-governance-button', 'cornell-governance-save-notes' ),
 					'default' => '',
 					'meta_box' => 'Info',

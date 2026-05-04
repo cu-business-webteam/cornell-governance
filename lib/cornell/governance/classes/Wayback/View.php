@@ -7,7 +7,10 @@ namespace {
 }
 
 namespace Cornell\Governance\Wayback {
-	if ( ! class_exists( 'View') ) {
+	if ( ! class_exists( '\Cornell\Governance\Wayback\View') ) {
+		/**
+		 * The class that allows viewing a list of Archive snapshots for a specific page
+		 */
 		class View {
 			/**
 			 * @var View $instance holds the single instance of this class

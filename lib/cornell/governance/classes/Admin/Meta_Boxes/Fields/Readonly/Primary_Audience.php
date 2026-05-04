@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Admin\Meta_Boxes\Fields\Audience;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Primary_Audience' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Primary_Audience' ) ) {
 		Final class Primary_Audience extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Primary_Audience {
 			/**
 			 * @var Primary_Audience $instance holds the single instance of this class

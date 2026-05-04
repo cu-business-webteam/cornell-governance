@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Change_Form_Props' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Change_Form_Props' ) ) {
 		class Change_Form_Props extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -26,7 +26,7 @@ namespace Cornell\Governance\Admin\Fields {
 				parent::__construct( array(
 					'type'      => 'checkbox',
 					'id'        => 'change-form-props',
-					'title'     => __( 'Which properties of the post should be appended to the change form URL?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'Which properties of the post should be appended to the change form URL?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings-change-form',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-checkbox',
@@ -53,18 +53,18 @@ namespace Cornell\Governance\Admin\Fields {
 			/**
 			 * Build a list of the available post properties
 			 *
-			 * @return array
+			 * @return array{ID: string, post_title: string, permalink: string, current_user_id: string, current_user_email: string, current_user_display_name: string}
 			 * @access private
 			 * @since  0.1
 			 */
 			private function get_post_props(): array {
 				return array(
-					'ID' => __( 'Post ID', 'cornell/governance' ),
-					'post_title' => __( 'Post Title', 'cornell/governance' ),
-					'permalink' => __( 'Post URL', 'cornell/governance' ),
-					'current_user_id' => __( 'The ID of the user that clicked the link', 'cornell/governance' ),
-					'current_user_email' => __( 'The Email address of the user that clicked the link', 'cornell/governance' ),
-					'current_user_display_name' => __( 'The Display Name of the user that clicked the link', 'cornell/governance' ),
+					'ID' => esc_html( __( 'Post ID', 'cornell-governance' ) ),
+					'post_title' => esc_html( __( 'Post Title', 'cornell-governance' ) ),
+					'permalink' => esc_html( __( 'Post URL', 'cornell-governance' ) ),
+					'current_user_id' => esc_html( __( 'The ID of the user that clicked the link', 'cornell-governance' ) ),
+					'current_user_email' => esc_html( __( 'The Email address of the user that clicked the link', 'cornell-governance' ) ),
+					'current_user_display_name' => esc_html( __( 'The Display Name of the user that clicked the link', 'cornell-governance' ) ),
 				);
 			}
 
@@ -79,15 +79,18 @@ namespace Cornell\Governance\Admin\Fields {
 				$types  = $this->get_post_props();
 				$current = $this->get_input_value();
 
-				$id = $this->page . '-' . $this->id;
+				$id = esc_attr( $this->page . '-' . $this->id );
 
 				$options = array();
 				foreach ( $types as $name => $label ) {
 					$checked = '';
 
 					if ( is_array( $current ) && in_array( $name, $current ) ) {
-						$checked = 'checked="checked"';
+						$checked = esc_attr( 'checked="checked"' );
 					}
+
+					$name = esc_attr( $name );
+					$label = esc_html( $label );
 
 					$options[$name] = sprintf(
 						'<p class="checkbox-item"><input type="checkbox" name="%1$s[%2$s]" id="%1$s_%2$s" %3$s/> <label for="%1$s_%2$s">%4$s</label></p>',

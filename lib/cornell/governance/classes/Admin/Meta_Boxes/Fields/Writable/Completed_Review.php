@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Confirm;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Completed_Review' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Completed_Review' ) ) {
 		class Completed_Review extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Completed_Review {
 			/**
 			 * @var Completed_Review $instance holds the single instance of this class

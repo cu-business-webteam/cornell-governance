@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use DateTimeZone;
 
-	if ( ! class_exists( 'Deletion_Timestamp' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Deletion_Timestamp' ) ) {
 		class Deletion_Timestamp extends Input {
 			/**
 			 * @var Deletion_Timestamp $instance holds the single instance of this class
@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-deletion-timestamp',
-					'label'    => __( 'Deletion request last updated', 'cornell/governance' ),
+					'label'    => esc_html( __( 'Deletion request last updated', 'cornell-governance' ) ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-input',

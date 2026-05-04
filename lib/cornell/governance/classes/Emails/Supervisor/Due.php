@@ -8,7 +8,7 @@ namespace {
 
 namespace Cornell\Governance\Emails\Supervisor {
 
-	if ( ! class_exists( 'Due' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Supervisor\Due' ) ) {
 		class Due extends \Cornell\Governance\Emails\Due {
 			/**
 			 * @var Due $instance holds the single instance of this class
@@ -23,7 +23,7 @@ namespace Cornell\Governance\Emails\Supervisor {
 				parent::__construct();
 
 				$this->set_vars( array(
-					'subject' => __( '[Secondary Contact Report] [DUE TODAY] These pages require immediate review', 'cornell/governance' ),
+					'subject' => esc_html( __( '[Secondary Contact Report] [DUE TODAY] These pages require immediate review', 'cornell-governance' ) ),
 				) );
 			}
 

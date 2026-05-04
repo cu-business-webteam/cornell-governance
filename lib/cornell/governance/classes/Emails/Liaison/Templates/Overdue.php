@@ -8,7 +8,7 @@ namespace {
 
 namespace Cornell\Governance\Emails\Liaison\Templates {
 
-	if ( ! class_exists( 'Overdue' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Liaison\Templates\Overdue' ) ) {
 		class Overdue extends \Cornell\Governance\Emails\Templates\Overdue {
 			/**
 			 * @var Overdue $instance holds the single instance of this class

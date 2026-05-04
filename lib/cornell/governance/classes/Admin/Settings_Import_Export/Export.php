@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Settings_Import_Export {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Export' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Settings_Import_Export\Export' ) ) {
 		class Export extends Base {
 			/**
 			 * @var Export $instance holds the single instance of this class

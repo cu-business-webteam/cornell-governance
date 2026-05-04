@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Stewards' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Stewards' ) ) {
 		class Stewards extends Base {
 			/**
 			 * @var Stewards $instance holds the single instance of this class
@@ -118,11 +118,11 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$output = array(
 					'canvasID' => 'stewards-chart',
 					'type'     => 'doughnut',
-					'chartLabel' => __( 'Content by Steward', 'cornell/governance' ),
+					'chartLabel' => esc_html( __( 'Content by Steward', 'cornell-governance' ) ),
 					'labels' => $labels,
 					'datasets' => array(
 						array(
-							'label' => __( 'Steward', 'cornell/governance' ),
+							'label' => esc_html( __( 'Steward', 'cornell-governance' ) ),
 							'data' => $data,
 						),
 					),
@@ -146,7 +146,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				printf(
 					'<h3 id="%2$s-title">%1$s</h3>
 							<canvas role="img" id="%2$s" aria-labelledby="%2$s-title" aria-describedby="%2$s-data"></canvas>',
-					__( 'Content by Steward', 'cornell/governance' ),
+					esc_html( __( 'Content by Steward', 'cornell-governance' ) ),
 					$output['canvasID']
 				);
 
@@ -164,7 +164,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					'<details id="%2$s-data"><summary>%3$s</summary><dl>%1$s</dl></details>',
 					implode( '', $lists ),
 					$output['canvasID'],
-					__( 'Reveal source data for this chart', 'cornell/governance' )
+					__( 'Reveal source data for this chart', 'cornell-governance' )
 				);
 
 				print( '</div>' );

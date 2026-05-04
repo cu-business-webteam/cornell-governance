@@ -110,8 +110,8 @@ namespace Cornell\Governance\Admin {
 				$this->cap = 'manage_options';
 
 				add_menu_page(
-					__( 'Cornell Business: Governance', 'cornell/governance' ),
-					__( 'Governance', 'cornell/governance' ),
+					esc_html( __( 'Cornell Business: Governance', 'cornell-governance' ) ),
+					esc_html( __( 'Governance', 'cornell-governance' ) ),
 					'edit_pages',
 					$this->page,
 					array( $this, 'do_menu_page' ),
@@ -151,7 +151,7 @@ namespace Cornell\Governance\Admin {
 			Admin::instance()->admin_enqueue_scripts();
 
 			print( '<div class="wrap">' );
-			printf( '<h2>%s</h2>', __( 'Governance Reports', 'cornell/governance' ) );
+			printf( '<h2>%s</h2>', esc_html( __( 'Governance Reports', 'cornell-governance' ) ) );
 			print( '<div class="governance-menu-boxes">' );
 			foreach ( $this->submenus as $class ) {
 				$classname = $this->namespace . '\Submenus\\' . $class;

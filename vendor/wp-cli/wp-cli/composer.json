@@ -1,0 +1,95 @@
+{
+    "name": "wp-cli/wp-cli",
+    "description": "WP-CLI framework",
+    "keywords": [
+        "cli",
+        "wordpress"
+    ],
+    "homepage": "https://wp-cli.org",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2.24 || ^8.0",
+        "mustache/mustache": "^3.0.0",
+        "wp-cli/mustangostang-spyc": "^0.6.3",
+        "wp-cli/php-cli-tools": "~0.12.7"
+    },
+    "require-dev": {
+        "justinrainbow/json-schema": "^6.3",
+        "roave/security-advisories": "dev-latest",
+        "wp-cli/db-command": "^2",
+        "wp-cli/entity-command": "^2",
+        "wp-cli/extension-command": "^2",
+        "wp-cli/package-command": "^2",
+        "wp-cli/wp-cli-tests": "^5"
+    },
+    "suggest": {
+        "ext-curl": "For better performance when making HTTP requests",
+        "ext-readline": "Include for a better --prompt implementation",
+        "ext-zip": "Needed to support extraction of ZIP archives when doing downloads or updates"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "johnpbloch/wordpress-core-installer": true,
+            "phpstan/extension-installer": true
+        },
+        "process-timeout": 7200,
+        "sort-packages": true,
+        "lock": false
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "2.13.x-dev"
+        },
+        "commands": [
+            "cli",
+            "cli alias",
+            "cli cache",
+            "cli check-update",
+            "cli cmd-dump",
+            "cli completions",
+            "cli has-command",
+            "cli info",
+            "cli param-dump",
+            "cli update",
+            "cli version"
+        ]
+    },
+    "autoload": {
+        "psr-0": {
+            "WP_CLI\\": "php/"
+        },
+        "classmap": [
+            "php/class-wp-cli.php",
+            "php/class-wp-cli-command.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "bin": [
+        "bin/wp",
+        "bin/wp.bat"
+    ],
+    "scripts": {
+        "behat": "run-behat-tests",
+        "behat-rerun": "rerun-behat-tests",
+        "lint": "run-linter-tests",
+        "phpcs": "run-phpcs-tests",
+        "phpcbf": "run-phpcbf-cleanup",
+        "phpstan": "run-phpstan-tests",
+        "phpunit": "run-php-unit-tests",
+        "prepare-tests": "install-package-tests",
+        "test": [
+            "@lint",
+            "@phpcs",
+            "@phpstan",
+            "@phpunit",
+            "@behat"
+        ]
+    },
+    "support": {
+        "issues": "https://github.com/wp-cli/wp-cli/issues",
+        "source": "https://github.com/wp-cli/wp-cli",
+        "docs": "https://make.wordpress.org/cli/handbook/"
+    }
+}

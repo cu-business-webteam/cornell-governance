@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Compliance' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Dashboard_Widgets\Compliance' ) ) {
 		class Compliance extends Base {
 			/**
 			 * @var Compliance $instance holds the single instance of this class
@@ -24,7 +24,7 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 			function __construct() {
 				parent::__construct( array(
 					'id'       => 'cornell-governance-compliance-widget',
-					'title'    => __( 'Compliance Status', 'cornell/governance' ),
+					'title'    => esc_html( __( 'Compliance Status', 'cornell-governance' ) ),
 					'context'  => 'normal',
 					'priority' => 'high',
 				) );
@@ -59,13 +59,13 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 				Non_Compliant::instance()->display();
 				Due_For_Review::instance()->display();
 				printf( '<p><a href="%s" class="large">%s</a></p>',
-					admin_url( 'admin.php?page=cornell-governance-steward-dashboard' ),
-					__( 'View your full Steward Page Report', 'cornell/governance' )
+					esc_url( admin_url( 'admin.php?page=cornell-governance-steward-dashboard' ) ),
+					esc_html( __( 'View your full Steward Page Report', 'cornell-governance' ) )
 				);
 				if ( current_user_can( Plugin::instance()->get_capability() ) ) {
 					printf( '<p><a href="%s" class="large">%s</a></p>',
-						admin_url( 'admin.php?page=cornell-governance-liaison-dashboard' ),
-						__( 'View your full Liaison Page Report', 'cornell/governance' )
+						esc_url( admin_url( 'admin.php?page=cornell-governance-liaison-dashboard' ) ),
+						esc_html( __( 'View your full Liaison Page Report', 'cornell-governance' ) )
 					);
 				}
 			}

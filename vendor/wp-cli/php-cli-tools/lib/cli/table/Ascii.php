@@ -1,0 +1,426 @@
+<?php
+/**
+ * PHP Command Line Tools
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.
+ *
+ * @author    James Logsdon <dwarf@girsbrain.org>
+ * @copyright 2010 James Logsdom (http://girsbrain.org)
+ * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
+ */
+
+namespace cli\table;
+
+use cli\Colors;
+use cli\Shell;
+
+/**
+ * The ASCII renderer renders tables with ASCII borders.
+ */
+class Ascii extends Renderer {
+	/**
+	 * Valid wrapping modes.
+	 */
+	private const VALID_WRAPPING_MODES = array( 'wrap', 'word-wrap', 'truncate' );
+
+	/**
+	 * Ellipsis character(s) used for truncation.
+	 */
+	private const ELLIPSIS = '...';
+
+	/**
+	 * Width of the ellipsis in characters.
+	 */
+	private const ELLIPSIS_WIDTH = 3;
+
+	/**
+	 * @var array<string, string>
+	 */
+	protected $_characters = array(
+		'corner'  => '+',
+		'line'    => '-',
+		'border'  => '|',
+		'padding' => ' ',
+	);
+
+	/**
+	 * @var string|null
+	 */
+	protected $_border = null;
+
+	/**
+	 * @var int|null
+	 */
+	protected $_constraintWidth = null;
+
+	/**
+	 * @var bool|array<int, bool>
+	 */
+	protected $_pre_colorized = false;
+
+	/**
+	 * @var string
+	 */
+	protected $_wrapping_mode = 'wrap'; // 'wrap', 'word-wrap', or 'truncate'
+
+	/**
+	 * Set the widths of each column in the table.
+	 *
+	 * @param array<int, int> $widths   The widths of the columns.
+	 * @param bool            $fallback Whether to use these values as fallback only.
+	 * @return void
+	 */
+	public function setWidths( array $widths, $fallback = false ) {
+		if ( $fallback ) {
+			foreach ( $this->_widths as $index => $value ) {
+				$widths[ $index ] = $value;
+			}
+		}
+		$this->_widths = $widths;
+
+		if ( is_null( $this->_constraintWidth ) ) {
+			$this->_constraintWidth = (int) Shell::columns();
+		}
+		$col_count           = count( $widths );
+		$col_borders_count   = $col_count ? ( ( $col_count - 1 ) * strlen( $this->_characters['border'] ) ) : 0;
+		$table_borders_count = strlen( $this->_characters['border'] ) * 2;
+		$col_padding_count   = $col_count * strlen( $this->_characters['padding'] ) * 2;
+		$max_width           = $this->_constraintWidth - $col_borders_count - $table_borders_count - $col_padding_count;
+
+		if ( $widths && $max_width && array_sum( $widths ) > $max_width ) {
+
+			$avg           = (int) floor( $max_width / count( $widths ) );
+			$resize_widths = array();
+			$extra_width   = 0;
+			foreach ( $widths as $width ) {
+				if ( $width > $avg ) {
+					$resize_widths[] = $width;
+				} else {
+					$extra_width = $extra_width + ( $avg - $width );
+				}
+			}
+
+			if ( ! empty( $resize_widths ) && $extra_width ) {
+				$avg_extra_width = (int) floor( $extra_width / count( $resize_widths ) );
+				foreach ( $widths as &$width ) {
+					if ( in_array( $width, $resize_widths ) ) {
+						$width = $avg + $avg_extra_width;
+						array_shift( $resize_widths );
+						// Last item gets the cake
+						if ( empty( $resize_widths ) ) {
+							$width = 0; // Zero it so not in sum.
+							$width = $max_width - array_sum( $widths );
+						}
+					}
+				}
+			}
+		}
+
+		$this->_widths = $widths;
+		// Reset border cache when widths change
+		$this->_border = null;
+	}
+
+	/**
+	 * Set the constraint width for the table
+	 *
+	 * @param int $constraintWidth
+	 * @return void
+	 */
+	public function setConstraintWidth( $constraintWidth ) {
+		$this->_constraintWidth = $constraintWidth;
+	}
+
+	/**
+	 * Set the wrapping mode for table cells.
+	 *
+	 * @param string $mode One of: 'wrap' (default - wrap at character boundaries),
+	 *                     'word-wrap' (wrap at word boundaries), or 'truncate' (truncate with ellipsis).
+	 * @return void
+	 */
+	public function setWrappingMode( $mode ) {
+		if ( ! in_array( $mode, self::VALID_WRAPPING_MODES, true ) ) {
+			throw new \InvalidArgumentException( "Invalid wrapping mode '$mode'. Must be one of: " . implode( ', ', self::VALID_WRAPPING_MODES ) );
+		}
+		$this->_wrapping_mode = $mode;
+	}
+
+	/**
+	 * Set the characters used for rendering the Ascii table.
+	 *
+	 * The keys `corner`, `line` and `border` are used in rendering.
+	 *
+	 * @param array<string, string> $characters Characters used in rendering.
+	 * @return void
+	 */
+	public function setCharacters( array $characters ) {
+		$this->_characters = array_merge( $this->_characters, $characters );
+	}
+
+	/**
+	 * Render a border for the top and bottom and separating the headers from the
+	 * table rows.
+	 *
+	 * @return string  The table border.
+	 */
+	public function border() {
+		if ( ! isset( $this->_border ) ) {
+			$this->_border = $this->_characters['corner'];
+			foreach ( $this->_widths as $width ) {
+				$this->_border .= str_repeat( $this->_characters['line'], $width + 2 );
+				$this->_border .= $this->_characters['corner'];
+			}
+		}
+
+		return $this->_border;
+	}
+
+	/**
+	 * Renders a row for output.
+	 *
+	 * @param array<int, mixed> $row The table row.
+	 * @return string The formatted table row.
+	 */
+	public function row( array $row ) {
+
+		$extra_row_count = 0;
+		$extra_rows      = [];
+
+		if ( count( $row ) > 0 ) {
+			$extra_rows = array_fill( 0, count( $row ), array() );
+
+			foreach ( $row as $col => $value ) {
+				$value              = ( is_scalar( $value ) || ( is_object( $value ) && method_exists( $value, '__toString' ) ) ) ? (string) $value : '';
+				$col_width          = $this->_widths[ $col ];
+				$encoding           = function_exists( 'mb_detect_encoding' ) ? mb_detect_encoding( $value, null, true /*strict*/ ) : false;
+				$original_val_width = Colors::width( $value, self::isPreColorized( $col ), $encoding );
+				if ( $col_width && ( $original_val_width > $col_width || strpos( $value, "\n" ) !== false ) ) {
+					$split_lines = preg_split( '/\r\n|\n/', $value );
+					if ( false === $split_lines ) {
+						$split_lines = array( $value );
+					}
+
+					$wrapped_lines = [];
+					foreach ( $split_lines as $line ) {
+						$line_wrapped  = $this->wrapText( $line, $col_width, $encoding, self::isPreColorized( $col ) );
+						$wrapped_lines = array_merge( $wrapped_lines, $line_wrapped );
+					}
+
+					$row[ $col ] = array_shift( $wrapped_lines );
+					foreach ( $wrapped_lines as $wrapped_line ) {
+						$extra_rows[ $col ][] = $wrapped_line;
+						++$extra_row_count;
+					}
+				}
+			}
+		}
+
+		$row = array_map( array( $this, 'padColumn' ), $row, array_keys( $row ) );
+		array_unshift( $row, '' ); // First border
+		array_push( $row, '' ); // Last border
+
+		$ret = join( $this->_characters['border'], $row );
+		if ( $extra_row_count ) {
+			foreach ( $extra_rows as $col => $col_values ) {
+				while ( count( $col_values ) < $extra_row_count ) {
+					$col_values[] = '';
+				}
+			}
+
+			do {
+				$row_values = array();
+				$has_more   = false;
+				foreach ( $extra_rows as $col => &$col_values ) {
+					$row_values[ $col ] = ! empty( $col_values ) ? array_shift( $col_values ) : '';
+					if ( count( $col_values ) ) {
+						$has_more = true;
+					}
+				}
+
+				$row_values = array_map( array( $this, 'padColumn' ), $row_values, array_keys( $row_values ) );
+				array_unshift( $row_values, '' ); // First border
+				array_push( $row_values, '' ); // Last border
+
+				$ret .= PHP_EOL . join( $this->_characters['border'], $row_values );
+			} while ( $has_more );
+		}
+		return $ret;
+	}
+
+	/**
+	 * Get the alignment for a column.
+	 *
+	 * @param int $column Column index.
+	 * @return int Alignment constant (STR_PAD_LEFT, STR_PAD_RIGHT, or STR_PAD_BOTH).
+	 */
+	private function getColumnAlignment( $column ) {
+		$column_name = isset( $this->_headers[ $column ] ) ? $this->_headers[ $column ] : '';
+		if ( $column_name !== '' && array_key_exists( $column_name, $this->_alignments ) ) {
+			return $this->_alignments[ $column_name ];
+		}
+		return Column::ALIGN_LEFT;
+	}
+
+	/**
+	 * Pad a column value.
+	 *
+	 * @param string $content The column content.
+	 * @param int    $column  The column index.
+	 * @return string The padded column.
+	 */
+	private function padColumn( $content, $column ) {
+		$alignment = $this->getColumnAlignment( $column );
+		$content   = str_replace( "\t", '    ', (string) $content );
+		return $this->_characters['padding'] . Colors::pad( $content, $this->_widths[ $column ], $this->isPreColorized( $column ), false, $alignment ) . $this->_characters['padding'];
+	}
+
+	/**
+	 * Set whether items are pre-colorized.
+	 *
+	 * @param bool|array<int, bool> $pre_colorized A boolean to set all columns in the table as pre-colorized, or an array of booleans keyed by column index (number) to set individual columns as pre-colorized.
+	 * @return void
+	 */
+	public function setPreColorized( $pre_colorized ) {
+		$this->_pre_colorized = $pre_colorized;
+	}
+
+	/**
+	 * Wrap text based on the configured wrapping mode.
+	 *
+	 * @param string      $text      The text to wrap.
+	 * @param int         $width     The maximum width.
+	 * @param string|bool $encoding  The text encoding.
+	 * @param bool        $is_precolorized Whether the text is pre-colorized.
+	 * @return array<int, string> Array of wrapped lines.
+	 */
+	protected function wrapText( $text, $width, $encoding, $is_precolorized ) {
+		if ( ! $width ) {
+			return array( $text );
+		}
+
+		$text_width = Colors::width( $text, $is_precolorized, $encoding );
+
+		// If text fits, no wrapping needed
+		if ( $text_width <= $width ) {
+			return array( $text );
+		}
+
+		// Handle truncate mode
+		if ( 'truncate' === $this->_wrapping_mode ) {
+			if ( $width <= self::ELLIPSIS_WIDTH ) {
+				// Not enough space for ellipsis, just truncate
+				return array( (string) \cli\safe_substr( $text, 0, $width, true /*is_width*/, $encoding ) );
+			}
+
+			// Truncate and add ellipsis
+			$truncated = (string) \cli\safe_substr( $text, 0, $width - self::ELLIPSIS_WIDTH, true /*is_width*/, $encoding );
+			return array( $truncated . self::ELLIPSIS );
+		}
+
+		// Handle word-wrap mode
+		if ( 'word-wrap' === $this->_wrapping_mode ) {
+			return $this->wordWrap( $text, $width, $encoding, $is_precolorized );
+		}
+
+		// Default: character-boundary wrapping
+		$wrapped_lines = array();
+		$line          = $text;
+
+		// Use the new color-aware wrapping for pre-colorized content
+		if ( $is_precolorized ) {
+			$wrapped_lines = Colors::wrapPreColorized( $line, $width, $encoding );
+		} else {
+			// For non-colorized content, use character-boundary wrapping
+			do {
+				$wrapped_value = (string) \cli\safe_substr( $line, 0, $width, true /*is_width*/, $encoding );
+				$val_width     = Colors::width( $wrapped_value, $is_precolorized, $encoding );
+				if ( $val_width ) {
+					$wrapped_lines[] = $wrapped_value;
+					$line            = (string) \cli\safe_substr( $line, \cli\safe_strlen( $wrapped_value, $encoding ), null /*length*/, false /*is_width*/, $encoding );
+				}
+			} while ( $line );
+		}
+
+		return $wrapped_lines;
+	}
+
+	/**
+	 * Wrap text at word boundaries.
+	 *
+	 * @param string      $text      The text to wrap.
+	 * @param int         $width     The maximum width.
+	 * @param string|bool $encoding  The text encoding.
+	 * @param bool        $is_precolorized Whether the text is pre-colorized.
+	 * @return array<int, string> Array of wrapped lines.
+	 */
+	protected function wordWrap( $text, $width, $encoding, $is_precolorized ) {
+		$wrapped_lines      = array();
+		$current_line       = '';
+		$current_line_width = 0;
+
+		// Split by spaces and hyphens while keeping the delimiters
+		$words = preg_split( '/(\s+|-)/u', $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
+		if ( false === $words ) {
+			$words = array( $text );
+		}
+
+		foreach ( $words as $word ) {
+			$word_width = Colors::width( $word, $is_precolorized, $encoding );
+
+			// If this word alone exceeds the width, we need to split it
+			if ( $word_width > $width ) {
+				// Flush current line if not empty
+				if ( $current_line !== '' ) {
+					$wrapped_lines[]    = $current_line;
+					$current_line       = '';
+					$current_line_width = 0;
+				}
+
+				// Split the long word at character boundaries
+				$remaining_word = $word;
+				while ( $remaining_word ) {
+					$chunk           = (string) \cli\safe_substr( $remaining_word, 0, $width, true /*is_width*/, $encoding );
+					$wrapped_lines[] = $chunk;
+					$remaining_word  = (string) \cli\safe_substr( $remaining_word, \cli\safe_strlen( $chunk, $encoding ), null /*length*/, false /*is_width*/, $encoding );
+				}
+				continue;
+			}
+
+			// Check if adding this word would exceed the width
+			if ( $current_line !== '' && $current_line_width + $word_width > $width ) {
+				// Start a new line
+				$wrapped_lines[]    = $current_line;
+				$current_line       = $word;
+				$current_line_width = $word_width;
+			} else {
+				// Add to current line
+				$current_line       .= $word;
+				$current_line_width += $word_width;
+			}
+		}
+
+		// Add any remaining content
+		if ( $current_line !== '' ) {
+			$wrapped_lines[] = $current_line;
+		}
+
+		return $wrapped_lines ?: array( '' );
+	}
+
+	/**
+	 * Is a column pre-colorized?
+	 *
+	 * @param int $column Column index to check.
+	 * @return bool True if whole table is marked as pre-colorized, or if the individual column is pre-colorized; else false.
+	 */
+	public function isPreColorized( $column ) {
+		if ( is_bool( $this->_pre_colorized ) ) {
+			return $this->_pre_colorized;
+		}
+		if ( is_array( $this->_pre_colorized ) && isset( $this->_pre_colorized[ $column ] ) ) {
+			return $this->_pre_colorized[ $column ];
+		}
+		return false;
+	}
+}

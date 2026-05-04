@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Review_Requirements_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Review_Requirements_Message' ) ) {
 		Final class Review_Requirements_Message extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Review_Requirements_Message {
 			/**
 			 * @var Review_Requirements_Message $instance holds the single instance of this class
@@ -30,7 +30,8 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 
 				$office = Plugin::instance()->get_managing_office();
 
-				$this->text = sprintf( __( 'Evaluate the content of this page and ensure all tasks are done. Having difficulties completing a task for the review? Reach out to your %s liaison for help.', 'cornell/governance' ), $office );
+				/* translators: The name of the liaison office, as set in this plugin's settings */
+				$this->text = esc_html( sprintf( __( 'Evaluate the content of this page and ensure all tasks are done. Having difficulties completing a task for the review? Reach out to your %s liaison for help.', 'cornell-governance' ), $office ) );
 			}
 
 			/**

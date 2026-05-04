@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Review_Requirements_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Review_Requirements_Message' ) ) {
 		abstract class Review_Requirements_Message extends Message {
 			function __construct() {
 				$atts = array(
@@ -29,7 +29,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'Based on the content and goals, specify how often this page must be reviewed and the exact review tasks relevant to this page. Universal tasks applicable to all pages are already populated.', 'cornell/governance' );
+				$this->text = esc_html( __( 'Based on the content and goals, specify how often this page must be reviewed and the exact review tasks relevant to this page. Universal tasks applicable to all pages are already populated.', 'cornell-governance' ) );
 			}
 		}
 	}

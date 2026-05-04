@@ -52,6 +52,16 @@ if ( !class_exists(Api::class, false) ):
 		protected $credentials = null;
 
 		/**
+		 * @var string|null The value of the "Authorization" header for API requests.
+		 */
+		private $authorizationHeader = null;
+
+		/**
+		 * @var string|null If set, add the "Authorization" header to update downloads that start with this prefix.
+		 */
+		private $downloadUrlPrefixRequiringAuth = null;
+
+		/**
 		 * @var string The filter tag that's used to filter options passed to wp_remote_get.
 		 * For example, "puc_request_info_options-slug" or "puc_request_update_options_theme-slug".
 		 */
@@ -323,6 +333,22 @@ if ( !class_exists(Api::class, false) ):
 		}
 
 		/**
+		 * @return array
+		 */
+		protected function getApiRequestHttpOptions() {
+			$options = ['timeout' => wp_doing_cron() ? 10 : 3];
+			if ( $this->isAuthenticationEnabled() && !empty($this->authorizationHeader) ) {
+				$options['headers'] = ['Authorization' => $this->authorizationHeader];
+			}
+
+			if ( !empty($this->httpFilterName) ) {
+				$options = apply_filters($this->httpFilterName, $options);
+			}
+
+			return $options;
+		}
+
+		/**
 		 * Set authentication credentials.
 		 *
 		 * @param $credentials
@@ -332,7 +358,130 @@ if ( !class_exists(Api::class, false) ):
 		}
 
 		public function isAuthenticationEnabled() {
-			return !empty($this->credentials);
+			return !empty($this->credentials) || !empty($this->authorizationHeader);
+		}
+
+		/**
+		 * Get the value of the "Authorization" header for API requests, if any.
+		 *
+		 * @return string
+		 */
+		protected function getAuthorizationHeader() {
+			return $this->authorizationHeader ?: '';
+		}
+
+		/**
+		 * Enable basic access authentication with the specified username and password.
+		 *
+		 * @param string $username
+		 * @param string $password
+		 * @param string|null $downloadUrlPrefix Optionally, add the same Authorization header to update
+		 *  downloads where the download URL starts with this prefix.
+		 */
+		protected function enableBasicAuth($username, $password, $downloadUrlPrefix = null) {
+			$this->authorizationHeader = 'Basic ' . base64_encode($username . ':' . $password);
+
+			$this->downloadUrlPrefixRequiringAuth = $downloadUrlPrefix;
+			if ( !empty($this->downloadUrlPrefixRequiringAuth) ) {
+				$this->enableDownloadRequestFilter();
+			}
+		}
+
+		/**
+		 * @var bool Whether the hook that registers download request filter(s) has already been added.
+		 */
+		private $preDownloadHookAdded = false;
+
+		/**
+		 * Enable the hooks that let you filter HTTP requests for update downloads.
+		 */
+		protected function enableDownloadRequestFilter() {
+			if ( $this->preDownloadHookAdded ) {
+				return;
+			}
+			$this->preDownloadHookAdded = true;
+
+			//Optimization: Instead of filtering all HTTP requests, let's do it only when
+			//WordPress is about to download an update. So this is a two-step process;
+			//the actual request arg filter is added in the following hook.
+			add_filter('upgrader_pre_download', [$this, 'addDownloadRequestFilters']); //WP 3.7+
+		}
+
+		/**
+		 * @var bool
+		 */
+		private $downloadFiltersAdded = false;
+
+		/**
+		 * @internal
+		 * @param bool $result Pass-through value for the "upgrader_pre_download" filter. Ignored by this callback.
+		 * @return bool
+		 */
+		public function addDownloadRequestFilters($result) {
+			if ( !$this->downloadFiltersAdded ) {
+				$this->downloadFiltersAdded = true;
+
+				//phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.http_request_args -- The callback doesn't change the timeout.
+				add_filter('http_request_args', [$this, 'filterUpdateDownloadRequestArgs'], 10, 2);
+
+				$authorizationHeader = $this->getAuthorizationHeader();
+				if ( $this->isAuthenticationEnabled() && !empty($authorizationHeader) ) {
+					add_action('requests-requests.before_redirect', [$this, 'removeAuthHeaderFromRedirects'], 10, 2);
+				}
+			}
+			return $result;
+		}
+
+		/**
+		 * Filter request arguments/options for update downloads.
+		 *
+		 * Note that this callback can potentially be called for *any* update download. You still
+		 * need to verify that the URL is one of yours.
+		 *
+		 * @internal
+		 * @param array $requestArgs
+		 * @param string $url
+		 * @return array
+		 */
+		public function filterUpdateDownloadRequestArgs($requestArgs, $url = '') {
+			//Add an authorization header to our downloads if needed.
+			$authHeader = $this->getAuthorizationHeader();
+			if (
+				$this->isAuthenticationEnabled()
+				&& !empty($authHeader)
+				&& !empty($this->downloadUrlPrefixRequiringAuth)
+				&& ((strpos($url, $this->downloadUrlPrefixRequiringAuth)) === 0)
+			) {
+				$requestArgs['headers']['Authorization'] = $authHeader;
+			}
+			return $requestArgs;
+		}
+
+		/**
+		 * At least in older WP versions, when following a redirect, the Requests library will
+		 * automatically forward the Authorization header to other hosts. We don't want that
+		 * because it breaks AWS downloads and can leak authorization information.
+		 *
+		 * @param string $location
+		 * @param array $headers
+		 * @internal
+		 */
+		public function removeAuthHeaderFromRedirects(&$location, &$headers) {
+			if (
+				//If there's no download URL prefix configured, we would not have added an auth header,
+				//and there's also no way to check if this URL needs auth or not.
+				empty($this->downloadUrlPrefixRequiringAuth)
+				//If this request goes to our download URL, we can leave the header.
+				|| ((strpos($location, $this->downloadUrlPrefixRequiringAuth)) === 0)
+			) {
+				return;
+			}
+
+			//Remove the header.
+			$authorizationHeader = $this->getAuthorizationHeader();
+			if ( isset($headers['Authorization']) && ($headers['Authorization'] === $authorizationHeader) ) {
+				unset($headers['Authorization']);
+			}
 		}
 
 		/**

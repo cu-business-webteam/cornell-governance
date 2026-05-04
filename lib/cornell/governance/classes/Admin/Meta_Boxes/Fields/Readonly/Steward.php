@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Steward' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Steward' ) ) {
 		Final class Steward extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Steward {
 			/**
 			 * @var Steward $instance holds the single instance of this class

@@ -11,14 +11,14 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Steward' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Steward' ) ) {
 		abstract class Steward extends Message {
 			function __construct() {
 				$post_id = Helpers::get_current_post_id();
 
 				$atts = array(
 					'id' => 'cornell-governance-page-info-steward',
-					'label' => __( 'Primary Steward', 'cornell/governance' ),
+					'label' => esc_html( __( 'Primary Steward', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-select', 'cornell-governance-steward', 'two-thirds' ),
 					'default' => '',
 					'meta_box' => 'Info',

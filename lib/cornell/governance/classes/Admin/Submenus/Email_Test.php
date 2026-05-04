@@ -36,10 +36,10 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'       => __( 'Cornell Governance: Email Testing', 'cornell/governance' ),
-				'menu_name'   => __( 'Plugin Email Testing', 'cornell/governance' ),
+				'title'       => esc_html( __( 'Cornell Governance: Email Testing', 'cornell-governance' ) ),
+				'menu_name'   => esc_html( __( 'Plugin Email Testing', 'cornell-governance' ) ),
 				'slug'        => 'cornell-governance-email-test',
-				'description' => __( 'Test the configuration and sending of plugin email messages', 'cornell/governance' ),
+				'description' => esc_html( __( 'Test the configuration and sending of plugin email messages', 'cornell-governance' ) ),
 			) );
 
 			if ( isset( $_GET['send_email'] ) ) {
@@ -64,6 +64,17 @@ namespace Cornell\Governance\Admin\Submenus {
 		}
 
 		/**
+		 * Conditionally register this submenu
+		 */
+		public function register() {
+			if ( false === Plugin::instance()->get_email_active() ) {
+				return;
+			}
+
+			Parent::register();
+		}
+
+		/**
 		 * Set the object properties
 		 *
 		 * @param array $attributes the properties to assign
@@ -75,7 +86,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		public function set_properties( array $attributes ) {
 			parent::set_properties( $attributes );
 
-			$this->cap = 'delete_plugins';
+			$this->cap = 'delete_users';
 		}
 
 		/**
@@ -88,7 +99,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		protected function display() {
 			printf( '<div class="wrap"><h2>%s</h2><div class="cornell-governance-email-testing">', $this->title );
 
-			printf( '<p>%s</p>', __( 'On this page, you can test the email configuration for the plugin. You can send test versions of any of the various email messages that are automatically dispatched by this plugin.', 'cornell/governance' ) );
+			printf( '<p>%s</p>', __( 'On this page, you can test the email configuration for the plugin. You can send test versions of any of the various email messages that are automatically dispatched by this plugin.', 'cornell-governance' ) );
 
 			if ( ! empty( $this->message ) ) {
 				printf( '<p class="admin-notice">%s</p>', $this->message );
@@ -96,34 +107,34 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			$this->do_debug_display();
 
-			printf( '<h3>%s</h3>', __( 'Email Overrides', true ) );
+			printf( '<h3>%s</h3>', __( 'Email Overrides', true, 'cornell-governance' ) );
 
 			$emails = array(
-				'Initial_Prompt' => __( 'Initial Prompt', 'cornell/governance' ),
-				'Secondary_Prompt' => __( 'Second Prompt', 'cornell/governance' ),
-				'Tertiary_Prompt' => __( 'Third Prompt', 'cornell/governance' ),
-				'Overdue' => __( 'Overdue Warning', 'cornell/governance' ),
+				'Initial_Prompt' => esc_html( __( 'Initial Prompt', 'cornell-governance' ) ),
+				'Secondary_Prompt' => esc_html( __( 'Second Prompt', 'cornell-governance' ) ),
+				'Tertiary_Prompt' => esc_html( __( 'Third Prompt', 'cornell-governance' ) ),
+				'Overdue' => esc_html( __( 'Overdue Warning', 'cornell-governance' ) ),
 			);
 
 			echo '<form>';
 			printf( '<input type="hidden" name="page" value="%s"/>', $this->slug );
 			wp_nonce_field( 'cornell/governance/send-test-mail', 'cornell_governance_send_test_mail' );
 
-			printf( '<p><label>%s</label><br/><input type="email" name="email_address"/></p>', __( 'Send the email report to the following address:', 'cornell/governance' ) );
+			printf( '<p><label>%s</label><br/><input type="email" name="email_address"/></p>', __( 'Send the email report to the following address:', 'cornell-governance' ) );
 
 			$authors = $this->get_authors();
 
 			if ( count( $authors ) ) {
 				echo '<fieldset>';
 
-				_e( '<legend>Author Emails</legend>', 'cornell/governance' );
+				_e( '<legend>Author Emails</legend>', 'cornell-governance' );
 
 				$options = array();
 				foreach ( $authors as $author ) {
 					$options[$author->ID] = sprintf( '<option value="%d">%s</option>', $author->ID, $author->user_email );
 				}
 
-				printf( '<p><label>%s</label><br/><select name="author">%s</select></p>', __( 'Select the author for which the report should be generated:', 'cornell/governance' ), implode( '', $options ) );
+				printf( '<p><label>%s</label><br/><select name="author">%s</select></p>', esc_html( __( 'Select the author for which the report should be generated:', 'cornell-governance' ) ), implode( '', $options ) );
 
 				echo '<ul class="email-prompt-list">';
 
@@ -141,14 +152,14 @@ namespace Cornell\Governance\Admin\Submenus {
 			$supervisors = $this->get_supervisors();
 			if ( count( $supervisors ) ) {
 				echo '<fieldset>';
-				_e( '<legend>Secondary Emails</legend>', 'cornell/governance' );
+				_e( '<legend>Secondary Emails</legend>', 'cornell-governance' );
 
 				$options = array();
 				foreach ( $supervisors as $supervisor ) {
 					$options[$supervisor] = sprintf( '<option value="%s">%s</option>', $supervisor, $supervisor );
 				}
 
-				printf( '<p><label>%s</label><br/><select name="supervisor">%s</select></p>', __( 'Select the supervisor for which the report should be generated:', 'cornell/governance' ), implode( '', $options ) );
+				printf( '<p><label>%s</label><br/><select name="supervisor">%s</select></p>', esc_html( __( 'Select the supervisor for which the report should be generated:', 'cornell-governance' ) ), implode( '', $options ) );
 
 				echo '<ul class="email-prompt-list">';
 
@@ -166,14 +177,14 @@ namespace Cornell\Governance\Admin\Submenus {
 
 			if ( count( $liaisons ) ) {
 				echo '<fieldset>';
-				_e( '<legend>Liaison Emails</legend>', 'cornell/governance' );
+				_e( '<legend>Liaison Emails</legend>', 'cornell-governance' );
 
 				$options = array();
 				foreach ( $liaisons as $liaison ) {
 					$options[$liaison] = sprintf( '<option value="%s">%s</option>', $liaison, $liaison );
 				}
 
-				printf( '<p><label>%s</label><br/><select name="liaison">%s</select></p>', __( 'Select the liaison for which the report should be generated:', 'cornell/governance' ), implode( '', $options ) );
+				printf( '<p><label>%s</label><br/><select name="liaison">%s</select></p>', esc_html( __( 'Select the liaison for which the report should be generated:', 'cornell-governance' ) ), implode( '', $options ) );
 
 				echo '<ul class="email-prompt-list">';
 
@@ -185,7 +196,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				echo '</fieldset>';
 			}
 
-			printf( '<input type="submit" name="send_email[all]" value="%1$s" class="button button-primary" />', __( 'Send all emails', 'cornell/governance' ) );
+			printf( '<input type="submit" name="send_email[all]" value="%1$s" class="button button-primary" />', __( 'Send all emails', 'cornell-governance' ) );
 
 			echo '</form>';
 
@@ -200,8 +211,8 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @return void
 		 */
 		private function do_debug_display() {
-			printf( '<h3>%s</h3>', __( 'Debug Information', 'cornell/governance' ) );
-			printf( '<p>%s</p>', __( 'The debug constants are currently set to:', 'cornell/governance' ) );
+			printf( '<h3>%s</h3>', __( 'Debug Information', 'cornell-governance' ) );
+			printf( '<p>%s</p>', __( 'The debug constants are currently set to:', 'cornell-governance' ) );
 			print( '<ul>' );
 
 			ob_start();
@@ -333,7 +344,7 @@ namespace Cornell\Governance\Admin\Submenus {
 		 */
 		protected function send_test_mail() {
 			if ( ! array_key_exists( 'cornell_governance_send_test_mail', $_GET ) || ! wp_verify_nonce( $_GET['cornell_governance_send_test_mail'], 'cornell/governance/send-test-mail' ) ) {
-				$this->message = __( 'Could not send the test email for some reason', 'cornell/governance' );
+				$this->message = esc_html( __( 'Could not send the test email for some reason', 'cornell-governance' ) );
 				return;
 			}
 
@@ -350,7 +361,7 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			if ( empty( $audience ) ) {
-				$this->message = __( 'It does not appear that an email type was selected', 'cornell/governance' );
+				$this->message = esc_html( __( 'It does not appear that an email type was selected', 'cornell-governance' ) );
 				return;
 			}
 
@@ -397,7 +408,7 @@ namespace Cornell\Governance\Admin\Submenus {
 					}
 
 					if ( empty( $data ) ) {
-						$this->message .= __( 'There was no data to send for this report', 'cornell/governance' );
+						$this->message .= esc_html( __( 'There was no data to send for this report', 'cornell-governance' ) );
 						$this->message .= sprintf( '<pre><code>%1$s</code></pre>', print_r( $_GET, true ) );
 						$this->message .= sprintf( '<pre><code>%2$s %3$s %4$s %3$s %1$s</code></pre>', print_r( $list, true ), $audience, PHP_EOL, $user );
 
@@ -413,7 +424,7 @@ namespace Cornell\Governance\Admin\Submenus {
 
 					$user = is_email( $user );
 					if ( false === $user ) {
-						$this->message .= __( 'For some reason, the email address does not appear to be valid', 'cornell/governance' );
+						$this->message .= esc_html( __( 'For some reason, the email address does not appear to be valid', 'cornell-governance' ) );
 
 						continue;
 					}
@@ -430,16 +441,16 @@ namespace Cornell\Governance\Admin\Submenus {
 
 					$test = $email->send_mail();
 					if ( $test ) {
-						$this->message .= __( 'The email appears to have been sent successfully', 'cornell/governance' );
+						$this->message .= esc_html( __( 'The email appears to have been sent successfully', 'cornell-governance' ) );
 					} else {
 						$this->message .= sprintf( '<pre><code>%s</code></pre>', print_r( $email, true ) );
-						$this->message .= __( 'There was an unknown error sending the email', 'cornell/governance' );
+						$this->message .= esc_html( __( 'There was an unknown error sending the email', 'cornell-governance' ) );
 					}
 				}
 			}
 
 			if ( empty( $this->message ) ) {
-				$this->message = __( 'We do not appear to have done anything with the email for some reason', 'cornell/governance' );
+				$this->message = esc_html( __( 'We do not appear to have done anything with the email for some reason', 'cornell-governance' ) );
 			}
 
 			return;
@@ -452,8 +463,8 @@ namespace Cornell\Governance\Admin\Submenus {
 		 * @param string $audience the audience for the report
 		 *
 		 * @access protected
+		 * @return array{author: array|array[], supervisor: array|array[], liaison: array|array[]} the list of pages
 		 * @since  0.1
-		 * @return array the list of pages
 		 */
 		protected function get_page_list( $user, string $audience ): array {
 			$reviews = array(

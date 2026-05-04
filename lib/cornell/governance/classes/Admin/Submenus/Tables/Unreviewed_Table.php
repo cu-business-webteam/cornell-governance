@@ -6,7 +6,7 @@ namespace {
 	}
 
 	// Loading table class
-	if ( ! class_exists( 'WP_List_Table' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Tables\WP_List_Table' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 	}
 }
@@ -43,10 +43,10 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		function get_visible_columns(): array {
 			return apply_filters( 'cornell/governance/page-list-table/columns/visible', array(
 				'cb'       => '<input type="checkbox"/>',
-				'author'   => __( 'Author', 'cornell/governance' ),
-				'title'    => __( 'Page Title', 'cornell/governance' ),
-				'modified' => __( 'Modified', 'cornell/governance' ),
-				'type'     => __( 'Post Type', 'cornell/governance' ),
+				'author'   => esc_html( __( 'Author', 'cornell-governance' ) ),
+				'title'    => esc_html( __( 'Page Title', 'cornell-governance' ) ),
+				'modified' => esc_html( __( 'Modified', 'cornell-governance' ) ),
+				'type'     => esc_html( __( 'Post Type', 'cornell-governance' ) ),
 			) );
 		}
 
@@ -59,7 +59,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 */
 		function get_hidden_columns(): array {
 			return apply_filters( 'cornell/governance/page-list-table/columns/hidden', array(
-				'ID' => __( 'ID', 'cornell/governance' ),
+				'ID' => esc_html( __( 'ID', 'cornell-governance' ) ),
 			) );
 		}
 
@@ -98,7 +98,7 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 * @param string $orderby the key on which the data are being sorted
 		 *
 		 * @access protected
-		 * @return array the appropriate query arg
+		 * @return array{orderby: string} the appropriate query arg
 		 * @since  0.1
 		 */
 		protected function get_orderby( string $orderby ): array {
@@ -229,12 +229,12 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 
 					$title = $item['title'];
 					if ( empty( $title ) ) {
-						$title = __( '[No Specified Title]', 'cornell/governance' );
+						$title = esc_html( __( '[No Specified Title]', 'cornell-governance' ) );
 					}
 					$link = get_edit_post_link( $item['ID'] );
 
-					$actions['edit_page'] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'Edit', 'cornell/governance' ) );
-					$actions['view_page'] = sprintf( '<a href="%1$s">%2$s</a>', get_permalink( $item['ID'] ), __( 'View', 'cornell/governance' ) );
+					$actions['edit_page'] = sprintf( '<a href="%1$s">%2$s</a>', $link, __( 'Edit', 'cornell-governance' ) );
+					$actions['view_page'] = sprintf( '<a href="%1$s">%2$s</a>', get_permalink( $item['ID'] ), __( 'View', 'cornell-governance' ) );
 
 					return sprintf( '<a href="%1$s" target="editor">%2$s</a>%3$s', $link, $title, $this->row_actions( $actions ) );
 					break;
@@ -283,9 +283,9 @@ namespace Cornell\Governance\Admin\Submenus\Tables {
 		 */
 		public function no_items() {
 			if ( isset( $_REQUEST['s'] ) ) {
-				_e( 'There are no unreviewed pages that match the specified criteria', 'cornell/governance' );
+				_e( 'There are no unreviewed pages that match the specified criteria', 'cornell-governance' );
 			} else {
-				_e( 'There are no unreviewed pages', 'cornell/governance' );
+				_e( 'There are no unreviewed pages', 'cornell-governance' );
 			}
 		}
 	}

@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Base' ) ) {
 		abstract class Base {
 			/**
 			 * @var string $id the HTML ID for this input
@@ -237,21 +237,21 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					if ( ! array_key_exists( $nonce, $_REQUEST ) || ! wp_verify_nonce( $_REQUEST[ $nonce ], $this->id ) ) {
 						Helpers::log( 'We could not verify the nonce for this page' );
 
-						return new \WP_Error( 'no-nonce', __( 'The nonce could not be verified for some reason', 'cornell/governance' ) );
+						return new \WP_Error( 'no-nonce', __( 'The nonce could not be verified for some reason', 'cornell-governance' ) );
 					}
 				}
 
 				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 					Helpers::log( 'It appears that we are auto-saving' );
 
-					return new \WP_Error( 'autosave', __( 'We are in the autosave portion', 'cornell/governance' ) );
+					return new \WP_Error( 'autosave', __( 'We are in the autosave portion', 'cornell-governance' ) );
 				}
 
 				// We should check user permissions here
 				if ( ! current_user_can( Plugin::instance()->get_capability() ) ) {
 					Helpers::log( 'It does not appear that the current user has permission to update Governance information' );
 
-					return new \WP_Error( 'no-access', __( 'The current user does not appear to have the appropriate cap', 'cornell/governance' ) );
+					return new \WP_Error( 'no-access', __( 'The current user does not appear to have the appropriate cap', 'cornell-governance' ) );
 				}
 
 				/*if ( $post_parent_id = wp_get_post_parent_id( $post_id ) ) {
@@ -317,9 +317,9 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 				$success = update_post_meta( $post_id, $this->meta_key, $data );
 
 				if ( false === $success ) {
-					Helpers::log( __( 'There was an unknown error saving the post meta', 'cornell/governance' ) );
+					Helpers::log( __( 'There was an unknown error saving the post meta', 'cornell-governance' ) );
 
-					return new \WP_Error( 'no-save', __( 'There was an unknown error saving the post meta', 'cornell/governance' ) );
+					return new \WP_Error( 'no-save', __( 'There was an unknown error saving the post meta', 'cornell-governance' ) );
 				} else if ( is_wp_error( $success ) ) {
 					Helpers::log( 'It appears that we successfully saved the following data: ' . print_r( $data, true ) );
 

@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Settings_Import_Export {
 	use Cornell\Governance\Helpers;
 	use WP_Error;
 
-	if ( ! class_exists( 'Import' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Settings_Import_Export\Import' ) ) {
 		class Import extends Base {
 			/**
 			 * @var Import $instance holds the single instance of this class
@@ -135,11 +135,12 @@ namespace Cornell\Governance\Admin\Settings_Import_Export {
 
 				foreach ( $this->data as $key => $value ) {
 					print( '<tr>' );
-					printf( '<th scope="row">%s</th>', $this->headers[ $key ] );
+					printf( '<th scope="row">%s</th>', esc_html( $this->headers[ $key ] ) );
 					if ( is_array( $value ) ) {
+						$value = array_map( 'esc_html', $value );
 						printf( '<td><ol><li>%s</li></ol></td>', implode( '</li>' . PHP_EOL . '<li>', $value ) );
 					} else {
-						printf( '<td>%s</td>', $value );
+						printf( '<td>%s</td>', esc_html( $value ) );
 					}
 					print( '</tr>' );
 				}
@@ -164,7 +165,7 @@ namespace Cornell\Governance\Admin\Settings_Import_Export {
 				}
 
 				if ( count( $this->data ) <= 0 ) {
-					return new WP_Error( 'import', __( 'The import file appears to be empty', 'cornell/governance' ) );
+					return new WP_Error( 'import', __( 'The import file appears to be empty', 'cornell-governance' ) );
 				}
 
 				foreach ( $this->data as $key => $value ) {

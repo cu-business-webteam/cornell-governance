@@ -15,7 +15,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 	use Cornell\Governance\Plugin;
 	use WP_Query;
 
-	if ( ! class_exists( 'Liaison_Status' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Liaison_Status' ) ) {
 		class Liaison_Status extends Base {
 			/**
 			 * @var Liaison_Status $instance holds the single instance of this class
@@ -162,7 +162,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 * @since  0.1
 			 */
 			protected function output_data() {
-				$title = __( 'Liaison Compliance Status', 'cornell/governance' );
+				$title = esc_html( __( 'Liaison Compliance Status', 'cornell-governance' ) );
 
 				$data = $this->get_data();
 
@@ -173,7 +173,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 								<p>%2$s</p>
 							</div>',
 						$title,
-						__( 'There are currently no pages available for this report', 'cornell/governance' )
+						__( 'There are currently no pages available for this report', 'cornell-governance' )
 					);
 
 					return;
@@ -182,18 +182,18 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$output = array(
 					'canvasID'   => 'compliance-status-chart',
 					'type'       => 'doughnut',
-					'chartLabel' => __( 'Review Due Date', 'cornell/governance' ),
+					'chartLabel' => esc_html( __( 'Review Due Date', 'cornell-governance' ) ),
 					'labels'     => array(
-						__( 'Not Reviewed Yet', 'cornell/governance' ),
-						__( 'Overdue', 'cornell/governance' ),
-						__( 'Due in the next 7 days', 'cornell/governance' ),
-						__( 'Due in the next 30 days', 'cornell/governance' ),
-						__( 'Due in the next 60 days', 'cornell/governance' ),
-						__( 'Fully compliant', 'cornell/governance' ),
+						esc_html( __( 'Not Reviewed Yet', 'cornell-governance' ) ),
+						esc_html( __( 'Overdue', 'cornell-governance' ) ),
+						esc_html( __( 'Due in the next 7 days', 'cornell-governance' ) ),
+						esc_html( __( 'Due in the next 30 days', 'cornell-governance' ) ),
+						esc_html( __( 'Due in the next 60 days', 'cornell-governance' ) ),
+						esc_html( __( 'Fully compliant', 'cornell-governance' ) ),
 					),
 					'datasets'   => array(
 						array(
-							'label'           => __( 'Review Due Date', 'cornell/governance' ),
+							'label'           => esc_html( __( 'Review Due Date', 'cornell-governance' ) ),
 							'data'            => array(
 								count( $data['unreviewed'] ),
 								count( $data['overdue'] ),
@@ -245,7 +245,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					'<details id="%2$s-data"><summary>%3$s</summary><dl>%1$s</dl></details>',
 					implode( '', $lists ),
 					$output['canvasID'],
-					__( 'Reveal source data for this chart', 'cornell/governance' )
+					__( 'Reveal source data for this chart', 'cornell-governance' )
 				);
 
 				print( '</div>' );

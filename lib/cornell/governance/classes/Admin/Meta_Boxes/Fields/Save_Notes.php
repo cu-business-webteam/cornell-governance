@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Button;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Save_Notes' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Save_Notes' ) ) {
 		class Save_Notes extends Button {
 			/**
 			 * @var Save_Notes $instance holds the single instance of this class
@@ -21,7 +21,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-notes-save',
-					'label' => __( 'Save Documentation', 'cornell/governance' ),
+					'label' => esc_html( __( 'Save Documentation', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-button', 'cornell-governance-save-notes' ),
 					'default' => '',
 					'meta_box' => 'Info',

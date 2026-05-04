@@ -34,11 +34,11 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'           => __( 'Cornell Governance: Page Status List', 'cornell/governance' ),
-				'menu_name'       => __( 'Page Status', 'cornell/governance' ),
+				'title'           => esc_html( __( 'Cornell Governance: Page Status List', 'cornell-governance' ) ),
+				'menu_name'       => esc_html( __( 'Page Status', 'cornell-governance' ) ),
 				'slug'            => 'cornell-governance-list',
 				'per_page_option' => 'cornell/governance/page-list/items_per_page',
-				'description'     => __( 'View a sortable list of all governable content on this site, along with various governance information about each piece of content', 'cornell/governance' ),
+				'description'     => esc_html( __( 'View a sortable list of all governable content on this site, along with various governance information about each piece of content', 'cornell-governance' ) ),
 			) );
 		}
 

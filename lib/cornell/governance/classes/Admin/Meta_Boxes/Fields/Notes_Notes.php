@@ -12,19 +12,20 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Notes_Notes' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Notes_Notes' ) ) {
 		abstract class Notes_Notes extends Textarea {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-notes-notes',
-					'label' => __( 'Relevant documentation', 'cornell/governance' ),
+					'label' => esc_html( __( 'Relevant documentation', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-textarea', 'cornell-governance-notes-notes' ),
 					'default' => '',
 					'meta_box' => 'Info',
 					'wysiwyg_settings' => array(
 						'teeny' => true,
 					),
-					'instructions' => sprintf( __( 'This field uses Markdown. <a href="%s" target="cheatsheet">Learn how to write basic Markdown.</a>', 'cornell/governance' ), 'https://www.markdownguide.org/cheat-sheet/' ),
+					/* translators: A link to a markdown cheat sheet */
+					'instructions' => esc_html( sprintf( __( 'This field uses Markdown. <a href="%s" target="cheatsheet">Learn how to write basic Markdown.</a>', 'cornell-governance' ), 'https://www.markdownguide.org/cheat-sheet/' ) ),
 				);
 
 				$cap = Plugin::instance()->get_capability();

@@ -10,7 +10,7 @@ namespace Cornell\Governance {
 
 	use Handlebars\Handlebars;
 
-	if ( ! class_exists( 'Frontend' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Frontend' ) ) {
 		class Frontend {
 			/**
 			 * @var Frontend $instance holds the single instance of this class
@@ -132,8 +132,20 @@ namespace Cornell\Governance {
 
 				$due_date      = \DateTime::createFromFormat( 'U', $next_review );
 				$now_date      = new \DateTime();
-				$compare       = new \DateInterval( 'P' . $compliance_time . 'D' );
-				$secondcompare = new \DateInterval( 'P7D' );
+				try {
+					$compare = new \DateInterval( 'P' . $compliance_time . 'D' );
+				} catch ( \Exception $e ) {
+					Helpers::log( 'Compliance time error: ' . $e->getMessage() );
+					$compare = null;
+					return array();
+				}
+				try {
+					$secondcompare = new \DateInterval( 'P7D' );
+				} catch ( \Exception $e ) {
+					Helpers::log( 'Compliance time error: ' . $e->getMessage() );
+					$secondcompare = null;
+					return array();
+				}
 
 				$overdue   = ( $now_date >= $due_date );
 				$due       = ( $now_date->add( $compare ) >= $due_date );

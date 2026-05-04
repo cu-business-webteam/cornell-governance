@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
-	if ( ! class_exists( 'Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Message' ) ) {
 		abstract class Message extends Base {
 			/**
 			 * @var string $type the input type

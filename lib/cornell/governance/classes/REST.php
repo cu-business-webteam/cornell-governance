@@ -11,7 +11,7 @@ namespace Cornell\Governance {
 	use Cornell\Governance\Taxonomies\Audience;
 	use WP_REST_Request;
 
-	if ( ! class_exists( 'REST' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\REST' ) ) {
 		class REST {
 			/**
 			 * @var REST $instance holds the single instance of this class
@@ -68,7 +68,7 @@ namespace Cornell\Governance {
 						'update_callback' => null,
 						'schema'          => array(
 							'type'        => 'array',
-							'description' => __( 'Displays governance information about the content', 'cornell/governance' ),
+							'description' => esc_html( __( 'Displays governance information about the content', 'cornell-governance' ) ),
 							'context'     => array( 'view' ),
 							'items'       => array(
 								'goal'              => 'string',
@@ -119,7 +119,7 @@ namespace Cornell\Governance {
 					'secondaryAudience' => $meta['secondary-audience'],
 					'secondaryContact'  => $meta['supervisor'],
 					'liaison'           => $meta['liaison'],
-					'cycle'             => sprintf( __( 'Every %d months', 'cornell/governance' ), $meta['review-cycle'] ),
+					'cycle'             => sprintf( esc_html( __( 'Every %d months', 'cornell-governance' ) ), $meta['review-cycle'] ),
 					'complianceStatus'  => $legend,
 					'lastReview'        => array_key_exists( 'last-review', $meta ) ? $meta['last-review'] : null,
 					'updateMessage'     => $latest_update,
@@ -232,8 +232,8 @@ namespace Cornell\Governance {
 				$types = Plugin::instance()->get_post_types();
 				if ( count( $types ) <= 0 ) {
 					return new \WP_Error(
-						__( 'No Post Types', 'cornell/governance' ),
-						__( 'The Governance plugin is not configured for any post types' )
+						esc_html( __( 'No Post Types', 'cornell-governance' ) ),
+						__( 'The Governance plugin is not configured for any post types', 'cornell-governance' )
 					);
 				}
 
@@ -269,8 +269,8 @@ namespace Cornell\Governance {
 
 				if ( empty( $posts ) || is_wp_error( $posts ) ) {
 					return new \WP_Error(
-						__( 'No posts were found', 'cornell/governance' ),
-						__( 'No posts with Governance Information could be located', 'cornell/governance' )
+						esc_html( __( 'No posts were found', 'cornell-governance' ) ),
+						__( 'No posts with Governance Information could be located', 'cornell-governance' )
 					);
 				}
 
@@ -286,7 +286,7 @@ namespace Cornell\Governance {
 				}
 
 				if ( empty( $data ) ) {
-					return new \WP_Error( __( 'No posts found', 'cornell/governance' ), __( 'We could not locate any posts with governance information', 'cornell/governance' ) );
+					return new \WP_Error( esc_html( __( 'No posts found', 'cornell-governance' ) ), __( 'We could not locate any posts with governance information', 'cornell-governance' ) );
 				}
 
 				$response = new \WP_REST_Response( $data );
@@ -308,8 +308,8 @@ namespace Cornell\Governance {
 				$post = get_post( $id );
 				if ( empty( $post ) || ! is_a( $post, 'WP_Post' ) ) {
 					return new \WP_Error(
-						__( 'No post', 'cornell/governance' ),
-						sprintf( __( 'No post could be found matching an ID of %d', 'cornell/governance' ), $id )
+						esc_html( __( 'No post', 'cornell-governance' ) ),
+						sprintf( esc_html( __( 'No post could be found matching an ID of %d', 'cornell-governance' ) ), $id )
 					);
 				}
 
@@ -317,8 +317,8 @@ namespace Cornell\Governance {
 
 				if ( empty( $meta ) ) {
 					return new \WP_Error(
-						__( 'No meta found', 'cornell/governance' ),
-						sprintf( __( 'No governance metadata could be found for %s', 'cornell/governance' ), $post->post_title )
+						esc_html( __( 'No meta found', 'cornell-governance' ) ),
+						sprintf( esc_html( __( 'No governance metadata could be found for %s', 'cornell-governance' ) ), $post->post_title )
 					);
 				}
 
@@ -347,7 +347,7 @@ namespace Cornell\Governance {
 				if ( array_key_exists( 'review-cycle', $meta ) ) {
 					$meta['review-cycle'] = array(
 						'cycle' => (int) $meta['review-cycle'],
-						'text'  => sprintf( __( 'Every %d months', 'cornell/governance' ), $meta['review-cycle'] ),
+						'text'  => sprintf( esc_html( __( 'Every %d months', 'cornell-governance' ) ), $meta['review-cycle'] ),
 					);
 				}
 
@@ -436,8 +436,8 @@ namespace Cornell\Governance {
 
 				if ( false === $term ) {
 					return new \WP_Error(
-						__( 'No term found', 'cornell/governance' ),
-						sprintf( __( 'The term with a slug of %s could not be found.', 'cornell/governance' ), $slug )
+						esc_html( __( 'No term found', 'cornell-governance' ) ),
+						sprintf( esc_html( __( 'The term with a slug of %s could not be found.', 'cornell-governance' ) ), $slug )
 					);
 				}
 
@@ -489,8 +489,8 @@ namespace Cornell\Governance {
 
 				if ( empty( $users ) || is_wp_error( $users ) ) {
 					return new \WP_Error(
-						__( 'No users were found', 'cornell/governance' ),
-						__( 'No users could be located', 'cornell/governance' )
+						esc_html( __( 'No users were found', 'cornell-governance' ) ),
+						__( 'No users could be located', 'cornell-governance' )
 					);
 				}
 
@@ -505,8 +505,8 @@ namespace Cornell\Governance {
 
 				if ( empty( $data ) ) {
 					return new \WP_Error(
-						__( 'No users were found', 'cornell/governance' ),
-						__( 'No users could be located', 'cornell/governance' )
+						esc_html( __( 'No users were found', 'cornell-governance' ) ),
+						__( 'No users could be located', 'cornell-governance' )
 					);
 				}
 
@@ -526,7 +526,7 @@ namespace Cornell\Governance {
 				// This won't work for browser-based requests, but should work for GET requests with auth headers set
 				// Sample App Pass (Local-only, not a security risk) = MoVy 3YF0 6WFI SkuL 9gQN eWBv
 				if ( ! current_user_can( 'read' ) ) {
-					return new \WP_Error( 'rest_forbidden', esc_html__( 'You are not allowed to view this API information', 'cornell/governance' ), array( 'status' => 401 ) );
+					return new \WP_Error( 'rest_forbidden', esc_html__( 'You are not allowed to view this API information', 'cornell-governance' ), array( 'status' => 401 ) );
 				}
 
 				return true;

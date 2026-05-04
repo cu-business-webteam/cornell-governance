@@ -11,12 +11,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Admin\Meta_Boxes\Info;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Mark_For_Deletion' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Mark_For_Deletion' ) ) {
 		abstract class Mark_For_Deletion extends Confirm {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-mark-for-deletion',
-					'label' => __( 'This content is no longer necessary, and should be deleted', 'cornell/governance' ),
+					'label' => esc_html( __( 'This content is no longer necessary, and should be deleted', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-confirm', 'cornell-governance-mark-for-deletion' ),
 					'default' => '',
 					'meta_box' => 'Info',

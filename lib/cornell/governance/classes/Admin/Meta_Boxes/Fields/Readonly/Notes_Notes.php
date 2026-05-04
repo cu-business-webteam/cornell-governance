@@ -10,7 +10,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Notes_Notes' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Notes_Notes' ) ) {
 		class Notes_Notes extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Notes_Notes {
 			/**
 			 * @var Notes_Notes $instance holds the single instance of this class

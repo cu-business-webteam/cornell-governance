@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Commit_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Commit_Message' ) ) {
 		class Commit_Message extends Textarea {
 			/**
 			 * @var Commit_Message $instance holds the single instance of this class
@@ -23,7 +23,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-revisions-commit-message',
-					'label' => __( 'What changes are you making to this page?', 'cornell/governance' ),
+					'label' => esc_html( __( 'What changes are you making to this page?', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-textarea', 'cornell-governance-commit-message' ),
 					'default' => '',
 					'meta_box' => 'Revisions',

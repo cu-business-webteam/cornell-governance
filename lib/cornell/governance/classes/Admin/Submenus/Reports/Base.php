@@ -7,8 +7,9 @@ namespace {
 namespace Cornell\Governance\Admin\Submenus\Reports {
 
 	use Cornell\Governance\Helpers;
+	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Base' ) ) {
 		abstract class Base {
 			/**
 			 * @var string $page_slug the slug of the page on which this report is being output
@@ -50,8 +51,8 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 */
 			protected function enqueue_scripts() {
 				$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-				wp_enqueue_script( 'governance-charts', Helpers::plugins_url( '/dist/js/cornell-governance/charts' . $min . '.js' ), array(), false, true );
-				wp_enqueue_style( 'governance-charts', Helpers::plugins_url( '/dist/css/cornell-governance/charts' . $min . '.css' ), array(), false, 'all' );
+				wp_enqueue_script( 'governance-charts', Helpers::plugins_url( '/dist/js/cornell-governance/charts' . $min . '.js' ), array(), Plugin::$version, true );
+				wp_enqueue_style( 'governance-charts', Helpers::plugins_url( '/dist/css/cornell-governance/charts' . $min . '.css' ), array(), Plugin::$version, 'all' );
 			}
 
 			/**
@@ -110,8 +111,8 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				printf( '<input type="hidden" name="export-what" value="%s" />', $this->report_name );
 				wp_nonce_field( 'governance-export-data' );
 				print( '<div class="button-row">' );
-				printf( '<button class="button-secondary" name="export-data" value="csv">%s</button>', __( 'Export CSV', 'cornell/governance' ) );
-				printf( '<button class="button-secondary" name="export-data" value="json">%s</button>', __( 'Export JSON', 'cornell/governance' ) );
+				printf( '<button class="button-secondary" name="export-data" value="csv">%s</button>', __( 'Export CSV', 'cornell-governance' ) );
+				printf( '<button class="button-secondary" name="export-data" value="json">%s</button>', __( 'Export JSON', 'cornell-governance' ) );
 				print( '</div>' );
 				print( '</form>' );
 				print( '</div>' );

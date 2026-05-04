@@ -15,7 +15,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Notes' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Notes' ) ) {
 		class Notes extends Base {
 			/**
 			 * @var Notes $instance holds the single instance of this class
@@ -26,7 +26,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			function __construct() {
 				parent::__construct( array(
 					'id'       => 'cornell-governance-page-notes',
-					'title'    => __( 'Documentation', 'cornell/governance' ),
+					'title'    => esc_html( __( 'Documentation', 'cornell-governance' ) ),
 					'context'  => 'advanced',
 					'priority' => 'high',
 					'fields'   => array(
@@ -129,25 +129,25 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 
 				$messages = $this->get_commit_messages( $post_id );
 				$output   .= '<blockquote id="cornell-governance-revisions-list-container">';
-				$output   .= sprintf( '<h3>%s</h3>', __( 'Previous Content Changes', 'cornell/governance' ) );
+				$output   .= sprintf( '<h3>%s</h3>', __( 'Previous Content Changes', 'cornell-governance' ) );
 				if ( count( $messages ) > 0 ) {
 					$output .= '<ol class="commit-messages">';
 					$output .= sprintf( '<li>%s</li>', implode( '</li><li>', $messages ) );
 					$output .= '</ol>';
 				} else {
-					$output .= sprintf( '<p>%s</p>', __( 'There have not been any commit messages added to this page, yet.', 'cornell/governance' ) );
+					$output .= sprintf( '<p>%s</p>', __( 'There have not been any commit messages added to this page, yet.', 'cornell-governance' ) );
 				}
 				$output .= '</blockquote>';
 
 				if ( empty( $post_id ) ) {
-					return __( '<p class="note">You will not be able to set up governance information until you have saved this piece of content for the first time</p>', 'cornell/governance' );
+					return esc_html( sprintf( '<p class="note">%s</p>', __( 'You will not be able to set up governance information until you have saved this piece of content for the first time', 'cornell-governance' ) ) );
 				}
 
 				$ro_notes = \Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Notes_Notes::instance();
 				$w_notes = \Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Notes_Notes::instance();
 
 				if ( current_user_can( $cap ) ) {
-					$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-notes-container', __( 'Documentation', 'cornell/governance' ) );
+					$output .= $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-notes-container', __( 'Documentation', 'cornell-governance' ) );
 					$output .= '<div class="cornell-governance-viewable-field">';
 					$output .= $ro_notes->get_input();
 					$output .= Edit_Notes_Button::instance()->get_input();

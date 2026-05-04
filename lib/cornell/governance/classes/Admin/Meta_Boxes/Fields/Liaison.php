@@ -11,17 +11,17 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Liaison' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Liaison' ) ) {
 		abstract class Liaison extends Select {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-liaison',
 					/* translators: The placeholder is a plugin setting with the name of the managing office, e.g., "Marketing Liaison" */
-					'label' => sprintf( __( '%s Liaison', 'cornell/governance' ), Plugin::instance()->get_managing_office() ),
+					'label' => esc_html( sprintf( __( '%s Liaison', 'cornell-governance' ), Plugin::instance()->get_managing_office() ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-select', 'cornell-governance-liaison' ),
 					'default' => '',
 					'meta_box' => 'Info',
-					'attributes' => array( 'placeholder' => __( '-- Select a User --', 'cornell/governance' ) ),
+					'attributes' => array( 'placeholder' => __( '-- Select a User --', 'cornell-governance' ) ),
 				);
 
 				$cap = Plugin::instance()->get_capability();
@@ -51,7 +51,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return array the array of options
 			 */
 			public function get_options(): array {
-				$options = array( '' => __( 'Please select a user', 'cornell/governance' ) );
+				$options = array( '' => __( 'Please select a user', 'cornell-governance' ) );
 				foreach ( $this->get_users() as $user ) {
 					$options[$user->user_email] = $user->display_name;
 				}

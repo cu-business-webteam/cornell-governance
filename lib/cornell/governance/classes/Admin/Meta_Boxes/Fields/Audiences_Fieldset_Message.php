@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Audiences_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Audiences_Fieldset_Message' ) ) {
 		abstract class Audiences_Fieldset_Message extends Message {
 			function __construct() {
 				$atts = array(
@@ -29,7 +29,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'Identify the intended primary and secondary audiences for this page. One per dropdown.', 'cornell/governance' );
+				$this->text = esc_html( __( 'Identify the intended primary and secondary audiences for this page. One per dropdown.', 'cornell-governance' ) );
 			}
 		}
 	}

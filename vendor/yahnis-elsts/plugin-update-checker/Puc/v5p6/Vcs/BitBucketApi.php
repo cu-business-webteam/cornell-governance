@@ -2,17 +2,11 @@
 
 namespace YahnisElsts\PluginUpdateChecker\v5p6\Vcs;
 
-use YahnisElsts\PluginUpdateChecker\v5p6\OAuthSignature;
 use YahnisElsts\PluginUpdateChecker\v5p6\Utils;
 
 if ( !class_exists(BitBucketApi::class, false) ):
 
 	class BitBucketApi extends Api {
-		/**
-		 * @var OAuthSignature
-		 */
-		private $oauth = null;
-
 		/**
 		 * @var string
 		 */
@@ -148,11 +142,19 @@ if ( !class_exists(BitBucketApi::class, false) ):
 		 * @return string
 		 */
 		protected function getDownloadUrl($ref) {
+			return $this->getDownloadBaseUrl() . $ref . '.zip';
+		}
+
+		/**
+		 * Get the base URL for ZIP downloads from our repo. Includes the trailing slash.
+		 *
+		 * @return string
+		 */
+		protected function getDownloadBaseUrl() {
 			return sprintf(
-				'https://bitbucket.org/%s/%s/get/%s.zip',
+				'https://bitbucket.org/%s/%s/get/',
 				$this->username,
-				$this->repository,
-				$ref
+				$this->repository
 			);
 		}
 
@@ -206,15 +208,7 @@ if ( !class_exists(BitBucketApi::class, false) ):
 			));
 			$baseUrl = $url;
 
-			if ( $this->oauth ) {
-				$url = $this->oauth->sign($url,'GET');
-			}
-
-			$options = array('timeout' => wp_doing_cron() ? 10 : 3);
-			if ( !empty($this->httpFilterName) ) {
-				$options = apply_filters($this->httpFilterName, $options);
-			}
-			$response = wp_remote_get($url, $options);
+			$response = wp_remote_get($url, $this->getApiRequestHttpOptions());
 			if ( is_wp_error($response) ) {
 				do_action('puc_api_error', $response, null, $url, $this->slug);
 				return $response;
@@ -248,24 +242,17 @@ if ( !class_exists(BitBucketApi::class, false) ):
 		public function setAuthentication($credentials) {
 			parent::setAuthentication($credentials);
 
-			if ( !empty($credentials) && !empty($credentials['consumer_key']) ) {
-				$this->oauth = new OAuthSignature(
-					$credentials['consumer_key'],
-					$credentials['consumer_secret']
+			if (
+				is_array($credentials)
+				&& !empty($credentials['username'])
+				&& !empty($credentials['api_token'])
+			) {
+				$this->enableBasicAuth(
+					$credentials['username'],
+					$credentials['api_token'],
+					$this->getDownloadBaseUrl()
 				);
-			} else {
-				$this->oauth = null;
 			}
-		}
-
-		public function signDownloadUrl($url) {
-			//Add authentication data to download URLs. Since OAuth signatures incorporate
-			//timestamps, we have to do this immediately before inserting the update. Otherwise,
-			//authentication could fail due to a stale timestamp.
-			if ( $this->oauth ) {
-				$url = $this->oauth->sign($url);
-			}
-			return $url;
 		}
 	}
 

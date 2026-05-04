@@ -9,10 +9,11 @@ namespace {
 namespace Cornell\Governance {
 
 	use Cornell\Governance\Admin\Admin;
+	use Cornell\Governance\Wayback\Retrieve;
 	use Cornell\Governance\Wayback\Trigger;
 	use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-	if ( ! class_exists( 'Plugin' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Plugin' ) ) {
 		class Plugin {
 			const INFO_META_KEY = 'cornell/governance/information';
 			const NOTES_META_KEY = 'cornell/governance/notes';
@@ -27,7 +28,7 @@ namespace Cornell\Governance {
 			 * @var string $version holds the version number for the plugin
 			 * @access public
 			 */
-			public static string $version = '1.0.2';
+			public static string $version = '1.0.5';
 			/**
 			 * @var string $capability the WP capability required to access settings
 			 * @access private
@@ -78,6 +79,11 @@ namespace Cornell\Governance {
 			 * @access protected
 			 */
 			protected Trigger $archive_obj;
+			/**
+			 * @var Retrieve $snapshot_obj a property to hold the Retrieve object used by this plugin
+			 * @access protected
+			 */
+			protected Retrieve $snapshot_obj;
 			/**
 			 * @var bool $frontend_compliance_active whether the plugin should display a compliance status on the frontend for logged-in privileged users
 			 * @access private
@@ -139,11 +145,15 @@ namespace Cornell\Governance {
 					}
 				}
 
-				/*if ( $this->get_archive_settings( 'active' ) ) {
-					if ( isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) || isset( $_GET['cornell/governance/daily-cron'] ) ) {
+				if ( $this->get_archive_settings( 'active' ) ) {
+					if ( isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) || isset( $_GET['cornell/governance/process-snapshots'] ) || isset( $_GET['cornell/governance/daily-cron'] ) ) {
 						add_action( 'init', array( $this, 'do_snapshots' ) );
 					}
-				}*/
+
+					if ( isset( $_REQUEST['cornell/governance/retrieve-snapshots'] ) ) {
+						add_action( 'init', array( $this, 'retrieve_snapshots' ) );
+					}
+				}
 			}
 
 			/**
@@ -210,7 +220,7 @@ namespace Cornell\Governance {
 			 * @since  0.1
 			 */
 			private function set_managing_office(): void {
-				$this->managing_office = apply_filters( 'cornell/governance/managing-office', get_option( 'cornell-governance-managing-office', __( 'MarCom', 'cornell/governance' ) ) );
+				$this->managing_office = apply_filters( 'cornell/governance/managing-office', get_option( 'cornell-governance-managing-office', __( 'MarCom', 'cornell-governance' ) ) );
 			}
 
 			/**
@@ -416,7 +426,7 @@ namespace Cornell\Governance {
 			 * @since  0.6.2
 			 */
 			private function set_archive_settings() {
-				$this->archive_active = ! empty( apply_filters( 'cornell/governance/archive/active', get_option( 'cornell-governance-archive-active', false ) ) );
+				$this->archive_active  = ! empty( apply_filters( 'cornell/governance/archive/active', get_option( 'cornell-governance-archive-active', false ) ) );
 				$this->archive_search  = apply_filters( 'cornell/governance/archive/search', get_option( 'cornell-governance-archive-url-search', get_bloginfo( 'url' ) ) );
 				$this->archive_replace = apply_filters( 'cornell/governance/archive/replace', get_option( 'cornell-governance-archive-url-replace', '' ) );
 			}
@@ -527,14 +537,14 @@ namespace Cornell\Governance {
 				foreach ( $types as $type ) {
 					register_post_meta( $type, self::INFO_META_KEY, array(
 						'type'              => 'array',
-						'description'       => __( 'The Page Governance Information associated with this piece of content', 'cornell/governance' ),
+						'description'       => esc_html( __( 'The Page Governance Information associated with this piece of content', 'cornell-governance' ) ),
 						'sanitize_callback' => array( $this, 'validate_meta_fields' ),
 						'revisions_enabled' => true,
 					) );
 
 					register_post_meta( $type, 'cornell/governance/notes', array(
 						'type'              => 'array',
-						'description'       => __( 'Any Page Governance notes associated with this piece of content', 'cornell/governance' ),
+						'description'       => esc_html( __( 'Any Page Governance notes associated with this piece of content', 'cornell-governance' ) ),
 						'sanitize_callback' => array( $this, 'validate_meta_fields' ),
 						'show_in_rest'      => false,
 						'revisions_enabled' => true,
@@ -542,7 +552,7 @@ namespace Cornell\Governance {
 
 					register_post_meta( $type, 'cornell/governance/revisions', array(
 						'type'              => 'array',
-						'description'       => __( 'Any Page Governance commit messages associated with this object', 'cornell/governance' ),
+						'description'       => esc_html( __( 'Any Page Governance commit messages associated with this object', 'cornell-governance' ) ),
 						'sanitize_callback' => array( $this, 'validate_meta_fields' ),
 						'show_in_rest'      => false,
 						'revisions_enabled' => true,
@@ -581,7 +591,7 @@ namespace Cornell\Governance {
 				$email_text = isset( $_GET['cornell/governance/run-email-cron'] ) ? ' The email trigger is set to ' . $_GET['cornell/governance/run-email-cron'] : '';
 				$debug_text = isset( $_GET['cornell/governance/debug'] ) ? ' The debug switch is set to ' . $_GET['cornell/governance/debug'] : '';
 
-				wp_die( __( 'The cron task to send Governance notifications has completed.' . $email_text . $debug_text, 'cornell/governance' ), __( 'Governance Emails Sent', 'cornell/governance' ), array( 'response' => 200 ) );
+				wp_die( esc_html( __( 'The cron task to send Governance notifications has completed.' . $email_text . $debug_text, 'cornell-governance' ), __( 'Governance Emails Sent', 'cornell-governance' ) ), array( 'response' => 200 ) );
 			}
 
 			/**
@@ -598,6 +608,30 @@ namespace Cornell\Governance {
 
 				$this->archive_obj = Trigger::instance();
 				$this->archive_obj->do_cron();
+			}
+
+			/**
+			 * Prime the lists of snapshots for each page, since that process seems to take a long time
+			 *
+			 * @access public
+			 * @return void
+			 * @since  1.0.4
+			 */
+			public function retrieve_snapshots() {
+				if ( isset( $this->snapshot_obj ) && is_a( $this->snapshot_obj, 'Cornell\Governance\Wayback\Retrieve' ) ) {
+					return;
+				}
+
+				$types = $this->get_post_types();
+				$pages = get_posts( array(
+					'post_type'      => $types,
+					'posts_per_page' => - 1,
+					'post_status'    => Helpers::get_page_status_list(),
+					'fields'         => 'ids',
+				) );
+
+				$this->snapshot_obj = Retrieve::instance();
+				$this->snapshot_obj->get_url_list( $pages );
 			}
 		}
 	}

@@ -9,7 +9,7 @@ namespace {
 
 namespace Cornell\Governance\Admin\Settings_Import_Export {
 
-	if ( ! class_exists( 'Base' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Settings_Import_Export\Base' ) ) {
 		abstract class Base {
 			/**
 			 * @var array $headers the CSV headers

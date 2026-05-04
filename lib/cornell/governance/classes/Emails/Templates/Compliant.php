@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails\Templates {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Compliant' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Templates\Compliant' ) ) {
 		class Compliant extends Base {
 			/**
 			 * @var Compliant $instance holds the single instance of this class

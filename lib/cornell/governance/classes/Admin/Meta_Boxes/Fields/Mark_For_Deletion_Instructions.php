@@ -12,12 +12,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Mark_For_Deletion_Instructions' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Mark_For_Deletion_Instructions' ) ) {
 		abstract class Mark_For_Deletion_Instructions extends Message {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-mark-for-deletion-instructions',
-					'label'    => __( 'Marked for Deletion:', 'cornell/governance' ),
+					'label'    => esc_html( __( 'Marked for Deletion:', 'cornell-governance' ) ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-message',
@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'If you indicate below that this content should be deleted, an email will be automatically dispatched to both the steward and the Liaison once you select the "Submit Deletion Request" button below.', 'cornell/governance' );
+				$this->text = esc_html( __( 'If you indicate below that this content should be deleted, an email will be automatically dispatched to both the steward and the Liaison once you select the "Submit Deletion Request" button below.', 'cornell-governance' ) );
 			}
 		}
 	}

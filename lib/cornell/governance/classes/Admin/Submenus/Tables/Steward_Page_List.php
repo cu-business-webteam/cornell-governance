@@ -6,13 +6,13 @@ namespace {
 	}
 
 	// Loading table class
-	if ( ! class_exists( 'WP_List_Table' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Tables\WP_List_Table' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 	}
 }
 
 namespace Cornell\Governance\Admin\Submenus\Tables {
-	if ( ! class_exists( 'Steward_Page_List' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Tables\Steward_Page_List' ) ) {
 		class Steward_Page_List extends Page_List_Table {
 			function __construct( $args = array() ) {
 				parent::__construct( $args );

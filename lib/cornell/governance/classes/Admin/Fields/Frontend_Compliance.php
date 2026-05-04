@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-    if ( ! class_exists( 'Frontend_Compliance' ) ) {
+    if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Frontend_Compliance' ) ) {
         class Frontend_Compliance extends Base {
             /**
              * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -27,7 +27,7 @@ namespace Cornell\Governance\Admin\Fields {
                 parent::__construct( array(
                     'type'      => 'boolean',
                     'id'        => 'frontend-compliance-active',
-                    'title'     => __( 'Display a compliance notice on the frontend to logged-in privileged users?', 'cornell/governance' ),
+                    'title'     => esc_html( __( 'Display a compliance notice on the frontend to logged-in privileged users?', 'cornell-governance' ) ),
                     'page'      => 'cornell-governance',
                     'section'   => 'cornell-governance-settings',
                     'class'     => 'cornell-governance-admin-field cornell-governance-admin-checkbox cornell-governance-admin-boolean',
@@ -49,17 +49,6 @@ namespace Cornell\Governance\Admin\Fields {
                 }
 
                 return self::$instance;
-            }
-
-            /**
-             * Build the input
-             *
-             * @access protected
-             * @return string
-             * @since  0.1
-             */
-            protected function get_input(): string {
-	            return $this->get_input_boolean();
             }
 
             /**

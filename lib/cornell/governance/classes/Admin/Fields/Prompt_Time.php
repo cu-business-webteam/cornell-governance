@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Prompt_Time' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Prompt_Time' ) ) {
 		class Prompt_Time extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -19,26 +19,12 @@ namespace Cornell\Governance\Admin\Fields {
 			 */
 			protected function __construct( array $atts = array() ) {
 				$atts = array_merge( $atts, array(
+					'type'      => 'number',
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings-prompts',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-number',
 				) );
 				parent::__construct( $atts );
-			}
-
-			/**
-			 * Build the input
-			 *
-			 * @access protected
-			 * @return string
-			 * @since  0.1
-			 */
-			protected function get_input(): string {
-				$current = $this->get_input_value();
-
-				$id = $this->page . '-' . $this->id;
-
-				return sprintf( '<input type="number" name="%1$s" id="%1$s" value="%2$d"/>', $id, esc_attr( $current ) );
 			}
 
 			/**

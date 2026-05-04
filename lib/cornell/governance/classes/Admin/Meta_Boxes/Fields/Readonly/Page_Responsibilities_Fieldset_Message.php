@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Page_Responsibilities_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Page_Responsibilities_Fieldset_Message' ) ) {
 		Final class Page_Responsibilities_Fieldset_Message extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Page_Responsibilities_Fieldset_Message {
 			/**
 			 * @var Page_Responsibilities_Fieldset_Message $instance holds the single instance of this class
@@ -28,7 +28,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 
 				$this->is_readonly = true;
 
-				$this->text = __( 'This is the team tasked with maintaining the page.', 'cornell/governance' );
+				$this->text = esc_html( __( 'This is the team tasked with maintaining the page.', 'cornell-governance' ) );
 			}
 
 			/**

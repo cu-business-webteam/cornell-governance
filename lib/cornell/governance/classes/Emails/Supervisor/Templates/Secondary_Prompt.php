@@ -11,7 +11,7 @@ namespace Cornell\Governance\Emails\Supervisor\Templates {
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Secondary_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Supervisor\Templates\Secondary_Prompt' ) ) {
 		class Secondary_Prompt extends \Cornell\Governance\Emails\Templates\Secondary_Prompt {
 			/**
 			 * @var Secondary_Prompt $instance holds the single instance of this class

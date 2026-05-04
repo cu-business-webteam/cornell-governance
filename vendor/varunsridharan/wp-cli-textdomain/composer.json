@@ -1,0 +1,27 @@
+{
+  "name"        : "varunsridharan/wp-cli-textdomain",
+  "description" : "Simple Library Which Provides Option To Render TextDomains",
+  "type"        : "library",
+  "support"     : {
+    "email"  : "varunsridharan23@gmail.com",
+    "issues" : "https://github.com/varunsridharan/wp-cli-text-domain/issues"
+  },
+  "homepage"    : "https://github.com/varunsridharan/wp-cli-text-domain/",
+  "license"     : "GPL-3.0-or-later",
+  "keywords"    : [ ],
+  "bin"         : [
+    "bin/add-textdomain.bat",
+    "bin/makepot.bat"
+  ],
+  "require"     : {
+    "wp-cli/i18n-command" : ">=1"
+  },
+  "authors"     : [
+    {
+      "name"     : "Varun Sridharan",
+      "email"    : "varunsridharan23@gmail.com",
+      "homepage" : "http://varunsridharan.in",
+      "role"     : "Developer"
+    }
+  ]
+}

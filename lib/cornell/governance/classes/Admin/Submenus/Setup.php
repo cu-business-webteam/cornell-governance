@@ -31,10 +31,10 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'       => __( 'Cornell Governance: Plugin Setup', 'cornell/governance' ),
-				'menu_name'   => __( 'Plugin Setup', 'cornell/governance' ),
+				'title'       => esc_html( __( 'Cornell Governance: Plugin Setup', 'cornell-governance' ) ),
+				'menu_name'   => esc_html( __( 'Plugin Setup', 'cornell-governance' ) ),
 				'slug'        => 'cornell-governance-setup',
-				'description' => __( 'Instructions explaining how to configure this plugin.', 'cornell/governance' ),
+				'description' => esc_html( __( 'Instructions explaining how to configure this plugin.', 'cornell-governance' ) ),
 			) );
 		}
 

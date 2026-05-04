@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Post_Types' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Post_Types' ) ) {
 		class Post_Types extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -30,7 +30,7 @@ namespace Cornell\Governance\Admin\Fields {
 				parent::__construct( array(
 					'type'      => 'checkbox',
 					'id'        => 'post-types',
-					'title'     => __( 'On which post types should the governance information be displayed?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'On which post types should the governance information be displayed?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-checkbox',
@@ -78,15 +78,18 @@ namespace Cornell\Governance\Admin\Fields {
 					$current = Plugin::instance()->get_post_types();
 				}
 
-				$id = $this->page . '-' . $this->id;
+				$id = esc_attr( $this->page . '-' . $this->id );
 
 				$options = array();
 				foreach ( $types as $name => $label ) {
 					$checked = '';
 
 					if ( is_array( $current ) && in_array( $name, $current ) ) {
-						$checked = 'checked="checked"';
+						$checked = esc_attr( 'checked="checked"' );
 					}
+
+					$name = esc_attr( $name );
+					$label = esc_html( $label );
 
 					$options[$name] = sprintf(
 						'<p class="checkbox-item"><input type="checkbox" name="%1$s[%2$s]" id="%1$s_%2$s" %3$s/> <label for="%1$s_%2$s">%4$s</label></p>',

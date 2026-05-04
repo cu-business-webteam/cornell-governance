@@ -12,12 +12,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Deletion_Reason' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Deletion_Reason' ) ) {
 		abstract class Deletion_Reason extends Textarea {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-deletion-reason',
-					'label' => __( 'Reason for the Request', 'cornell/governance' ),
+					'label' => esc_html( __( 'Reason for the Request', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-textarea', 'cornell-governance-deletion-reason' ),
 					'default' => '',
 					'meta_box' => 'Info',

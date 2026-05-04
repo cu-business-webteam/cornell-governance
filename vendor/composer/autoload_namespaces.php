@@ -6,6 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'cli' => array($vendorDir . '/wp-cli/php-cli-tools/lib'),
+    'WP_CLI\\' => array($vendorDir . '/wp-cli/wp-cli/php'),
     'ParsedownExtra' => array($vendorDir . '/erusev/parsedown-extra'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'Handlebars' => array($vendorDir . '/salesforce/handlebars-php/src'),

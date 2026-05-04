@@ -1,7 +1,7 @@
 {
   "name": "cornell/governance",
   "description": "Cornell's In-Page Governance Plugin",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "authors": [
     {
       "name": "Curtiss Grymala",
@@ -46,5 +46,9 @@
     "psr-4": {
       "Cornell\\Governance\\": "lib/cornell/governance/classes"
     }
+  },
+  "require-dev": {
+    "solvebeam/wp-text-domain-replacer": "dev-main",
+    "varunsridharan/wp-cli-textdomain": "dev-main"
   }
 }

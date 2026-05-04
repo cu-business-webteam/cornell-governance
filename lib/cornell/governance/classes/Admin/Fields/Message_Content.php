@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Message_Content' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Message_Content' ) ) {
 		class Message_Content extends Base {
 			/**
 			 * @var bool $did_sanitize determines whether we've already sanitized the field value or not, since
@@ -25,7 +25,7 @@ namespace Cornell\Governance\Admin\Fields {
 			protected function __construct() {
 				parent::__construct( array(
 					'id'        => 'message-content',
-					'title'     => __( 'What message should be sent when it is time for a page to be reviewed?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'What message should be sent when it is time for a page to be reviewed?', 'cornell-governance' ) ),
 					'page'      => 'cornell-governance',
 					'section'   => 'cornell-governance-settings',
 					'class'     => 'cornell-governance-admin-field cornell-governance-admin-wysiwyg',
@@ -57,7 +57,7 @@ namespace Cornell\Governance\Admin\Fields {
 			 * @return string the default content
 			 */
 			private function get_default_content(): string {
-				return __( 'The following pages that you manage on the Cornell websites are due to be reviewed: ', 'cornell/governance' );
+				return esc_html( __( 'The following pages that you manage on the Cornell websites are due to be reviewed: ', 'cornell-governance' ) );
 			}
 
 			/**
@@ -73,7 +73,7 @@ namespace Cornell\Governance\Admin\Fields {
 				$id = $this->page . '-' . $this->id;
 
 				ob_start();
-				wp_editor( $current, $id, array(
+				wp_editor( wp_kses_post( $current ), $id, array(
 					'media_buttons' => false,
 					'drag_drop_upload' => false,
 					'textarea_name' => $id,

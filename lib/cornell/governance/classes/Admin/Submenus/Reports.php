@@ -48,10 +48,10 @@ namespace Cornell\Governance\Admin\Submenus {
 			$this->allData = array();
 
 			parent::__construct( array(
-				'title'       => __( 'Cornell Governance: Page Reports', 'cornell/governance' ),
-				'menu_name'   => __( 'Page Reports', 'cornell/governance' ),
+				'title'       => esc_html( __( 'Cornell Governance: Page Reports', 'cornell-governance' ) ),
+				'menu_name'   => esc_html( __( 'Page Reports', 'cornell-governance' ) ),
 				'slug'        => 'cornell-governance-reports',
-				'description' => __( 'A series of reports on various aspects of governance throughout the site.', 'cornell/governance' ),
+				'description' => esc_html( __( 'A series of reports on various aspects of governance throughout the site.', 'cornell-governance' ) ),
 			) );
 
 			$this->chartConfig = array();

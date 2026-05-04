@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
-	if ( ! class_exists( 'Confirm' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Confirm' ) ) {
 		abstract class Confirm extends Base {
 			/**
 			 * @var string $type the input type

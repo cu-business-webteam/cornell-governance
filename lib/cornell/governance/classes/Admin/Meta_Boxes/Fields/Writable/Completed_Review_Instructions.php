@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Completed_Review_Instructions' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Completed_Review_Instructions' ) ) {
 		class Completed_Review_Instructions extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Completed_Review_Instructions {
 			/**
 			 * @var Completed_Review_Instructions $instance holds the single instance of this class

@@ -14,12 +14,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Tasks' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Tasks' ) ) {
 		abstract class Tasks extends Repeater {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-tasks',
-					'label'    => __( 'Governance Task Check List', 'cornell/governance' ),
+					'label'    => esc_html( __( 'Governance Task Check List', 'cornell-governance' ) ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-repeater',
@@ -37,9 +37,9 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->add_text    = __( 'Add Another New Task', 'cornell/governance' );
-				$this->remove_text = __( 'Remove This Task', 'cornell/governance' );
-				$this->short_name = __( 'Task', 'cornell/governance' );
+				$this->add_text    = esc_html( __( 'Add Another New Task', 'cornell-governance' ) );
+				$this->remove_text = esc_html( __( 'Remove This Task', 'cornell-governance' ) );
+				$this->short_name = esc_html( __( 'Task', 'cornell-governance' ) );
 			}
 
 			/**
@@ -120,7 +120,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 					$this->id,
 					$this->label,
 					implode( "\n\r", $options ),
-					__( 'When this page needs to be reviewed, these tasks will be selectable', 'cornell/governance' )
+					__( 'When this page needs to be reviewed, these tasks will be selectable', 'cornell-governance' )
 				);
 			}
 

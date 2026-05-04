@@ -3,13 +3,12 @@
  * This file processes the various private configuration variables available to the plugin
  */
 namespace {
-	if ( ! defined( 'ABSPATH' ) ) {
+	if ( ! defined( 'ABSPATH' ) )
 		die( 'You do not have permission to access this file directly.' );
-	}
 }
 
 namespace Cornell\Governance {
-	if ( ! class_exists( 'Config' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Config' ) ) {
 		class Config {
 			/**
 			 * @var Config $instance holds the single instance of this class

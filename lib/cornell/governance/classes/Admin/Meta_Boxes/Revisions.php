@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Revisions' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Revisions' ) ) {
 		class Revisions extends Base {
 			/**
 			 * @var Revisions $instance holds the single instance of this class
@@ -24,7 +24,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 			function __construct() {
 				parent::__construct( array(
 					'id'       => 'cornell-governance-page-revisions',
-					'title'    => __( 'Content Updates', 'cornell/governance' ),
+					'title'    => esc_html( __( 'Content Updates', 'cornell-governance' ) ),
 					'context'  => 'side',
 					'priority' => 'high',
 					'fields'   => array(
@@ -179,12 +179,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 					}
 				}
 
-				$output = $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-commit-message', __( 'Current Update', 'cornell/governance' ) );
+				$output = $this->fieldset_open( 'cornell-governance-fieldset cornell-governance-fieldset-commit-message', __( 'Current Update', 'cornell-governance' ) );
 
 				$output .= \Cornell\Governance\Admin\Meta_Boxes\Fields\Commit_Message_Message::instance()->get_input();
 
 				if ( empty( $post_id ) ) {
-					return __( '<p class="note">You will not be able to set up governance information until you have saved this piece of content for the first time</p>', 'cornell/governance' );
+					return esc_html( sprintf( '<p class="note">%s</p>', __( 'You will not be able to set up governance information until you have saved this piece of content for the first time</p>', 'cornell-governance' ) ) );
 					/*} else {
 						$output .= '<p>The current post ID appears to be: ' . $post_id . '</p>';*/
 				}
@@ -213,11 +213,11 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 								%2$s
 							</blockquote>
 						</div>',
-						__( 'Latest content update: ', 'cornell/governance' ),
+						esc_html( __( 'Latest content update: ', 'cornell-governance' ) ),
 						self::format_commit_message( $latest )
 					);
 
-					$output .= sprintf( __( '<p class="field-note"><a href="%s">View more content updates</a></p>', 'cornell/governance' ), $link );
+					$output .= esc_html( sprintf( __( '<p class="field-note"><a href="%s">View more content updates</a></p>', 'cornell-governance' ), $link ) );
 				}
 
 				return sprintf( '<div class="%1$s">%2$s</div>', 'cornell-governance-metabox', $output );

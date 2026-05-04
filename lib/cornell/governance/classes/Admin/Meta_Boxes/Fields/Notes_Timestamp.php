@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Input;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Notes_Timestamp' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Notes_Timestamp' ) ) {
 		class Notes_Timestamp extends Input {
 			/**
 			 * @var Notes_Timestamp $instance holds the single instance of this class
@@ -26,7 +26,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-notes-timestamp',
-					'label'    => __( 'Notes last updated', 'cornell/governance' ),
+					'label'    => esc_html( __( 'Notes last updated', 'cornell-governance' ) ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-email',

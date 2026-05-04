@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Writable {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Last_Review' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Writable\Last_Review' ) ) {
 		Final class Last_Review extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Last_Review {
 			/**
 			 * @var Last_Review $instance holds the single instance of this class

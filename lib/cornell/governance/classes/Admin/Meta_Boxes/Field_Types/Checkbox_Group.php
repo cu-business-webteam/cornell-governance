@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Meta_Boxes\Field_Types {
-	if ( ! class_exists( 'Checkbox_Group' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Field_Types\Checkbox_Group' ) ) {
 		abstract class Checkbox_Group extends Base {
 			/**
 			 * Gathers the options for this checkbox group

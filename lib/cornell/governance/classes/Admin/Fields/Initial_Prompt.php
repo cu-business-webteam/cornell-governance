@@ -7,7 +7,7 @@ namespace {
 }
 
 namespace Cornell\Governance\Admin\Fields {
-	if ( ! class_exists( 'Initial_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Fields\Initial_Prompt' ) ) {
 		class Initial_Prompt extends Prompt_Time {
 			/**
 			 * @var Initial_Prompt $instance holds the single instance of this class
@@ -20,7 +20,7 @@ namespace Cornell\Governance\Admin\Fields {
 			protected function __construct( array $atts = array() ) {
 				parent::__construct( array(
 					'id'        => 'initial-prompt-time',
-					'title'     => __( 'How many days before a review is due should the first prompt message be sent?', 'cornell/governance' ),
+					'title'     => esc_html( __( 'How many days before a review is due should the first prompt message be sent?', 'cornell-governance' ) ),
 					'default'   => 60,
 				) );
 			}

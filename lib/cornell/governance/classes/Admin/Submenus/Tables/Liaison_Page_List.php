@@ -6,7 +6,7 @@ namespace {
 	}
 
 	// Loading table class
-	if ( ! class_exists( 'WP_List_Table' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Tables\WP_List_Table' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 	}
 }
@@ -14,7 +14,7 @@ namespace {
 namespace Cornell\Governance\Admin\Submenus\Tables {
 	use \Cornell\Governance\Admin\Submenus\Liaison_Dashboard;
 
-	if ( ! class_exists( 'Liaison_Page_List' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Tables\Liaison_Page_List' ) ) {
 		class Liaison_Page_List extends Page_List_Table {
 			function __construct( $args = array() ) {
 				$args = array(

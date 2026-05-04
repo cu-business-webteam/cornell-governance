@@ -11,12 +11,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Supervisor' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Supervisor' ) ) {
 		abstract class Supervisor extends Input {
 			function __construct() {
 				$atts = array(
 					'id' => 'cornell-governance-page-info-supervisor',
-					'label' => __( 'Secondary Contact Email', 'cornell/governance' ),
+					'label' => esc_html( __( 'Secondary Contact Email', 'cornell-governance' ) ),
 					'classes' => array( 'cornell-governance-field', 'cornell-governance-email', 'cornell-governance-supervisor' ),
 					'default' => '',
 					'type' => 'email',

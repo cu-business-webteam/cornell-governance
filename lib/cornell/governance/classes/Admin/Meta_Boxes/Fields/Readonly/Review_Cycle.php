@@ -11,7 +11,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Review_Cycle' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Review_Cycle' ) ) {
 		Final class Review_Cycle extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Review_Cycle {
 			/**
 			 * @var Review_Cycle $instance holds the single instance of this class

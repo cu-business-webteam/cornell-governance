@@ -11,12 +11,12 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Admin\Meta_Boxes\Field_Types\Tooltip;
 	use Cornell\Governance\Helpers;
 
-	if ( ! class_exists( 'Steward_Tooltip' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Steward_Tooltip' ) ) {
 		abstract class Steward_Tooltip extends Tooltip {
 			function __construct() {
 				$atts = array(
 					'id'       => 'cornell-governance-page-info-steward-tooltip',
-					'label'    => __( 'More about primary stewards', 'cornell/governance' ),
+					'label'    => esc_html( __( 'More about primary stewards', 'cornell-governance' ) ),
 					'classes'  => array(
 						'cornell-governance-field',
 						'cornell-governance-tooltip',
@@ -38,7 +38,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 			 * @return string the HTML content of the tooltip dialog
 			 */
 			protected function get_content(): string {
-				$content = __( 'The primary steward is automatically set by the WordPress "Author" field. To change the page steward, please update the Author for this page.', 'cornell/governance' );
+				$content = esc_html( __( 'The primary steward is automatically set by the WordPress "Author" field. To change the page steward, please update the Author for this page.', 'cornell-governance' ) );
 
 				return $content;
 			}

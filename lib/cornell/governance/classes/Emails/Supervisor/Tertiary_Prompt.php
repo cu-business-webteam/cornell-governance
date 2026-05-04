@@ -8,7 +8,7 @@ namespace {
 
 namespace Cornell\Governance\Emails\Supervisor {
 
-	if ( ! class_exists( 'Tertiary_Prompt' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Emails\Supervisor\Tertiary_Prompt' ) ) {
 		class Tertiary_Prompt extends \Cornell\Governance\Emails\Tertiary_Prompt {
 			/**
 			 * @var Tertiary_Prompt $instance holds the single instance of this class
@@ -25,7 +25,7 @@ namespace Cornell\Governance\Emails\Supervisor {
 				$prompt_time = get_option( 'cornell-governance-tertiary-prompt-time', 7 );
 
 				$this->set_vars( array(
-					'subject' => sprintf( __( '[Secondary Contact Report] [NOTIFICATION] These pages require review in the next %d days', 'cornell/governance' ), $prompt_time )
+					'subject' => sprintf( esc_html( __( '[Secondary Contact Report] [NOTIFICATION] These pages require review in the next %d days', 'cornell-governance' ) ), $prompt_time )
 				) );
 			}
 

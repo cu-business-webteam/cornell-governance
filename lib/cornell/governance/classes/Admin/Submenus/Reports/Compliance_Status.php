@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Compliance_Status' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Submenus\Reports\Compliance_Status' ) ) {
 		class Compliance_Status extends Base {
 			/**
 			 * @var Compliance_Status $instance holds the single instance of this class
@@ -102,7 +102,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 			 * @since  0.1
 			 */
 			protected function output_data() {
-				$title = __( 'Compliance Status', 'cornell/governance' );
+				$title = esc_html( __( 'Compliance Status', 'cornell-governance' ) );
 
 				$data = $this->get_data();
 
@@ -113,7 +113,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 								<p>%2$s</p>
 							</div>',
 						$title,
-						__( 'There are currently no pages available for this report', 'cornell/governance' )
+						__( 'There are currently no pages available for this report', 'cornell-governance' )
 					);
 
 					return;
@@ -122,18 +122,18 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$output = array(
 					'canvasID'   => 'compliance-status-chart',
 					'type'       => 'doughnut',
-					'chartLabel' => __( 'Review Due Date', 'cornell/governance' ),
+					'chartLabel' => esc_html( __( 'Review Due Date', 'cornell-governance' ) ),
 					'labels'     => array(
-						__( 'Overdue', 'cornell/governance' ),
-						__( 'Due in the next 7 days', 'cornell/governance' ),
-						__( 'Due in the next 30 days', 'cornell/governance' ),
-						__( 'Due in the next 60 days', 'cornell/governance' ),
-						__( 'Fully compliant', 'cornell/governance' ),
-						__( 'Not yet reviewed', 'cornell/governance' ),
+						esc_html( __( 'Overdue', 'cornell-governance' ) ),
+						esc_html( __( 'Due in the next 7 days', 'cornell-governance' ) ),
+						esc_html( __( 'Due in the next 30 days', 'cornell-governance' ) ),
+						esc_html( __( 'Due in the next 60 days', 'cornell-governance' ) ),
+						esc_html( __( 'Fully compliant', 'cornell-governance' ) ),
+						esc_html( __( 'Not yet reviewed', 'cornell-governance' ) ),
 					),
 					'datasets'   => array(
 						array(
-							'label'           => __( 'Review Due Date', 'cornell/governance' ),
+							'label'           => esc_html( __( 'Review Due Date', 'cornell-governance' ) ),
 							'data'            => array(
 								count( $data['overdue'] ),
 								count( $data['7-days'] ),
@@ -185,7 +185,7 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 					'<details id="%2$s-data"><summary>%3$s</summary><dl>%1$s</dl></details>',
 					implode( '', $lists ),
 					$output['canvasID'],
-					__( 'Reveal source data for this chart', 'cornell/governance' )
+					__( 'Reveal source data for this chart', 'cornell-governance' )
 				);
 
 				add_action( 'admin_footer', array( Reports::instance(), 'localize_script' ) );
@@ -207,18 +207,18 @@ namespace Cornell\Governance\Admin\Submenus\Reports {
 				$export = \Cornell\Governance\Admin\Import_Export\Generic_Export::instance();
 
 				$headers = array(
-					'page_id'            => __( 'Page ID', 'cornell/governance' ),
-					'page_title'         => __( 'Page Title', 'cornell/governance' ),
-					'page_url'           => __( 'Page URL', 'cornell/governance' ),
-					'primary-audience'   => __( 'Primary Audience', 'cornell/governance' ),
-					'secondary-audience' => __( 'Secondary Audience', 'cornell/governance' ),
-					'last-reviewed'      => __( 'Last Reviewed', 'cornell/governance' ),
-					'review-cycle'       => __( 'Review Cycle', 'cornell/governance' ),
-					'steward'            => __( 'Steward', 'cornell/governance' ),
-					'steward_email'      => __( 'Steward Email', 'cornell/governance' ),
-					'steward_username'   => __( 'Steward Username', 'cornell/governance' ),
-					'supervisor'         => __( 'Secondary Contact', 'cornell/governance' ),
-					'liaison'            => __( 'Liaison', 'cornell/governance' ),
+					'page_id'            => esc_html( __( 'Page ID', 'cornell-governance' ) ),
+					'page_title'         => esc_html( __( 'Page Title', 'cornell-governance' ) ),
+					'page_url'           => esc_html( __( 'Page URL', 'cornell-governance' ) ),
+					'primary-audience'   => esc_html( __( 'Primary Audience', 'cornell-governance' ) ),
+					'secondary-audience' => esc_html( __( 'Secondary Audience', 'cornell-governance' ) ),
+					'last-reviewed'      => esc_html( __( 'Last Reviewed', 'cornell-governance' ) ),
+					'review-cycle'       => esc_html( __( 'Review Cycle', 'cornell-governance' ) ),
+					'steward'            => esc_html( __( 'Steward', 'cornell-governance' ) ),
+					'steward_email'      => esc_html( __( 'Steward Email', 'cornell-governance' ) ),
+					'steward_username'   => esc_html( __( 'Steward Username', 'cornell-governance' ) ),
+					'supervisor'         => esc_html( __( 'Secondary Contact', 'cornell-governance' ) ),
+					'liaison'            => esc_html( __( 'Liaison', 'cornell-governance' ) ),
 				);
 
 				$export->set_headers( $headers );

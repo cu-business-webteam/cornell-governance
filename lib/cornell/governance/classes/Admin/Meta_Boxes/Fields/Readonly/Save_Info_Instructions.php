@@ -12,7 +12,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Save_Info_Instructions' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Readonly\Save_Info_Instructions' ) ) {
 		class Save_Info_Instructions extends \Cornell\Governance\Admin\Meta_Boxes\Fields\Save_Info_Instructions {
 			/**
 			 * @var Save_Info_Instructions $instance holds the single instance of this class

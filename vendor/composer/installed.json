@@ -1,6 +1,67 @@
 {
         "packages": [
                 {
+                        "name": "eftec/bladeone",
+                        "version": "3.52",
+                        "version_normalized": "3.52.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/EFTEC/BladeOne.git",
+                                "reference": "a19bf66917de0b29836983db87a455a4f6e32148"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/a19bf66917de0b29836983db87a455a4f6e32148",
+                                "reference": "a19bf66917de0b29836983db87a455a4f6e32148",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-json": "*",
+                                "php": ">=5.6"
+                        },
+                        "require-dev": {
+                                "friendsofphp/php-cs-fixer": "^2.16.1",
+                                "phpunit/phpunit": "^5.7",
+                                "squizlabs/php_codesniffer": "^3.5.4"
+                        },
+                        "suggest": {
+                                "eftec/bladeonehtml": "Extension to create forms",
+                                "ext-mbstring": "This extension is used if it's active"
+                        },
+                        "time": "2021-04-17T13:49:01+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "eftec\\bladeone\\": "lib/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Jorge Patricio Castro Castillo",
+                                        "email": "jcastro@eftec.cl"
+                                }
+                        ],
+                        "description": "The standalone version Blade Template Engine from Laravel in a single php file",
+                        "homepage": "https://github.com/EFTEC/BladeOne",
+                        "keywords": [
+                                "blade",
+                                "php",
+                                "template",
+                                "templating",
+                                "view"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/EFTEC/BladeOne/issues",
+                                "source": "https://github.com/EFTEC/BladeOne/tree/3.52"
+                        },
+                        "install-path": "../eftec/bladeone"
+                },
+                {
                         "name": "erusev/parsedown",
                         "version": "1.8.0",
                         "version_normalized": "1.8.0.0",
@@ -66,12 +127,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/erusev/parsedown-extra.git",
-                                "reference": "b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d"
+                                "reference": "cf4dc29794d22ab441fddd2b336b5c54f7ae2e2f"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d",
-                                "reference": "b6a8efbcb0fb37c038ff5d6fc1aa138f5768155d",
+                                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/cf4dc29794d22ab441fddd2b336b5c54f7ae2e2f",
+                                "reference": "cf4dc29794d22ab441fddd2b336b5c54f7ae2e2f",
                                 "shasum": ""
                         },
                         "require": {
@@ -84,7 +145,7 @@
                         "require-dev": {
                                 "phpunit/phpunit": "^8.5.52|^9.6.33"
                         },
-                        "time": "2026-02-18T15:50:12+00:00",
+                        "time": "2026-03-03T06:52:47+00:00",
                         "default-branch": true,
                         "type": "library",
                         "installation-source": "source",
@@ -125,18 +186,180 @@
                         "install-path": "../erusev/parsedown-extra"
                 },
                 {
+                        "name": "gettext/gettext",
+                        "version": "4.x-dev",
+                        "version_normalized": "4.9999999.9999999.9999999-dev",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/php-gettext/Gettext.git",
+                                "reference": "11af89ee6c087db3cf09ce2111a150bca5c46e12"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/php-gettext/Gettext/zipball/11af89ee6c087db3cf09ce2111a150bca5c46e12",
+                                "reference": "11af89ee6c087db3cf09ce2111a150bca5c46e12",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "gettext/languages": "^2.3",
+                                "php": ">=5.4.0"
+                        },
+                        "require-dev": {
+                                "illuminate/view": "^5.0.x-dev",
+                                "phpunit/phpunit": "^4.8|^5.7|^6.5",
+                                "squizlabs/php_codesniffer": "^3.0",
+                                "symfony/yaml": "~2",
+                                "twig/extensions": "*",
+                                "twig/twig": "^1.31|^2.0"
+                        },
+                        "suggest": {
+                                "illuminate/view": "Is necessary if you want to use the Blade extractor",
+                                "symfony/yaml": "Is necessary if you want to use the Yaml extractor/generator",
+                                "twig/extensions": "Is necessary if you want to use the Twig extractor",
+                                "twig/twig": "Is necessary if you want to use the Twig extractor"
+                        },
+                        "time": "2024-05-18T10:25:07+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Gettext\\": "src"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Oscar Otero",
+                                        "email": "oom@oscarotero.com",
+                                        "homepage": "http://oscarotero.com",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "PHP gettext manager",
+                        "homepage": "https://github.com/oscarotero/Gettext",
+                        "keywords": [
+                                "JS",
+                                "gettext",
+                                "i18n",
+                                "mo",
+                                "po",
+                                "translation"
+                        ],
+                        "support": {
+                                "email": "oom@oscarotero.com",
+                                "issues": "https://github.com/oscarotero/Gettext/issues",
+                                "source": "https://github.com/php-gettext/Gettext/tree/4.x"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://paypal.me/oscarotero",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/oscarotero",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://www.patreon.com/misteroom",
+                                        "type": "patreon"
+                                }
+                        ],
+                        "install-path": "../gettext/gettext"
+                },
+                {
+                        "name": "gettext/languages",
+                        "version": "2.12.2",
+                        "version_normalized": "2.12.2.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/php-gettext/Languages.git",
+                                "reference": "079d6f4842cbcbf5673a70d8e93169a684e7aadd"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/php-gettext/Languages/zipball/079d6f4842cbcbf5673a70d8e93169a684e7aadd",
+                                "reference": "079d6f4842cbcbf5673a70d8e93169a684e7aadd",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5 || ^8.4"
+                        },
+                        "time": "2026-02-23T14:05:50+00:00",
+                        "bin": [
+                                "bin/export-plural-rules",
+                                "bin/import-cldr-data"
+                        ],
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Gettext\\Languages\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Michele Locati",
+                                        "email": "mlocati@gmail.com",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "gettext languages with plural rules",
+                        "homepage": "https://github.com/php-gettext/Languages",
+                        "keywords": [
+                                "cldr",
+                                "i18n",
+                                "internationalization",
+                                "l10n",
+                                "language",
+                                "languages",
+                                "localization",
+                                "php",
+                                "plural",
+                                "plural rules",
+                                "plurals",
+                                "translate",
+                                "translations",
+                                "unicode"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/php-gettext/Languages/issues",
+                                "source": "https://github.com/php-gettext/Languages/tree/2.12.2"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://paypal.me/mlocati",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/mlocati",
+                                        "type": "github"
+                                }
+                        ],
+                        "install-path": "../gettext/languages"
+                },
+                {
                         "name": "graham-campbell/result-type",
                         "version": "1.1.x-dev",
                         "version_normalized": "1.1.9999999.9999999-dev",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/GrahamCampbell/Result-Type.git",
-                                "reference": "e01f4a821471308ba86aa202fed6698b6b695e3b"
+                                "reference": "806fe8441c34bed1318bc779e2a510e6555f2169"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/e01f4a821471308ba86aa202fed6698b6b695e3b",
-                                "reference": "e01f4a821471308ba86aa202fed6698b6b695e3b",
+                                "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/806fe8441c34bed1318bc779e2a510e6555f2169",
+                                "reference": "806fe8441c34bed1318bc779e2a510e6555f2169",
                                 "shasum": ""
                         },
                         "require": {
@@ -144,9 +367,9 @@
                                 "phpoption/phpoption": "^1.9.5"
                         },
                         "require-dev": {
-                                "phpunit/phpunit": "^8.5.41 || ^9.6.22 || ^10.5.45 || ^11.5.7"
+                                "phpunit/phpunit": "^8.5.52 || ^9.6.34 || ^10.5.63 || ^11.5.55 || ^12.5.14"
                         },
-                        "time": "2025-12-27T19:43:20+00:00",
+                        "time": "2026-03-19T18:33:23+00:00",
                         "default-branch": true,
                         "type": "library",
                         "installation-source": "source",
@@ -189,6 +412,115 @@
                                 }
                         ],
                         "install-path": "../graham-campbell/result-type"
+                },
+                {
+                        "name": "mck89/peast",
+                        "version": "dev-master",
+                        "version_normalized": "dev-master",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/mck89/peast.git",
+                                "reference": "b8b4184b1e6912669f9af155caef9050509d9f18"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/mck89/peast/zipball/b8b4184b1e6912669f9af155caef9050509d9f18",
+                                "reference": "b8b4184b1e6912669f9af155caef9050509d9f18",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-mbstring": "*",
+                                "php": ">=5.4.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+                        },
+                        "time": "2026-04-24T08:04:05+00:00",
+                        "default-branch": true,
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "1.17.6-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Peast\\": "lib/Peast/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "BSD-3-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Marco Marchiò",
+                                        "email": "marco.mm89@gmail.com"
+                                }
+                        ],
+                        "description": "Peast is PHP library that generates AST for JavaScript code",
+                        "support": {
+                                "issues": "https://github.com/mck89/peast/issues",
+                                "source": "https://github.com/mck89/peast/tree/master"
+                        },
+                        "install-path": "../mck89/peast"
+                },
+                {
+                        "name": "mustache/mustache",
+                        "version": "v3.1.0",
+                        "version_normalized": "3.1.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/bobthecow/mustache.php.git",
+                                "reference": "f1853266937492dce75e63fb071cd844aa7d4089"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/f1853266937492dce75e63fb071cd844aa7d4089",
+                                "reference": "f1853266937492dce75e63fb071cd844aa7d4089",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.6"
+                        },
+                        "require-dev": {
+                                "friendsofphp/php-cs-fixer": "~2.19.3",
+                                "yoast/phpunit-polyfills": "^2.0"
+                        },
+                        "time": "2026-04-30T18:25:37+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Mustache\\": "src/"
+                                },
+                                "classmap": [
+                                        "src/compat.php"
+                                ]
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Justin Hileman",
+                                        "email": "justin@justinhileman.info",
+                                        "homepage": "http://justinhileman.com"
+                                }
+                        ],
+                        "description": "A Mustache implementation in PHP.",
+                        "homepage": "https://github.com/bobthecow/mustache.php",
+                        "keywords": [
+                                "mustache",
+                                "templating"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/bobthecow/mustache.php/issues",
+                                "source": "https://github.com/bobthecow/mustache.php/tree/v3.1.0"
+                        },
+                        "install-path": "../mustache/mustache"
                 },
                 {
                         "name": "phpoption/phpoption",
@@ -326,18 +658,71 @@
                         "install-path": "../salesforce/handlebars-php"
                 },
                 {
+                        "name": "solvebeam/wp-text-domain-replacer",
+                        "version": "dev-main",
+                        "version_normalized": "dev-main",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/solvebeam/wp-text-domain-replacer.git",
+                                "reference": "bd55d8f6a959591b12678447e9b324fce2f9e735"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/solvebeam/wp-text-domain-replacer/zipball/bd55d8f6a959591b12678447e9b324fce2f9e735",
+                                "reference": "bd55d8f6a959591b12678447e9b324fce2f9e735",
+                                "shasum": ""
+                        },
+                        "require-dev": {
+                                "pronamic/wp-coding-standards": "^2.3"
+                        },
+                        "time": "2026-03-23T19:33:34+00:00",
+                        "default-branch": true,
+                        "bin": [
+                                "bin/wptdr"
+                        ],
+                        "type": "library",
+                        "extra": {
+                                "solvebeam-wp-text-domain-replacer": {
+                                        "dir": "tests",
+                                        "search": [
+                                                "old",
+                                                "older",
+                                                "block-development-examples"
+                                        ],
+                                        "exclude": [
+                                                "exclude"
+                                        ],
+                                        "replace": "new"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "notification-url": "https://packagist.org/downloads/",
+                        "authors": [
+                                {
+                                        "name": "SolveBeam",
+                                        "email": "info@solvebeam.com"
+                                }
+                        ],
+                        "description": "A developer tool for replacing WordPress translation text domains in PHP, JavaScript, and `block.json` files.",
+                        "support": {
+                                "issues": "https://github.com/solvebeam/wp-text-domain-replacer/issues",
+                                "source": "https://github.com/solvebeam/wp-text-domain-replacer/tree/main"
+                        },
+                        "install-path": "../solvebeam/wp-text-domain-replacer"
+                },
+                {
                         "name": "symfony/polyfill-ctype",
                         "version": "1.x-dev",
                         "version_normalized": "1.9999999.9999999.9999999-dev",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638"
+                                "reference": "141046a8f9477948ff284fa65be2095baafb94f2"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/a3cc8b044a6ea513310cbd48ef7333b384945638",
-                                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638",
+                                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/141046a8f9477948ff284fa65be2095baafb94f2",
+                                "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
                                 "shasum": ""
                         },
                         "require": {
@@ -349,7 +734,8 @@
                         "suggest": {
                                 "ext-ctype": "For best performance"
                         },
-                        "time": "2024-09-09T11:45:10+00:00",
+                        "time": "2026-04-10T16:19:22+00:00",
+                        "default-branch": true,
                         "type": "library",
                         "extra": {
                                 "thanks": {
@@ -388,6 +774,9 @@
                                 "polyfill",
                                 "portable"
                         ],
+                        "support": {
+                                "source": "https://github.com/symfony/polyfill-ctype/tree/1.x"
+                        },
                         "funding": [
                                 {
                                         "url": "https://symfony.com/sponsor",
@@ -395,6 +784,10 @@
                                 },
                                 {
                                         "url": "https://github.com/fabpot",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://github.com/nicolas-grekas",
                                         "type": "github"
                                 },
                                 {
@@ -411,12 +804,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493"
+                                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6d857f4d76bd4b343eac26d6b539585d2bc56493",
-                                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493",
+                                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6a21eb99c6973357967f6ce3708cd55a6bec6315",
+                                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315",
                                 "shasum": ""
                         },
                         "require": {
@@ -429,7 +822,8 @@
                         "suggest": {
                                 "ext-mbstring": "For best performance"
                         },
-                        "time": "2024-12-23T08:48:59+00:00",
+                        "time": "2026-04-10T17:25:58+00:00",
+                        "default-branch": true,
                         "type": "library",
                         "extra": {
                                 "thanks": {
@@ -469,6 +863,9 @@
                                 "portable",
                                 "shim"
                         ],
+                        "support": {
+                                "source": "https://github.com/symfony/polyfill-mbstring/tree/1.x"
+                        },
                         "funding": [
                                 {
                                         "url": "https://symfony.com/sponsor",
@@ -476,6 +873,10 @@
                                 },
                                 {
                                         "url": "https://github.com/fabpot",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://github.com/nicolas-grekas",
                                         "type": "github"
                                 },
                                 {
@@ -492,18 +893,18 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/symfony/polyfill-php80.git",
-                                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608"
+                                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
-                                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
+                                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+                                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
                                 "shasum": ""
                         },
                         "require": {
                                 "php": ">=7.2"
                         },
-                        "time": "2025-01-02T08:10:11+00:00",
+                        "time": "2026-04-10T16:19:22+00:00",
                         "default-branch": true,
                         "type": "library",
                         "extra": {
@@ -563,11 +964,76 @@
                                         "type": "github"
                                 },
                                 {
+                                        "url": "https://github.com/nicolas-grekas",
+                                        "type": "github"
+                                },
+                                {
                                         "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                                         "type": "tidelift"
                                 }
                         ],
                         "install-path": "../symfony/polyfill-php80"
+                },
+                {
+                        "name": "varunsridharan/wp-cli-textdomain",
+                        "version": "dev-main",
+                        "version_normalized": "dev-main",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/varunsridharan/wp-cli-textdomain.git",
+                                "reference": "edeb5b18b59bc6989c9f05215741e19e77113c3a"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/varunsridharan/wp-cli-textdomain/zipball/edeb5b18b59bc6989c9f05215741e19e77113c3a",
+                                "reference": "edeb5b18b59bc6989c9f05215741e19e77113c3a",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "wp-cli/i18n-command": ">=1"
+                        },
+                        "time": "2021-04-11T05:29:23+00:00",
+                        "default-branch": true,
+                        "bin": [
+                                "bin/add-textdomain.bat",
+                                "bin/makepot.bat"
+                        ],
+                        "type": "library",
+                        "installation-source": "dist",
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "GPL-3.0-or-later"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Varun Sridharan",
+                                        "email": "varunsridharan23@gmail.com",
+                                        "homepage": "http://varunsridharan.in",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "Simple Library Which Provides Option To Render TextDomains",
+                        "homepage": "https://github.com/varunsridharan/wp-cli-text-domain/",
+                        "support": {
+                                "email": "varunsridharan23@gmail.com",
+                                "issues": "https://github.com/varunsridharan/wp-cli-text-domain/issues",
+                                "source": "https://github.com/varunsridharan/wp-cli-textdomain/tree/main"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://paypal.me/varunsridharan23",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://www.buymeacoffee.com/varunsridharan",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/varunsridharan",
+                                        "type": "github"
+                                }
+                        ],
+                        "install-path": "../varunsridharan/wp-cli-textdomain"
                 },
                 {
                         "name": "vlucas/phpdotenv",
@@ -658,25 +1124,307 @@
                         "install-path": "../vlucas/phpdotenv"
                 },
                 {
+                        "name": "wp-cli/i18n-command",
+                        "version": "dev-main",
+                        "version_normalized": "dev-main",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/wp-cli/i18n-command.git",
+                                "reference": "a42366245fef8b11a5d895db3f38d3c606d21d06"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/a42366245fef8b11a5d895db3f38d3c606d21d06",
+                                "reference": "a42366245fef8b11a5d895db3f38d3c606d21d06",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "eftec/bladeone": "3.52",
+                                "gettext/gettext": "^4.8",
+                                "mck89/peast": "^1.13.11",
+                                "wp-cli/wp-cli": "^2.13"
+                        },
+                        "require-dev": {
+                                "wp-cli/scaffold-command": "^1.2 || ^2",
+                                "wp-cli/wp-cli-tests": "^5.0.0"
+                        },
+                        "suggest": {
+                                "ext-json": "Used for reading and generating JSON translation files",
+                                "ext-mbstring": "Used for calculating include/exclude matches in code extraction"
+                        },
+                        "time": "2026-04-28T13:55:33+00:00",
+                        "default-branch": true,
+                        "type": "wp-cli-package",
+                        "extra": {
+                                "bundled": true,
+                                "commands": [
+                                        "i18n",
+                                        "i18n audit",
+                                        "i18n make-pot",
+                                        "i18n make-json",
+                                        "i18n make-mo",
+                                        "i18n make-php",
+                                        "i18n update-po"
+                                ],
+                                "branch-alias": {
+                                        "dev-main": "2.x-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "files": [
+                                        "i18n-command.php"
+                                ],
+                                "psr-4": {
+                                        "WP_CLI\\I18n\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Pascal Birchler",
+                                        "homepage": "https://pascalbirchler.com/"
+                                }
+                        ],
+                        "description": "Provides internationalization tools for WordPress projects.",
+                        "homepage": "https://github.com/wp-cli/i18n-command",
+                        "support": {
+                                "issues": "https://github.com/wp-cli/i18n-command/issues",
+                                "source": "https://github.com/wp-cli/i18n-command/tree/main"
+                        },
+                        "install-path": "../wp-cli/i18n-command"
+                },
+                {
+                        "name": "wp-cli/mustangostang-spyc",
+                        "version": "0.6.6",
+                        "version_normalized": "0.6.6.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/wp-cli/spyc.git",
+                                "reference": "30f25baaaba939caaff1f4b8c7ed998632f59fe2"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/wp-cli/spyc/zipball/30f25baaaba939caaff1f4b8c7ed998632f59fe2",
+                                "reference": "30f25baaaba939caaff1f4b8c7ed998632f59fe2",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3.1"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "4.3.*@dev"
+                        },
+                        "time": "2026-03-12T12:30:41+00:00",
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "0.5.x-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "files": [
+                                        "includes/functions.php"
+                                ],
+                                "psr-4": {
+                                        "Mustangostang\\": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "mustangostang",
+                                        "email": "vlad.andersen@gmail.com"
+                                }
+                        ],
+                        "description": "A simple YAML loader/dumper class for PHP (WP-CLI fork)",
+                        "homepage": "https://github.com/mustangostang/spyc/",
+                        "support": {
+                                "source": "https://github.com/wp-cli/spyc/tree/0.6.6"
+                        },
+                        "install-path": "../wp-cli/mustangostang-spyc"
+                },
+                {
+                        "name": "wp-cli/php-cli-tools",
+                        "version": "dev-main",
+                        "version_normalized": "dev-main",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/wp-cli/php-cli-tools.git",
+                                "reference": "cf3b8901123fed33a752897d336b1561243913a4"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/cf3b8901123fed33a752897d336b1561243913a4",
+                                "reference": "cf3b8901123fed33a752897d336b1561243913a4",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">= 7.2.24"
+                        },
+                        "require-dev": {
+                                "roave/security-advisories": "dev-latest",
+                                "wp-cli/wp-cli-tests": "^5"
+                        },
+                        "time": "2026-04-22T08:46:10+00:00",
+                        "default-branch": true,
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-main": "0.12.x-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "files": [
+                                        "lib/cli/cli.php"
+                                ],
+                                "psr-0": {
+                                        "cli": "lib/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Daniel Bachhuber",
+                                        "email": "daniel@handbuilt.co",
+                                        "role": "Maintainer"
+                                },
+                                {
+                                        "name": "James Logsdon",
+                                        "email": "jlogsdon@php.net",
+                                        "role": "Developer"
+                                }
+                        ],
+                        "description": "Console utilities for PHP",
+                        "homepage": "http://github.com/wp-cli/php-cli-tools",
+                        "keywords": [
+                                "cli",
+                                "console"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/wp-cli/php-cli-tools/issues",
+                                "source": "https://github.com/wp-cli/php-cli-tools/tree/main"
+                        },
+                        "install-path": "../wp-cli/php-cli-tools"
+                },
+                {
+                        "name": "wp-cli/wp-cli",
+                        "version": "dev-main",
+                        "version_normalized": "dev-main",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/wp-cli/wp-cli.git",
+                                "reference": "dd0c55b323d05d5c4e4c19aaff40bc3177b9a25d"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/dd0c55b323d05d5c4e4c19aaff40bc3177b9a25d",
+                                "reference": "dd0c55b323d05d5c4e4c19aaff40bc3177b9a25d",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "mustache/mustache": "^3.0.0",
+                                "php": ">=7.2.24 || ^8.0",
+                                "wp-cli/mustangostang-spyc": "^0.6.3",
+                                "wp-cli/php-cli-tools": "~0.12.7"
+                        },
+                        "require-dev": {
+                                "justinrainbow/json-schema": "^6.3",
+                                "roave/security-advisories": "dev-latest",
+                                "wp-cli/db-command": "^2",
+                                "wp-cli/entity-command": "^2",
+                                "wp-cli/extension-command": "^2",
+                                "wp-cli/package-command": "^2",
+                                "wp-cli/wp-cli-tests": "^5"
+                        },
+                        "suggest": {
+                                "ext-curl": "For better performance when making HTTP requests",
+                                "ext-readline": "Include for a better --prompt implementation",
+                                "ext-zip": "Needed to support extraction of ZIP archives when doing downloads or updates"
+                        },
+                        "time": "2026-05-04T05:20:39+00:00",
+                        "default-branch": true,
+                        "bin": [
+                                "bin/wp",
+                                "bin/wp.bat"
+                        ],
+                        "type": "library",
+                        "extra": {
+                                "commands": [
+                                        "cli",
+                                        "cli alias",
+                                        "cli cache",
+                                        "cli check-update",
+                                        "cli cmd-dump",
+                                        "cli completions",
+                                        "cli has-command",
+                                        "cli info",
+                                        "cli param-dump",
+                                        "cli update",
+                                        "cli version"
+                                ],
+                                "branch-alias": {
+                                        "dev-main": "2.13.x-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "WP_CLI\\": "php/"
+                                },
+                                "classmap": [
+                                        "php/class-wp-cli.php",
+                                        "php/class-wp-cli-command.php"
+                                ]
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "description": "WP-CLI framework",
+                        "homepage": "https://wp-cli.org",
+                        "keywords": [
+                                "cli",
+                                "wordpress"
+                        ],
+                        "support": {
+                                "docs": "https://make.wordpress.org/cli/handbook/",
+                                "issues": "https://github.com/wp-cli/wp-cli/issues",
+                                "source": "https://github.com/wp-cli/wp-cli"
+                        },
+                        "install-path": "../wp-cli/wp-cli"
+                },
+                {
                         "name": "yahnis-elsts/plugin-update-checker",
                         "version": "dev-master",
                         "version_normalized": "dev-master",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
-                                "reference": "9c044de05f7829e2c88b2c773957e17d5423ffb8"
+                                "reference": "299a8698f1417c7211300e9baddd8709417e1a8b"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/9c044de05f7829e2c88b2c773957e17d5423ffb8",
-                                "reference": "9c044de05f7829e2c88b2c773957e17d5423ffb8",
+                                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/299a8698f1417c7211300e9baddd8709417e1a8b",
+                                "reference": "299a8698f1417c7211300e9baddd8709417e1a8b",
                                 "shasum": ""
                         },
                         "require": {
                                 "ext-json": "*",
                                 "php": ">=5.6.20"
                         },
-                        "time": "2026-02-18T17:31:46+00:00",
+                        "time": "2026-04-04T09:06:38+00:00",
                         "default-branch": true,
                         "type": "library",
                         "installation-source": "source",
@@ -707,11 +1455,23 @@
                         ],
                         "support": {
                                 "issues": "https://github.com/YahnisElsts/plugin-update-checker/issues",
-                                "source": "https://github.com/YahnisElsts/plugin-update-checker/tree/master"
+                                "source": "https://github.com/YahnisElsts/plugin-update-checker/tree/feat-bitbucket-api-token"
                         },
                         "install-path": "../yahnis-elsts/plugin-update-checker"
                 }
         ],
         "dev": true,
-        "dev-package-names": []
+        "dev-package-names": [
+                "eftec/bladeone",
+                "gettext/gettext",
+                "gettext/languages",
+                "mck89/peast",
+                "mustache/mustache",
+                "solvebeam/wp-text-domain-replacer",
+                "varunsridharan/wp-cli-textdomain",
+                "wp-cli/i18n-command",
+                "wp-cli/mustangostang-spyc",
+                "wp-cli/php-cli-tools",
+                "wp-cli/wp-cli"
+        ]
 }

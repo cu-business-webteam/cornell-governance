@@ -1,0 +1,225 @@
+<?php
+
+namespace WP_CLI\Context;
+
+use WP_CLI;
+use WP_CLI\Context;
+use WP_CLI\Fetchers\User;
+use WP_User;
+
+/**
+ * Context which simulates the administrator backend.
+ */
+final class Admin implements Context {
+
+	/**
+	 * Process the context to set up the environment correctly.
+	 *
+	 * @param array $config Associative array of configuration data.
+	 * @return void
+	 */
+	public function process( $config ) {
+		if ( defined( 'WP_ADMIN' ) ) {
+			// @phpstan-ignore phpstanWP.wpConstant.fetch
+			if ( ! WP_ADMIN ) {
+				WP_CLI::warning( 'Could not fake admin request.' );
+			}
+
+			return;
+		}
+
+		WP_CLI::debug( 'Faking an admin request', Context::DEBUG_GROUP );
+
+		// Define `WP_ADMIN` as being true. This causes the helper method
+		// `is_admin()` to return true as well.
+		define( 'WP_ADMIN', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+
+		// Set a fake entry point to ensure wp-includes/vars.php does not throw
+		// notices/errors. This will be reflected in the global `$pagenow`
+		// variable. We try to use a realistic admin page based on the current
+		// command so that plugins which check `$pagenow` behave correctly.
+		$_SERVER['PHP_SELF'] = '/wp-admin/' . $this->get_fake_admin_page();
+
+		// Bootstrap the WordPress administration area.
+		WP_CLI::add_wp_hook(
+			'plugins_loaded',
+			function () use ( $config ) {
+				if ( isset( $config['user'] ) ) {
+					$fetcher       = new User();
+					$user          = $fetcher->get_check( $config['user'] );
+					$admin_user_id = $user->ID;
+				} else {
+					$admin_user_id = $this->find_admin_user_id();
+				}
+
+				/**
+				 * @var int<1, max> $admin_user_id
+				 */
+
+				WP_CLI::debug( sprintf( 'Continuing as admin user %d', $admin_user_id ), Context::DEBUG_GROUP );
+
+				$this->log_in_as_admin_user( $admin_user_id );
+			},
+			defined( 'PHP_INT_MIN' ) ? PHP_INT_MIN : -2147483648, // phpcs:ignore PHPCompatibility.Constants.NewConstants.php_int_minFound
+			0
+		);
+
+		WP_CLI::add_wp_hook(
+			'wp_loaded',
+			function () {
+				$this->load_admin_environment();
+			},
+			defined( 'PHP_INT_MAX' ) ? PHP_INT_MAX : 2147483648, // phpcs:ignore PHPCompatibility.Constants.NewConstants.php_int_maxFound
+			0
+		);
+	}
+
+	/**
+	 * Find a suitable admin user ID for the current environment.
+	 *
+	 * On multisite, resolves a super admin via get_super_admins().
+	 * On single site, finds a user with the administrator role.
+	 *
+	 * @return int<1, max> Admin user ID.
+	 */
+	private function find_admin_user_id() {
+		if ( is_multisite() ) {
+			$super_admins = get_super_admins();
+
+			foreach ( $super_admins as $super_admin_login ) {
+				$user = get_user_by( 'login', $super_admin_login );
+				if ( $user instanceof WP_User ) {
+					/** @var int<1, max> */
+					return $user->ID;
+				}
+			}
+
+			WP_CLI::error( 'No super admin user found. Specify one with --user=<login>.' );
+		}
+
+		$admins = get_users(
+			[
+				'role'    => 'administrator',
+				'number'  => 1,
+				'orderby' => 'ID',
+				'order'   => 'ASC',
+			]
+		);
+
+		if ( ! empty( $admins ) ) {
+			return $admins[0]->ID;
+		}
+
+		WP_CLI::error( 'No administrator user found. Specify one with --user=<login>.' );
+	}
+
+	/**
+	 * Get a fake admin page filename that reflects the current command.
+	 *
+	 * Returns 'plugins.php' for `wp plugin` commands, 'themes.php' for
+	 * `wp theme` commands, and 'wp-cli-fake-admin-file.php' otherwise.
+	 *
+	 * @return string Admin page filename.
+	 */
+	private function get_fake_admin_page(): string {
+		$command = WP_CLI::get_runner()->arguments;
+
+		$command_map = [
+			'plugin' => 'plugins.php',
+			'theme'  => 'themes.php',
+		];
+
+		$command_name = $command[0] ?? '';
+
+		return $command_map[ $command_name ] ?? 'wp-cli-fake-admin-file.php';
+	}
+
+	/**
+	 * Ensure the current request is done under a logged-in administrator
+	 * account.
+	 *
+	 * A lot of premium plugins/themes have their custom update routines locked
+	 * behind an is_admin() call.
+	 *
+	 * @param int<1, max> $admin_user_id to log in as
+	 *
+	 * @return void
+	 */
+	private function log_in_as_admin_user( $admin_user_id ): void {
+		wp_set_current_user( $admin_user_id );
+
+		$expiration = time() + DAY_IN_SECONDS;
+
+		$_COOKIE[ AUTH_COOKIE ] = wp_generate_auth_cookie(
+			$admin_user_id,
+			$expiration,
+			'auth'
+		);
+
+		$_COOKIE[ SECURE_AUTH_COOKIE ] = wp_generate_auth_cookie(
+			$admin_user_id,
+			$expiration,
+			'secure_auth'
+		);
+	}
+
+	/**
+	 * Load the admin environment.
+	 *
+	 * This tries to load `wp-admin/admin.php` while trying to avoid issues
+	 * like re-loading the wp-config.php file (which redeclares constants).
+	 *
+	 * To make this work across WordPress versions, we use the actual file and
+	 * modify it on-the-fly.
+	 *
+	 * @global string $hook_suffix
+	 * @global string $pagenow
+	 * @global int    $wp_db_version
+	 * @global array  $_wp_submenu_nopriv
+	 * @global array  $menu_order
+	 * @global array  $default_menu_order
+	 * @global array  $menu
+	 * @global array  $submenu
+	 * @global array  $compat
+	 */
+	private function load_admin_environment(): void {
+		global $compat, $default_menu_order, $hook_suffix, $menu, $menu_order, $pagenow, $submenu, $wp_db_version, $_wp_submenu_nopriv;
+
+		if ( ! isset( $hook_suffix ) ) {
+			$hook_suffix = 'index'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		}
+
+		// Make sure we don't trigger a DB upgrade as that tries to redirect
+		// the page.
+
+		/**
+		 * @var string $wp_db_version
+		 */
+		$wp_db_version = get_option( 'db_version' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$wp_db_version = (int) $wp_db_version; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		// Ensure WP does not iterate over an undefined variable in
+		// `user_can_access_admin_page()`.
+		if ( ! isset( $_wp_submenu_nopriv ) ) {
+			$_wp_submenu_nopriv = []; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		}
+
+		$admin_php_file = (string) file_get_contents( ABSPATH . 'wp-admin/admin.php' );
+
+		// First we remove the opening and closing PHP tags.
+		$admin_php_file = (string) preg_replace( '/^<\?php\s+/', '', $admin_php_file );
+		$admin_php_file = (string) preg_replace( '/\s+\?>$/', '', $admin_php_file );
+
+		// Then we remove the loading of either wp-config.php or wp-load.php.
+		$admin_php_file = (string) preg_replace( '/^\s*(?:include|require).*[\'"]\/?wp-(?:load|config)\.php[\'"]\s*\)?;\s*$/m', '', $admin_php_file );
+
+		// We also remove the authentication redirect.
+		$admin_php_file = (string) preg_replace( '/^\s*auth_redirect\(\);$/m', '', $admin_php_file );
+
+		// Finally, we avoid sending headers.
+		$admin_php_file   = (string) preg_replace( '/^\s*nocache_headers\(\);$/m', '', $admin_php_file );
+		$_GET['noheader'] = true;
+
+		eval( $admin_php_file ); // phpcs:ignore Squiz.PHP.Eval.Discouraged
+	}
+}

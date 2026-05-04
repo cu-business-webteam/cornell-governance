@@ -35,11 +35,11 @@ namespace Cornell\Governance\Admin\Submenus {
 			}
 
 			parent::__construct( array(
-				'title'           => __( 'Cornell Governance: Steward Dashboard', 'cornell/governance' ),
-				'menu_name'       => __( 'Your Pages', 'cornell/governance' ),
+				'title'           => esc_html( __( 'Cornell Governance: Steward Dashboard', 'cornell-governance' ) ),
+				'menu_name'       => esc_html( __( 'Your Pages', 'cornell-governance' ) ),
 				'slug'            => 'cornell-governance-steward-dashboard',
 				'per_page_option' => 'cornell/governance/steward-dashboard/items_per_page',
-				'description'     => __( 'A series of reports specifically about content that you currently own or manage.', 'cornell/governance' ),
+				'description'     => esc_html( __( 'A series of reports specifically about content that you currently own or manage.', 'cornell-governance' ) ),
 			) );
 		}
 

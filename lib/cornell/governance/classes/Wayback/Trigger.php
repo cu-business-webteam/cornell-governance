@@ -1,16 +1,18 @@
 <?php
 
 namespace {
-	if ( ! defined( 'ABSPATH' ) ) {
+	if ( ! defined( 'ABSPATH' ) )
 		die( 'You do not have permission to access this file directly.' );
-	}
 }
 
 namespace Cornell\Governance\Wayback {
 
 	use Cornell\Governance\Admin\Submenus\Archive_Trigger;
 
-	if ( ! class_exists( 'Trigger') ) {
+	if ( ! class_exists( '\Cornell\Governance\Wayback\Trigger') ) {
+		/**
+		 * The class that handles triggering an Archive snapshot
+		 */
 		class Trigger {
 			/**
 			 * @var Trigger $instance holds the single instance of this class
@@ -50,7 +52,7 @@ namespace Cornell\Governance\Wayback {
 			 * @since  0.1
 			 */
 			private function __construct() {
-				if ( ! is_admin() && ! isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) ) {
+				if ( ! is_admin() && ! isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) && ! isset( $_REQUEST['cornell/governance/process-snapshots'] ) ) {
 					return;
 				}
 
@@ -137,9 +139,20 @@ namespace Cornell\Governance\Wayback {
 			 * @return void
 			 */
 			public function do_cron() {
+				$started = get_option( 'cornell/governance/trigger-snapshots/triggered', false );
+				if ( $started === false ) {
+					if ( isset( $_REQUEST['cornell/governance/trigger-snapshots'] ) ) {
+						$started = date( 'Y-m-d' );
+						update_option( 'cornell/governance/trigger-snapshots/triggered', $started );
+						wp_die( __( 'Archive snapshots have been triggered. They will be processed soon', 'cornell-governance' ) );
+					} else {
+						wp_die( __( 'Archive snapshots have not yet been triggered; it is likely all have been processed', 'cornell-governance' ) );
+					}
+				}
+
 				foreach ( $this->posts as $post ) {
 					if ( self::$count >= $this->limit ) {
-						continue;
+						wp_die( esc_html( __( 'This batch of snapshots has been completed. Waiting until the next request to process more.', 'cornell-governance' ) ), __( 'Round Complete', 'cornell-governance' ) );
 					}
 
 					$this->done[ $post->ID ] = Save::instance()->trigger_snapshot( $post );
@@ -153,7 +166,9 @@ namespace Cornell\Governance\Wayback {
 					self::$count++;
 				}
 
-				$this->cleanup_database();
+				if ( empty( $this->posts ) ) {
+					$this->cleanup_database();
+				}
 			}
 
 			/**
@@ -164,6 +179,7 @@ namespace Cornell\Governance\Wayback {
 			 * @return array the list of completed snapshots
 			 */
 			public function manual_trigger(): array {
+				update_option( 'cornell/governance/trigger-snapshots/triggered', $this->today );
 				$this->do_cron();
 
 				return $this->done;
@@ -179,6 +195,7 @@ namespace Cornell\Governance\Wayback {
 			protected function cleanup_database() {
 				$this->cleanup_triggers();
 				$this->cleanup_snapshots();
+				delete_option( 'cornell/governance/trigger-snapshots/triggered' );
 			}
 
 			/**
@@ -227,7 +244,11 @@ namespace Cornell\Governance\Wayback {
 					return;
 				}
 
-				$all_done = get_option( 'cornell/governance/archive/trigger/done', array() );
+				$all_done = get_option( 'cornell/governance/archive/trigger/done', [] );
+				if ( ! is_array( $all_done ) ) {
+					$all_done = [];
+				}
+
 				$log_limit = apply_filters( 'cornell/governance/archive/log-limit', get_option( 'cornell-governance-archive-log-limit', 30 ) );
 				$oldest = date( "Y-m-d", strtotime( $this->today . ' - ' . $log_limit . ' days' ) );
 				$check = \DateTimeImmutable::createFromFormat( 'Y-m-d', $oldest );
@@ -235,6 +256,7 @@ namespace Cornell\Governance\Wayback {
 				foreach ( $all_done as $date => $row ) {
 					$row_date = \DateTimeImmutable::createFromFormat( 'Y-m-d', $date );
 					if ( $row_date < $check ) {
+						delete_option( 'cornell/governance/archive/trigger/done/' . $date );
 						unset( $all_done[ $date ] );
 					}
 				}
@@ -243,12 +265,15 @@ namespace Cornell\Governance\Wayback {
 					$date = str_replace( 'cornell/governance/archive/trigger/done/', '', $row->option_name );
 					$today = \DateTimeImmutable::createFromFormat( 'Y-m-d', $this->today );
 					$option_date = \DateTimeImmutable::createFromFormat( 'Y-m-d', $date );
-					if ( $option_date < $today ) {
+					/*if ( $option_date < $today ) {
 						delete_option( $row->option_name );
-					}
+					}*/
 
 					$date = str_replace( 'cornell/governance/archive/trigger/done/', '', $row->option_name );
-					$all_done[ $date ] = $row;
+					$all_done[ $date ] = array();
+					$all_done[ $date ]['option_id'] = $row->option_id;
+					$all_done[ $date ]['option_name'] = $row->option_name;
+					$all_done[ $date ]['option_value'] = $row->option_value;
 				}
 
 				update_option( 'cornell/governance/archive/trigger/done', $all_done );

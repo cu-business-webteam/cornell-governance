@@ -1,5 +1,6 @@
+@use "sass:meta";
 :root {
   --cornell-red: #b31b1b;
 }
 
-@import "modules/compliance-widget";
+@include meta.load-css("modules/compliance-widget");

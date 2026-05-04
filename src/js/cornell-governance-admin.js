@@ -21,9 +21,20 @@ class CornellGovernanceAdmin {
     }
 
     init() {
-        if (document.querySelectorAll('.cornell-governance-save-info, .cornell-governance-save-notes, ol.repeater-field-set').length <= 0) {
+        // Keep a list of the query selectors used to determine whether we should use any of these scripts or not
+        const activeSelectors = [
+            '.cornell-governance-save-info',
+            '.cornell-governance-save-notes',
+            'ol.repeater-field-set',
+            '.cornell-governance-tablist'
+        ];
+
+        // If none of these selectors exist on the page, we abandon processing this javascript
+        if (document.querySelectorAll(activeSelectors.join(',')).length <= 0) {
             return;
         }
+
+        this.waybackAPIBase = 'https://web.archive.org/cdx/search/cdx/';
 
         this.handleArchiveLists();
         this.hideSaveInfoInstructions();
@@ -65,10 +76,12 @@ class CornellGovernanceAdmin {
         }
 
         const inputs = document.querySelectorAll('.postbox#cornell-governance-page-info .cornell-governance-tabpanel > :not(#cornell-governance-page-notes) :is(input, select, textarea)');
-        inputs.forEach((input) => {
-            this.log(input);
-            input.addEventListener('change', this.inputChanged);
-        });
+        if ( inputs.length >= 1 ) {
+            inputs.forEach((input) => {
+                this.log(input);
+                input.addEventListener('change', this.inputChanged);
+            });
+        }
 
         if (document.querySelectorAll('ol.repeater-field-set').length >= 1) {
             this.repeater = new CBRepeater();
@@ -83,15 +96,19 @@ class CornellGovernanceAdmin {
 
         this.tooltips = [];
         const tooltips = document.querySelectorAll('.governance-tooltip-container');
-        tooltips.forEach((tooltip) => {
-            this.tooltips.push(new governanceTooltip(tooltip));
-        });
+        if ( tooltips.length >= 1 ) {
+            tooltips.forEach((tooltip) => {
+                this.tooltips.push(new governanceTooltip(tooltip));
+            });
+        }
 
         this.tabLists = [];
-        const tabLists = document.querySelectorAll('.cornell-governance-metabox .inside :not(.governance-paginated-list) [role="tablist"], .cornell-governance-tablist :not(.governance-paginated-list) [role="tablist"]');
-        tabLists.forEach((tabList) => {
-            this.tabLists.push(new governanceTabs(tabList));
-        });
+        const tabLists = document.querySelectorAll('.cornell-governance-metabox .inside :not(.governance-paginated-list) [role="tablist"], .cornell-governance-tablist [role="tablist"]');
+        if ( tabLists.length >= 1 ) {
+            tabLists.forEach((tabList) => {
+                this.tabLists.push(new governanceTabs(tabList));
+            });
+        }
 
         this.updateNotice = new updateNotice();
 

@@ -13,7 +13,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
-	if ( ! class_exists( 'Focus_Areas_Fieldset_Message' ) ) {
+	if ( ! class_exists( '\Cornell\Governance\Admin\Meta_Boxes\Fields\Focus_Areas_Fieldset_Message' ) ) {
 		abstract class Focus_Areas_Fieldset_Message extends Message {
 			function __construct() {
 				$atts = array(
@@ -29,7 +29,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes\Fields {
 
 				parent::__construct( $atts );
 
-				$this->text = __( 'Document important information relevant to managing and maintaining this page.', 'cornell/governance' );
+				$this->text = esc_html( __( 'Document important information relevant to managing and maintaining this page.', 'cornell-governance' ) );
 			}
 		}
 	}
