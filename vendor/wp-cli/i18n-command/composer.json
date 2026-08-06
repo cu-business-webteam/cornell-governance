@@ -14,10 +14,10 @@
         "eftec/bladeone": "3.52",
         "gettext/gettext": "^4.8",
         "mck89/peast": "^1.13.11",
-        "wp-cli/wp-cli": "^2.13"
+        "wp-cli/wp-cli": "^3.0"
     },
     "require-dev": {
-        "wp-cli/scaffold-command": "^1.2 || ^2",
+        "wp-cli/scaffold-command": "^1.2 || ^2 || ^3",
         "wp-cli/wp-cli-tests": "^5.0.0"
     },
     "suggest": {
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "2.x-dev"
+            "dev-main": "3.x-dev"
         },
         "bundled": true,
         "commands": [

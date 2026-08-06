@@ -3,7 +3,7 @@
 /*
  * This file is part of Mustache.php.
  *
- * (c) 2010-2025 Justin Hileman
+ * (c) 2010-2026 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,6 +14,7 @@ namespace Mustache;
 use Mustache\Cache\FilesystemCache;
 use Mustache\Cache\NoopCache;
 use Mustache\Exception\InvalidArgumentException;
+use Mustache\Exception\RenderingException;
 use Mustache\Exception\RuntimeException;
 use Mustache\Exception\UnknownTemplateException;
 use Mustache\Loader\ArrayLoader;
@@ -35,11 +36,29 @@ use Psr\Log\LoggerInterface;
  */
 class Engine
 {
-    const VERSION      = '3.1.0';
+    const VERSION      = '3.2.0';
     const SPEC_VERSION = '1.4.3';
 
     const PRAGMA_FILTERS       = 'FILTERS';
     const PRAGMA_ANCHORED_DOT  = 'ANCHORED-DOT';
+
+    const STRICT_NONE          = 0;
+    const STRICT_INTERPOLATION = 1 << 0;
+    const STRICT_SECTIONS      = 1 << 1;
+    const STRICT_PARTIALS      = 1 << 2;
+    const STRICT_PARENTS       = 1 << 3;
+    const STRICT_EXTRA_BLOCKS  = 1 << 4;
+    const STRICT_COERCION      = 1 << 5;
+    const STRICT_ALL = self::STRICT_INTERPOLATION
+        | self::STRICT_SECTIONS
+        | self::STRICT_PARTIALS
+        | self::STRICT_PARENTS
+        | self::STRICT_EXTRA_BLOCKS
+        | self::STRICT_COERCION;
+
+    const DEBUG_RENDERING_ALWAYS       = 'always';
+    const DEBUG_RENDERING_ON_EXCEPTION = 'on_exception';
+    const DEBUG_RENDERING_NEVER        = 'never';
 
     /**
      * @deprecated PRAGMA_BLOCKS is now part of the Mustache spec, and is enabled by default
@@ -70,9 +89,13 @@ class Engine
     private $charset = 'UTF-8';
     private $logger;
     private $strictCallables = true;
+    private $strictTags = self::STRICT_COERCION;
     private $pragmas = [];
     private $delimiters;
     private $buggyPropertyShadowing = false;
+    private $debugRendering = self::DEBUG_RENDERING_NEVER;
+    private $debugRenderingRetry = false;
+    private $templateSources = [];
 
     // Optional Mustache specs
     private $dynamicNames = true;
@@ -141,13 +164,26 @@ class Engine
      *         // Character set for `htmlspecialchars`. Defaults to 'UTF-8'. Use 'UTF-8'.
      *         'charset' => 'ISO-8859-1',
      *
+     *         // Enable extra rendering debug context in generated templates. When enabled, rendering exceptions will
+     *         // include the Mustache tag stack that was active when rendering failed. Set to DEBUG_RENDERING_ALWAYS to
+     *         // always generate debug rendering code, DEBUG_RENDERING_ON_EXCEPTION to rerender with debug context after
+     *         // a failure, or DEBUG_RENDERING_NEVER to disable rendering debug context.
+     *         'debug_rendering' => \Mustache\Engine::DEBUG_RENDERING_ALWAYS,
+     *
      *         // A Mustache Logger instance. No logging will occur unless this is set. Using a PSR-3 compatible
      *         // logging library -- such as Monolog -- is highly recommended. A simple stream logger implementation is
      *         // available as well:
      *         'logger' => new \Mustache\Logger\StreamLogger('php://stderr'),
      *
+     *         // Treat missing Mustache tags as a failure and throw an exception instead of silently ignoring them.
+     *         // Set this to true for all strict tag categories, or use an Engine::STRICT_* bitmask.
+     *         // STRICT_COERCION validates that rendered values are stringable before output; this is enabled by default.
+     *         // STRICT_EXTRA_BLOCKS validates block overrides only when a concrete parent template is rendered; skipped
+     *         // conditional parent paths do not throw for otherwise unused overrides.
+     *         'strict_tags' => \Mustache\Engine::STRICT_INTERPOLATION | \Mustache\Engine::STRICT_PARTIALS,
      *
-     *         // OPTIONAL MUSTACHE FEATURES:
+     *
+     *         // OPTIONAL MUSTACHE SPEC FEATURES:
      *
      *         // Enable dynamic names. By default, variables and sections like `{{*name}}` will be resolved dynamically.
      *         //
@@ -274,6 +310,10 @@ class Engine
             $this->charset = $options['charset'];
         }
 
+        if (isset($options['debug_rendering'])) {
+            $this->debugRendering = self::normalizeDebugRendering($options['debug_rendering']);
+        }
+
         if (isset($options['logger'])) {
             $this->setLogger($options['logger']);
         }
@@ -313,6 +353,10 @@ class Engine
 
         if (isset($options['strict_callables'])) {
             $this->strictCallables = (bool) $options['strict_callables'];
+        }
+
+        if (isset($options['strict_tags'])) {
+            $this->strictTags = self::normalizeStrictTags($options['strict_tags']);
         }
 
         if (isset($options['buggy_property_shadowing'])) {
@@ -383,6 +427,43 @@ class Engine
     public function getDoubleRenderLambdas()
     {
         return $this->doubleRenderLambdas;
+    }
+
+    /**
+     * Handle a failed render, adding debug context or retrying when configured.
+     *
+     * @param mixed      $context
+     * @param \Throwable $previous
+     */
+    public function handleRenderException(Template $template, $context, Context $stack, $previous)
+    {
+        if ($this->getDebugRendering()) {
+            throw RenderingException::fromDebugContext($previous, $stack);
+        }
+
+        if ($this->debugRendering !== self::DEBUG_RENDERING_ON_EXCEPTION || $this->debugRenderingRetry) {
+            throw $previous;
+        }
+
+        $className = get_class($template);
+        if (!isset($this->templateSources[$className])) {
+            throw $previous;
+        }
+
+        $source = $this->templateSources[$className];
+
+        $this->debugRenderingRetry = true;
+        try {
+            // Recompiled with debug rendering active; this render is expected to throw a
+            // RenderingException with debug context. If it somehow doesn't, fall through and
+            // throw the original exception so the failure isn't hidden.
+            $debugTemplate = $this->loadSource($source['source'], null, $source['sourceName']);
+            $debugTemplate->render($context);
+        } finally {
+            $this->debugRenderingRetry = false;
+        }
+
+        throw $previous;
     }
 
     /**
@@ -742,10 +823,11 @@ class Engine
      * the same template could be parsed and compiled multiple different ways.
      *
      * @param string|Source $source
+     * @param string        $sourceName Source name for debug rendering frames (default: null)
      *
      * @return string Mustache Template class name
      */
-    public function getTemplateClassName($source)
+    public function getTemplateClassName($source, $sourceName = null)
     {
         // For the most part, adding a new option here should do the trick.
         //
@@ -757,6 +839,7 @@ class Engine
         // Keep this list in alphabetical order :)
         $chunks = [
             'charset'         => $this->charset,
+            'debugRendering'  => $this->getDebugRendering(),
             'delimiters'      => $this->delimiters ?: '{{ }}',
             'entityFlags'     => $this->entityFlags,
             'escape'          => isset($this->escape) ? 'custom' : 'default',
@@ -764,8 +847,13 @@ class Engine
             'options'         => $this->getOptions(),
             'pragmas'         => $this->getPragmas(),
             'strictCallables' => $this->strictCallables,
+            'strictTags'      => $this->strictTags,
             'version'         => self::VERSION,
         ];
+
+        if ($this->getDebugRendering() && $sourceName !== null) {
+            $chunks['debugSource'] = $sourceName;
+        }
 
         $key = json_encode($chunks);
 
@@ -787,7 +875,10 @@ class Engine
      */
     public function loadTemplate($name)
     {
-        return $this->loadSource($this->getLoader()->load($name));
+        $loader = $this->getLoader();
+        $sourceName = $loader instanceof StringLoader ? null : $name;
+
+        return $this->loadSource($loader->load($name), null, $sourceName);
     }
 
     /**
@@ -796,11 +887,14 @@ class Engine
      * This is a helper method used internally by Template instances for loading partial templates. You can most likely
      * ignore it completely.
      *
+     * @throws UnknownTemplateException if $strict is true and the partial cannot be loaded
+     *
      * @param string $name
+     * @param bool   $strict If true, throw on missing partials instead of logging and returning null (default: false)
      *
      * @return Template
      */
-    public function loadPartial($name)
+    public function loadPartial($name, $strict = false)
     {
         try {
             if (isset($this->partialsLoader)) {
@@ -811,8 +905,12 @@ class Engine
                 throw new UnknownTemplateException($name);
             }
 
-            return $this->loadSource($loader->load($name));
+            return $this->loadSource($loader->load($name), null, $name);
         } catch (UnknownTemplateException $e) {
+            if ($strict) {
+                throw $e;
+            }
+
             // If the named partial cannot be found, log then return null.
             $this->log(
                 Logger::WARNING,
@@ -839,7 +937,7 @@ class Engine
             $source = $delims . "\n" . $source;
         }
 
-        return $this->loadSource($source, $this->getLambdaCache());
+        return $this->loadSource($source, $this->getLambdaCache(), 'lambda');
     }
 
     /**
@@ -853,13 +951,14 @@ class Engine
      * @see Mustache\Engine::loadLambda
      *
      * @param string|Source $source
-     * @param Cache         $cache  (default: null)
+     * @param Cache         $cache      (default: null)
+     * @param string        $sourceName (default: null)
      *
      * @return Template
      */
-    private function loadSource($source, $cache = null)
+    private function loadSource($source, $cache = null, $sourceName = null)
     {
-        $className = $this->getTemplateClassName($source);
+        $className = $this->getTemplateClassName($source, $sourceName);
 
         if (!isset($this->templates[$className])) {
             if ($cache === null || !$cache instanceof Cache) {
@@ -868,7 +967,7 @@ class Engine
 
             if (!class_exists($className, false)) {
                 if (!$cache->load($className)) {
-                    $compiled = $this->compile($source);
+                    $compiled = $this->compile($source, $className, $sourceName);
                     $cache->cache($className, $compiled);
                 }
             }
@@ -880,6 +979,13 @@ class Engine
             );
 
             $this->templates[$className] = new $className($this);
+
+            if ($this->debugRendering === self::DEBUG_RENDERING_ON_EXCEPTION && !$this->debugRenderingRetry) {
+                $this->templateSources[$className] = [
+                    'source' => $source,
+                    'sourceName' => $sourceName,
+                ];
+            }
         }
 
         return $this->templates[$className];
@@ -923,13 +1029,13 @@ class Engine
      * @see Mustache\Compiler::compile
      *
      * @param string|Source $source
+     * @param string        $name       Template class name
+     * @param string        $sourceName Source name for debug rendering frames (default: null)
      *
      * @return string generated Mustache template class code
      */
-    private function compile($source)
+    private function compile($source, $name, $sourceName = null)
     {
-        $name = $this->getTemplateClassName($source);
-
         $this->log(
             Logger::INFO,
             'Compiling template to "{className}" class',
@@ -945,7 +1051,56 @@ class Engine
         $compiler->setOptions($this->getOptions());
         $compiler->setPragmas($this->getPragmas());
 
-        return $compiler->compile($source, $tree, $name, isset($this->escape), $this->charset, $this->strictCallables, $this->entityFlags);
+        return $compiler->compile($source, $tree, $name, new CompileOptions([
+            'custom_escape'    => isset($this->escape),
+            'charset'          => $this->charset,
+            'debug_rendering'  => $this->getDebugRendering(),
+            'entity_flags'     => $this->entityFlags,
+            'source_name'      => $sourceName,
+            'strict_callables' => $this->strictCallables,
+            'strict_tags'      => $this->strictTags,
+        ]));
+    }
+
+    public static function normalizeStrictTags($strictTags)
+    {
+        if ($strictTags === true) {
+            return self::STRICT_ALL;
+        }
+
+        if ($strictTags === false) {
+            return self::STRICT_NONE;
+        }
+
+        if (!is_int($strictTags)) {
+            throw new InvalidArgumentException('Mustache Constructor "strict_tags" option must be a boolean or an integer bitmask');
+        }
+
+        if (($strictTags & ~self::STRICT_ALL) !== 0) {
+            throw new InvalidArgumentException(sprintf('Unknown "strict_tags" bitmask: %d', $strictTags));
+        }
+
+        return $strictTags;
+    }
+
+    private static function normalizeDebugRendering($debugRendering)
+    {
+        if (
+            $debugRendering === self::DEBUG_RENDERING_ALWAYS
+            || $debugRendering === self::DEBUG_RENDERING_NEVER
+            || $debugRendering === self::DEBUG_RENDERING_ON_EXCEPTION
+        ) {
+            return $debugRendering;
+        }
+
+        throw new InvalidArgumentException(
+            'Mustache Constructor "debug_rendering" option must be one of "always", "never", or "on_exception"'
+        );
+    }
+
+    private function getDebugRendering()
+    {
+        return $this->debugRendering === self::DEBUG_RENDERING_ALWAYS || $this->debugRenderingRetry;
     }
 
     /**

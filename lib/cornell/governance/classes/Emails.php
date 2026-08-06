@@ -631,19 +631,8 @@ namespace Cornell\Governance {
 									$recipients[ $author ] = $this->shift_and_return( $this->recipients[ $prompt_key ][ $recipient_key ], $author );
 									$i ++;
 								}
-							} else {
-								do_action( 'qm/debug', 'Could not locate {key} in {list}', array(
-									'key'  => $recipient_key,
-									'list' => $this->recipients[ $prompt_key ],
-								) );
 							}
 						}
-					} else {
-						do_action( 'qm/debug', 'Could not locate {key} in {list}', array(
-							'key'  => $prompt_key,
-							'list' => $this->recipients
-						) );
-					}
 				}
 
 				$this->filter_recipients_lists();

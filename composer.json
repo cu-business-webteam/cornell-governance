@@ -1,7 +1,7 @@
 {
   "name": "cornell/governance",
   "description": "Cornell's In-Page Governance Plugin",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "authors": [
     {
       "name": "Curtiss Grymala",
@@ -15,7 +15,7 @@
       "php": "7.4"
     }
   },
-  "type": "project",
+  "type": "wordpress-plugin",
   "license": "Proprietary",
   "minimum-stability": "dev",
   "repositories": [

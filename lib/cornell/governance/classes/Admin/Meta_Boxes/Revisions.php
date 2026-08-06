@@ -217,7 +217,7 @@ namespace Cornell\Governance\Admin\Meta_Boxes {
 						self::format_commit_message( $latest )
 					);
 
-					$output .= esc_html( sprintf( __( '<p class="field-note"><a href="%s">View more content updates</a></p>', 'cornell-governance' ), $link ) );
+					$output .= sprintf( '<p class="field-note"><a href="%s">%s</a></p>', $link, esc_html( __( 'View more content updates', 'cornell-governance' ) ) );
 				}
 
 				return sprintf( '<div class="%1$s">%2$s</div>', 'cornell-governance-metabox', $output );

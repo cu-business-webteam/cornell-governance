@@ -3,7 +3,7 @@
 /*
  * This file is part of Mustache.php.
  *
- * (c) 2010-2025 Justin Hileman
+ * (c) 2010-2026 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,11 +19,14 @@ class_alias(\Mustache\Engine::class, \Mustache_Engine::class);
 class_alias(\Mustache\Exception::class, \Mustache_Exception::class);
 class_alias(\Mustache\Exception\InvalidArgumentException::class, \Mustache_Exception_InvalidArgumentException::class);
 class_alias(\Mustache\Exception\LogicException::class, \Mustache_Exception_LogicException::class);
+class_alias(\Mustache\Exception\RenderingException::class, \Mustache_Exception_RenderingException::class);
 class_alias(\Mustache\Exception\RuntimeException::class, \Mustache_Exception_RuntimeException::class);
 class_alias(\Mustache\Exception\SyntaxException::class, \Mustache_Exception_SyntaxException::class);
+class_alias(\Mustache\Exception\UnknownBlockException::class, \Mustache_Exception_UnknownBlockException::class);
 class_alias(\Mustache\Exception\UnknownFilterException::class, \Mustache_Exception_UnknownFilterException::class);
 class_alias(\Mustache\Exception\UnknownHelperException::class, \Mustache_Exception_UnknownHelperException::class);
 class_alias(\Mustache\Exception\UnknownTemplateException::class, \Mustache_Exception_UnknownTemplateException::class);
+class_alias(\Mustache\Exception\UnknownVariableException::class, \Mustache_Exception_UnknownVariableException::class);
 class_alias(\Mustache\HelperCollection::class, \Mustache_HelperCollection::class);
 class_alias(\Mustache\LambdaHelper::class, \Mustache_LambdaHelper::class);
 class_alias(\Mustache\Loader::class, \Mustache_Loader::class);
@@ -127,9 +130,23 @@ if (!class_exists(\Mustache_Exception_RuntimeException::class)) {
     }
 }
 
+if (!class_exists(\Mustache_Exception_RenderingException::class)) {
+    /** @deprecated use Mustache\Exception\RenderingException */
+    class Mustache_Exception_RenderingException extends \Mustache\Exception\RenderingException
+    {
+    }
+}
+
 if (!class_exists(\Mustache_Exception_SyntaxException::class)) {
     /** @deprecated use Mustache\Exception\SyntaxException */
     class Mustache_Exception_SyntaxException extends \Mustache\Exception\SyntaxException
+    {
+    }
+}
+
+if (!class_exists(\Mustache_Exception_UnknownBlockException::class)) {
+    /** @deprecated use Mustache\Exception\UnknownBlockException */
+    class Mustache_Exception_UnknownBlockException extends \Mustache\Exception\UnknownBlockException
     {
     }
 }
@@ -151,6 +168,13 @@ if (!class_exists(\Mustache_Exception_UnknownHelperException::class)) {
 if (!class_exists(\Mustache_Exception_UnknownTemplateException::class)) {
     /** @deprecated use Mustache\Exception\UnknownTemplateException */
     class Mustache_Exception_UnknownTemplateException extends \Mustache\Exception\UnknownTemplateException
+    {
+    }
+}
+
+if (!class_exists(\Mustache_Exception_UnknownVariableException::class)) {
+    /** @deprecated use Mustache\Exception\UnknownVariableException */
+    class Mustache_Exception_UnknownVariableException extends \Mustache\Exception\UnknownVariableException
     {
     }
 }

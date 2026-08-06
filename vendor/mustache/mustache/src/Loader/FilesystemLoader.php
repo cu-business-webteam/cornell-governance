@@ -3,7 +3,7 @@
 /*
  * This file is part of Mustache.php.
  *
- * (c) 2010-2025 Justin Hileman
+ * (c) 2010-2026 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,7 +33,10 @@ use Mustache\Loader;
 class FilesystemLoader implements Loader
 {
     private $baseDir;
+    private $baseDirPrefix;
+    private $checkPath;
     private $extension = '.mustache';
+    private $allowUnsafeTemplateNames = false;
     private $templates = [];
 
     /**
@@ -44,6 +47,10 @@ class FilesystemLoader implements Loader
      *     $options = [
      *         // The filename extension used for Mustache templates. Defaults to '.mustache'
      *         'extension' => '.ms',
+     *
+     *         // Disable path containment checks for backwards compatibility.
+     *         // This is not recommended.
+     *         'allow_unsafe_template_names' => true,
      *     ];
      *
      * @throws RuntimeException if $baseDir does not exist
@@ -54,13 +61,20 @@ class FilesystemLoader implements Loader
     public function __construct($baseDir, array $options = [])
     {
         $this->baseDir = $baseDir;
+        $this->checkPath = $this->shouldCheckPath();
 
-        if (strpos($this->baseDir, '://') === false) {
-            $this->baseDir = realpath($this->baseDir);
-        }
+        if ($this->checkPath) {
+            $resolved = $this->resolveLocalPath($this->baseDir);
 
-        if ($this->shouldCheckPath() && !is_dir($this->baseDir)) {
-            throw new RuntimeException(sprintf('FilesystemLoader baseDir must be a directory: %s', $baseDir));
+            if ($resolved === false || !is_dir($resolved)) {
+                throw new RuntimeException(sprintf('FilesystemLoader baseDir must be a directory: %s', $baseDir));
+            }
+
+            if (strpos($this->baseDir, '://') === false) {
+                $this->baseDir = $resolved;
+            }
+
+            $this->baseDirPrefix = rtrim($resolved, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         }
 
         if (array_key_exists('extension', $options)) {
@@ -69,6 +83,10 @@ class FilesystemLoader implements Loader
             } else {
                 $this->extension = '.' . ltrim($options['extension'], '.');
             }
+        }
+
+        if (isset($options['allow_unsafe_template_names'])) {
+            $this->allowUnsafeTemplateNames = (bool) $options['allow_unsafe_template_names'];
         }
     }
 
@@ -104,7 +122,7 @@ class FilesystemLoader implements Loader
     {
         $fileName = $this->getFileName($name);
 
-        if ($this->shouldCheckPath() && !file_exists($fileName)) {
+        if ($this->checkPath && !file_exists($fileName)) {
             throw new UnknownTemplateException($name);
         }
 
@@ -114,23 +132,90 @@ class FilesystemLoader implements Loader
     /**
      * Helper function for getting a Mustache template file name.
      *
+     * @throws UnknownTemplateException If a template name is invalid or resolves outside the base directory
+     *
      * @param string $name
      *
-     * @return string Template file name
+     * @return string Template file name, resolved for local filesystem templates
      */
     protected function getFileName($name)
     {
+        $this->validateName($name);
+
         $fileName = $this->baseDir . '/' . $name;
-        if (substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
+        if ($this->extension !== '' && substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
             $fileName .= $this->extension;
+        }
+
+        if (!$this->allowUnsafeTemplateNames && $this->checkPath) {
+            return $this->ensureContained($fileName, $name);
         }
 
         return $fileName;
     }
 
     /**
-     * Only check if baseDir is a directory and requested templates are files if
-     * baseDir is using the filesystem stream wrapper.
+     * Validate a requested template name before appending it to the base path.
+     *
+     * @throws UnknownTemplateException If a template name is invalid
+     *
+     * @param string $name
+     */
+    private function validateName($name)
+    {
+        if ($this->allowUnsafeTemplateNames) {
+            return;
+        }
+
+        if (strpos($name, "\0") !== false) {
+            throw new UnknownTemplateException($name);
+        }
+    }
+
+    /**
+     * Resolve and assert that a requested file stays inside the base directory.
+     *
+     * @throws UnknownTemplateException If a template file is missing or outside the base directory
+     *
+     * @param string $fileName
+     * @param string $name
+     *
+     * @return string
+     */
+    private function ensureContained($fileName, $name)
+    {
+        $real = $this->resolveLocalPath($fileName);
+
+        if ($real === false) {
+            throw new UnknownTemplateException($name);
+        }
+
+        if (strpos($real . DIRECTORY_SEPARATOR, $this->baseDirPrefix) !== 0) {
+            throw new UnknownTemplateException($name);
+        }
+
+        return $real;
+    }
+
+    /**
+     * Resolve a local filesystem path, including file:// URLs.
+     *
+     * @param string $path
+     *
+     * @return string|false
+     */
+    private function resolveLocalPath($path)
+    {
+        if (strpos($path, 'file://') === 0) {
+            $path = substr($path, strlen('file://'));
+        }
+
+        return realpath($path);
+    }
+
+    /**
+     * Only check if baseDir is a directory and requested templates are files
+     * when baseDir has no scheme or uses the file:// stream wrapper.
      *
      * @return bool Whether to check `is_dir` and `file_exists`
      */

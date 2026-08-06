@@ -3,13 +3,16 @@
 /*
  * This file is part of Mustache.php.
  *
- * (c) 2010-2025 Justin Hileman
+ * (c) 2010-2026 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace Mustache;
+
+use Mustache\Exception\RuntimeException;
+use Mustache\Exception\UnknownBlockException;
 
 /**
  * Abstract Mustache Template class.
@@ -27,6 +30,21 @@ abstract class Template
      * @var bool
      */
     protected $strictCallables = false;
+
+    /**
+     * @var int
+     */
+    protected $strictTags = Engine::STRICT_NONE;
+
+    /**
+     * @var bool[]
+     */
+    protected $blockNames = [];
+
+    /**
+     * @var bool
+     */
+    protected $hasParents = false;
 
     /**
      * @var bool
@@ -68,9 +86,15 @@ abstract class Template
      */
     public function render($context = [])
     {
-        return $this->renderInternal(
-            $this->prepareContextStack($context)
-        );
+        $stack = $this->prepareContextStack($context);
+
+        try {
+            return $this->renderInternal($stack);
+        } catch (\Exception $e) {
+            return $this->mustache->handleRenderException($this, $context, $stack, $e);
+        } catch (\Throwable $e) {
+            return $this->mustache->handleRenderException($this, $context, $stack, $e);
+        }
     }
 
     /**
@@ -85,6 +109,28 @@ abstract class Template
      * @return string Rendered template
      */
     abstract public function renderInternal(Context $context, $indent = '');
+
+    /**
+     * Assert that all visible block overrides are accepted by this template.
+     *
+     * Templates that themselves call into a parent defer validation: each
+     * generated parent call asserts again when (and if) it renders, so unused
+     * overrides surface against the deepest parent that actually runs.
+     *
+     * @throws UnknownBlockException if a block override cannot be matched to a block declaration
+     */
+    public function assertBlockContext(Context $context)
+    {
+        if ($this->hasParents) {
+            return;
+        }
+
+        foreach ($context->getBlockContextNames() as $name => $_) {
+            if (!isset($this->blockNames[$name])) {
+                throw new UnknownBlockException($name);
+            }
+        }
+    }
 
     /**
      * Tests whether a value should be iterated over (e.g. in a section context).
@@ -147,7 +193,7 @@ abstract class Template
      */
     protected function prepareContextStack($context = null)
     {
-        $stack = new Context(null, $this->mustache->getBuggyPropertyShadowing());
+        $stack = new Context(null, $this->mustache->getBuggyPropertyShadowing(), $this->strictTags);
 
         $helpers = $this->mustache->getHelpers();
         if (!$helpers->isEmpty()) {
@@ -189,5 +235,49 @@ abstract class Template
         }
 
         return $value;
+    }
+
+    /**
+     * Prepare a resolved value for template output.
+     *
+     * @param mixed $value
+     * @param bool  $strict
+     *
+     * @return string
+     */
+    protected function stringifyValue($value, $strict = true)
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        return $this->stringifyNonScalar($value, $strict);
+    }
+
+    /**
+     * Prepare a non-null, non-scalar value for template output.
+     *
+     * @param mixed $value
+     * @param bool  $strict
+     *
+     * @return string
+     */
+    protected function stringifyNonScalar($value, $strict = true)
+    {
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+
+        if (!$strict) {
+            return '';
+        }
+
+        $type = is_object($value) ? get_class($value) : gettype($value);
+
+        throw new RuntimeException(sprintf('Cannot render non-stringable value of type %s', $type));
     }
 }

@@ -18,15 +18,19 @@ class Extractor {
 	/**
 	 * Extract the archive file to a specific destination.
 	 *
+	 * @param string $tarball_or_zip
 	 * @param string $dest
+	 * @return void
 	 */
 	public static function extract( $tarball_or_zip, $dest ) {
 		if ( preg_match( '/\.zip$/', $tarball_or_zip ) ) {
-			return self::extract_zip( $tarball_or_zip, $dest );
+			self::extract_zip( $tarball_or_zip, $dest );
+			return;
 		}
 
 		if ( preg_match( '/\.tar\.gz$/', $tarball_or_zip ) ) {
-			return self::extract_tarball( $tarball_or_zip, $dest );
+			self::extract_tarball( $tarball_or_zip, $dest );
+			return;
 		}
 
 		throw new Exception( "Extraction only supported for '.zip' and '.tar.gz' file types." );
@@ -37,6 +41,7 @@ class Extractor {
 	 *
 	 * @param string $zipfile
 	 * @param string $dest
+	 * @return void
 	 */
 	private static function extract_zip( $zipfile, $dest ) {
 		if ( ! class_exists( 'ZipArchive' ) ) {
@@ -88,37 +93,12 @@ class Extractor {
 	 *
 	 * @param string $tarball
 	 * @param string $dest
+	 * @return void
 	 */
 	private static function extract_tarball( $tarball, $dest ) {
 		// Ensure the destination folder exists or can be created.
 		if ( ! self::ensure_dir_exists( $dest ) ) {
 			throw new Exception( "Could not create folder '{$dest}'." );
-		}
-
-		if ( class_exists( 'PharData' ) ) {
-			try {
-				$phar    = new PharData( $tarball );
-				$name    = Path::basename( $tarball );
-				$tempdir = Utils\get_temp_dir()
-							. uniqid( 'wp-cli-extract-tarball-', true )
-							. "-{$name}";
-
-				$phar->extractTo( $tempdir );
-
-				self::copy_overwrite_files(
-					self::get_first_subfolder( $tempdir ),
-					$dest
-				);
-
-				self::rmdir( $tempdir );
-				return;
-			} catch ( Exception $e ) {
-				WP_CLI::warning(
-					"PharData failed, falling back to 'tar xz' ("
-					. $e->getMessage() . ')'
-				);
-				// Fall through to trying `tar xz` below.
-			}
 		}
 
 		$tarball_absolute = realpath( $tarball );
@@ -132,28 +112,82 @@ class Extractor {
 			throw new Exception( "Invalid tarball '{$tarball}'." );
 		}
 
-		// Note: directory must exist for tar --directory to work.
-		$cmd = Utils\esc_cmd(
-			'tar xz --strip-components=1 --directory=%s -f %s',
-			$dest,
-			$tarball
-		);
+		$tar_error = null;
 
-		$process_run = WP_CLI::launch(
-			$cmd,
-			false, /*exit_on_error*/
-			true /*return_detailed*/
-		);
-
-		if ( 0 !== $process_run->return_code ) {
-			throw new Exception(
-				sprintf(
-					'Failed to execute `%s`: %s.',
-					$cmd,
-					self::tar_error_msg( $process_run )
-				)
+		try {
+			// Note: directory must exist for tar --directory to work.
+			$force_local = Utils\is_windows() ? ' --force-local' : '';
+			$cmd         = Utils\esc_cmd(
+				"tar xz{$force_local} --strip-components=1 --directory=%s -f %s",
+				Path::normalize( $dest ),
+				Path::normalize( $tarball )
 			);
+
+			$process_run = WP_CLI::launch(
+				$cmd,
+				false, /*exit_on_error*/
+				true /*return_detailed*/
+			);
+
+			if ( 0 === $process_run->return_code ) {
+				return;
+			}
+
+			throw new Exception( (string) self::tar_error_msg( $process_run ) );
+		} catch ( Exception $e ) {
+			$tar_error = $e->getMessage();
+			if ( class_exists( 'PharData' ) ) {
+				WP_CLI::warning(
+					'tar xz failed, falling back to PharData ('
+					. $tar_error . ')'
+				);
+			}
 		}
+
+		$phar_error = null;
+
+		if ( class_exists( 'PharData' ) ) {
+			$name    = Path::basename( $tarball );
+			$tempdir = Utils\get_temp_dir()
+						. uniqid( 'wp-cli-extract-tarball-', true )
+						. "-{$name}";
+
+			try {
+				$phar = new PharData( $tarball );
+				$phar->extractTo( $tempdir );
+
+				self::copy_overwrite_files(
+					self::get_first_subfolder( $tempdir ),
+					$dest
+				);
+				return;
+			} catch ( Exception $e ) {
+				$phar_error = $e->getMessage();
+			} finally {
+				if ( is_dir( $tempdir ) ) {
+					try {
+						self::rmdir( $tempdir );
+					} catch ( Exception $e ) {
+						// Ignore cleanup errors to avoid masking primary exceptions.
+						unset( $e );
+					}
+				}
+			}
+		}
+
+		$errors = [];
+		if ( $tar_error ) {
+			$errors[] = "tar xz failed: {$tar_error}";
+		}
+		if ( $phar_error ) {
+			$errors[] = "PharData failed: {$phar_error}";
+		}
+
+		if ( empty( $errors ) ) {
+			throw new Exception( 'Failed to extract the tarball.' );
+		}
+
+		throw new Exception( 'Failed to extract the tarball. ' . implode( ' ', $errors ) );
 	}
 
 	/**
@@ -162,6 +196,7 @@ class Extractor {
 	 *
 	 * @param string $source
 	 * @param string $dest
+	 * @return void
 	 */
 	public static function copy_overwrite_files( $source, $dest ) {
 		$iterator = new RecursiveIteratorIterator(
@@ -175,7 +210,7 @@ class Extractor {
 		$error = 0;
 
 		if ( ! is_dir( $dest ) ) {
-			mkdir( $dest, 0777, true );
+			mkdir( $dest, 0755, true );
 		}
 
 		/**
@@ -187,7 +222,7 @@ class Extractor {
 
 			if ( $item->isDir() ) {
 				if ( ! is_dir( $dest_path ) ) {
-					mkdir( $dest_path );
+					mkdir( $dest_path, 0755 );
 				}
 			} elseif ( file_exists( $dest_path ) && is_writable( $dest_path ) ) {
 					copy( $item, $dest_path );
@@ -209,6 +244,7 @@ class Extractor {
 	 * must exist.
 	 *
 	 * @param string $dir
+	 * @return void
 	 */
 	public static function rmdir( $dir ) {
 		$files = new RecursiveIteratorIterator(
@@ -339,7 +375,7 @@ class Extractor {
 	 */
 	private static function ensure_dir_exists( $dir ) {
 		if ( ! is_dir( $dir ) ) {
-			if ( ! @mkdir( $dir, 0777, true ) ) {
+			if ( ! @mkdir( $dir, 0755, true ) ) {
 				$error = error_get_last();
 				WP_CLI::warning(
 					sprintf(

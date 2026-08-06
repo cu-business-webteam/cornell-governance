@@ -1,4 +1,5 @@
 <?php
+declare( strict_types=1 );
 
 namespace {
 	if ( ! defined( 'ABSPATH' ) ) {
@@ -10,7 +11,6 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 
 	use Cornell\Governance\Admin\Submenus\Reports\Due_For_Review;
 	use Cornell\Governance\Admin\Submenus\Reports\Non_Compliant;
-	use Cornell\Governance\Helpers;
 	use Cornell\Governance\Plugin;
 
 	if ( ! class_exists( '\Cornell\Governance\Admin\Dashboard_Widgets\Compliance' ) ) {
@@ -21,7 +21,14 @@ namespace Cornell\Governance\Admin\Dashboard_Widgets {
 			 */
 			protected static Compliance $instance;
 
-			function __construct() {
+			/**
+			 * Construct our Compliance object
+			 */
+			public function __construct() {
+				if ( ! current_user_can( 'edit_pages' ) ) {
+					return;
+				}
+
 				parent::__construct( array(
 					'id'       => 'cornell-governance-compliance-widget',
 					'title'    => esc_html( __( 'Compliance Status', 'cornell-governance' ) ),

@@ -310,8 +310,6 @@ namespace Cornell\Governance\Wayback {
 					$output .= HTML_Table::instance()->open( esc_html( __( 'Wayback Machine Results', 'cornell-governance' ) ), array( 'wayback-query-results' ) );
 					$headers = array_shift( $results );
 
-					do_action( 'qm/warning', 'The headers array looks like: {headers}', array( 'headers' => print_r( $headers, true ) ) );
-
 					$this->set_headers( $headers );
 
 					$output .= HTML_Table::instance()->get_row( $headers, 'header' );
@@ -322,7 +320,6 @@ namespace Cornell\Governance\Wayback {
 
 					foreach ( $results as $result ) {
 						$result  = $this->format_row( $result );
-						do_action( 'qm/info', 'The row information looks like: {result}', array( 'result' => print_r( $result, true ) ) );
 
 						if ( array_key_exists( 'Timestamp', $result ) && array_key_exists( 'Original', $result ) ) {
 							$result['Original'] = sprintf( '<a href="%s">%s</a>', View::instance()->get_url( $result ), $result['Original'] );

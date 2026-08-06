@@ -1,20 +1,20 @@
 <?php return array(
     'root' => array(
         'name' => 'cornell/governance',
-        'pretty_version' => '1.0.5',
-        'version' => '1.0.5.0',
+        'pretty_version' => '1.0.6.2',
+        'version' => '1.0.6.2',
         'reference' => null,
-        'type' => 'project',
+        'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
         'cornell/governance' => array(
-            'pretty_version' => '1.0.5',
-            'version' => '1.0.5.0',
+            'pretty_version' => '1.0.6.2',
+            'version' => '1.0.6.2',
             'reference' => null,
-            'type' => 'project',
+            'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
@@ -69,7 +69,7 @@
         'graham-campbell/result-type' => array(
             'pretty_version' => '1.1.x-dev',
             'version' => '1.1.9999999.9999999-dev',
-            'reference' => '806fe8441c34bed1318bc779e2a510e6555f2169',
+            'reference' => 'af45ab35db4f5eb070fe9e66b25c7b5e546391d1',
             'type' => 'library',
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
@@ -78,21 +78,32 @@
         'mck89/peast' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'b8b4184b1e6912669f9af155caef9050509d9f18',
+            'reference' => '89ee39f81e82cb7ed36cc5abaf2edd43cef71770',
             'type' => 'library',
             'install_path' => __DIR__ . '/../mck89/peast',
             'aliases' => array(
-                0 => '1.17.6.x-dev',
+                0 => '1.17.7.x-dev',
             ),
             'dev_requirement' => true,
         ),
         'mustache/mustache' => array(
-            'pretty_version' => 'v3.1.0',
-            'version' => '3.1.0.0',
-            'reference' => 'f1853266937492dce75e63fb071cd844aa7d4089',
+            'pretty_version' => 'v3.2.0',
+            'version' => '3.2.0.0',
+            'reference' => 'bd4fb2e45ac2df0570c0f4da6898054a950d1ed0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../mustache/mustache',
             'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'nikic/php-parser' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'fbd47f7ebcbb450138d92642a0a53b72a5285dda',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../nikic/php-parser',
+            'aliases' => array(
+                0 => '5.x-dev',
+            ),
             'dev_requirement' => true,
         ),
         'phpoption/phpoption' => array(
@@ -118,7 +129,7 @@
         'solvebeam/wp-text-domain-replacer' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'bd55d8f6a959591b12678447e9b324fce2f9e735',
+            'reference' => 'e67f59bdc21a4f1f16426eb0887acb2fe0b58431',
             'type' => 'library',
             'install_path' => __DIR__ . '/../solvebeam/wp-text-domain-replacer',
             'aliases' => array(
@@ -138,7 +149,7 @@
         'symfony/polyfill-mbstring' => array(
             'pretty_version' => '1.x-dev',
             'version' => '1.9999999.9999999.9999999-dev',
-            'reference' => '6a21eb99c6973357967f6ce3708cd55a6bec6315',
+            'reference' => 'd3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
             'aliases' => array(),
@@ -167,7 +178,7 @@
         'vlucas/phpdotenv' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '2af27192fc6c6bf7c05ef26e67d54afe9a0c39e1',
+            'reference' => '416df702837983f8d5ff48c9c3fee4f5f57b980b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vlucas/phpdotenv',
             'aliases' => array(
@@ -178,11 +189,11 @@
         'wp-cli/i18n-command' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'a42366245fef8b11a5d895db3f38d3c606d21d06',
+            'reference' => '53ca3f59cc37b288a3df2776e9eca9fd092324c0',
             'type' => 'wp-cli-package',
             'install_path' => __DIR__ . '/../wp-cli/i18n-command',
             'aliases' => array(
-                0 => '2.x-dev',
+                0 => '3.x-dev',
             ),
             'dev_requirement' => true,
         ),
@@ -196,31 +207,29 @@
             'dev_requirement' => true,
         ),
         'wp-cli/php-cli-tools' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => 'cf3b8901123fed33a752897d336b1561243913a4',
+            'pretty_version' => 'v0.13.0',
+            'version' => '0.13.0.0',
+            'reference' => '4a04ffbe322b031b4c54e176edf1dfd299c7fe55',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wp-cli/php-cli-tools',
-            'aliases' => array(
-                0 => '0.12.x-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => true,
         ),
         'wp-cli/wp-cli' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'dd0c55b323d05d5c4e4c19aaff40bc3177b9a25d',
+            'reference' => '05fd7f2b1f9a7731423d27b7ad7de499c6c5ee56',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wp-cli/wp-cli',
             'aliases' => array(
-                0 => '2.13.x-dev',
+                0 => '3.0.x-dev',
             ),
             'dev_requirement' => true,
         ),
         'yahnis-elsts/plugin-update-checker' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '299a8698f1417c7211300e9baddd8709417e1a8b',
+            'reference' => 'a6acaf3a95fffd1bd2004028430a2ad814ef7ab4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../yahnis-elsts/plugin-update-checker',
             'aliases' => array(

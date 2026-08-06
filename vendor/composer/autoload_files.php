@@ -12,5 +12,5 @@ return array(
     '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
     'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     'ffb465a494c3101218c4417180c2c9a2' => $vendorDir . '/wp-cli/i18n-command/i18n-command.php',
-    'f6d4f6bcee7247df6b777884c3e22f98' => $vendorDir . '/yahnis-elsts/plugin-update-checker/load-v5p6.php',
+    'bc0af1337b39f0d750e835f5263eb646' => $vendorDir . '/yahnis-elsts/plugin-update-checker/load-v5p7.php',
 );

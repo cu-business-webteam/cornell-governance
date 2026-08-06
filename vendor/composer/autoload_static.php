@@ -13,7 +13,7 @@ class ComposerStaticInitb646bce9e9b9f1000f380b36d606774e
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         'ffb465a494c3101218c4417180c2c9a2' => __DIR__ . '/..' . '/wp-cli/i18n-command/i18n-command.php',
-        'f6d4f6bcee7247df6b777884c3e22f98' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p6.php',
+        'bc0af1337b39f0d750e835f5263eb646' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p7.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -33,6 +33,7 @@ class ComposerStaticInitb646bce9e9b9f1000f380b36d606774e
         ),
         'P' =>
         array (
+            'PhpParser\\' => 10,
             'PhpOption\\' => 10,
             'Peast\\' => 6,
         ),
@@ -77,6 +78,10 @@ class ComposerStaticInitb646bce9e9b9f1000f380b36d606774e
         'Symfony\\Polyfill\\Ctype\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'PhpParser\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
         'PhpOption\\' =>
         array (
@@ -164,11 +169,14 @@ class ComposerStaticInitb646bce9e9b9f1000f380b36d606774e
         'Mustache_Exception' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Exception_InvalidArgumentException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Exception_LogicException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
+        'Mustache_Exception_RenderingException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Exception_RuntimeException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Exception_SyntaxException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
+        'Mustache_Exception_UnknownBlockException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Exception_UnknownFilterException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Exception_UnknownHelperException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Exception_UnknownTemplateException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
+        'Mustache_Exception_UnknownVariableException' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_HelperCollection' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_LambdaHelper' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',
         'Mustache_Loader' => __DIR__ . '/..' . '/mustache/mustache/src/compat.php',

@@ -4,3 +4,4 @@
 node_modules
 .env
 cornell-governance-config.php
+vendor

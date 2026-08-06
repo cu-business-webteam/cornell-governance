@@ -3,7 +3,7 @@
 /*
  * This file is part of Mustache.php.
  *
- * (c) 2010-2025 Justin Hileman
+ * (c) 2010-2026 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,16 +12,21 @@
 namespace Mustache;
 
 use Mustache\Exception\InvalidArgumentException;
+use Mustache\Exception\UnknownVariableException;
 
 /**
  * Mustache Template rendering Context.
  */
 class Context
 {
-    private $stack      = [];
-    private $blockStack = [];
-    private $stackSize = 0;
-    private $blockStackSize = 0;
+    private $strictTags       = Engine::STRICT_NONE;
+    private $stack            = [];
+    private $stackSize        = 0;
+    private $blockScopes      = [[]];
+    private $blockScopeIndex  = 0;
+    private $renderingStack   = [];
+    private $renderingStackSize = 0;
+    private static $publicMethods = [];
 
     private $buggyPropertyShadowing = false;
 
@@ -30,8 +35,9 @@ class Context
      *
      * @param mixed $context                Default rendering context (default: null)
      * @param bool  $buggyPropertyShadowing See Engine::getBuggyPropertyShadowing (default: false)
+     * @param int   $strictTags             Strict tag bitmask (default: Engine::STRICT_NONE)
      */
-    public function __construct($context = null, $buggyPropertyShadowing = false)
+    public function __construct($context = null, $buggyPropertyShadowing = false, $strictTags = Engine::STRICT_NONE)
     {
         if ($context !== null) {
             $this->stack = [$context];
@@ -39,6 +45,7 @@ class Context
         }
 
         $this->buggyPropertyShadowing = $buggyPropertyShadowing;
+        $this->strictTags = $strictTags;
     }
 
     /**
@@ -58,7 +65,7 @@ class Context
      */
     public function pushBlockContext($value)
     {
-        $this->blockStack[$this->blockStackSize++] = $value;
+        $this->blockScopes[$this->blockScopeIndex][] = $value;
     }
 
     /**
@@ -86,15 +93,53 @@ class Context
      */
     public function popBlockContext()
     {
-        if ($this->blockStackSize === 0) {
+        return array_pop($this->blockScopes[$this->blockScopeIndex]);
+    }
+
+    /**
+     * Push a rendering debug frame onto the stack.
+     *
+     * This is used by debug-compiled templates to preserve the current Mustache
+     * tag context if rendering fails.
+     */
+    public function pushRenderingFrame(array $frame)
+    {
+        $this->renderingStack[$this->renderingStackSize++] = $frame;
+    }
+
+    /**
+     * Pop the last rendering debug frame from the stack.
+     */
+    public function popRenderingFrame()
+    {
+        if ($this->renderingStackSize === 0) {
             return null;
         }
 
-        $index = --$this->blockStackSize;
-        $value = $this->blockStack[$index];
-        unset($this->blockStack[$index]);
+        $index = --$this->renderingStackSize;
+        $value = $this->renderingStack[$index];
+        unset($this->renderingStack[$index]);
 
         return $value;
+    }
+
+    /**
+     * Get the current rendering debug stack.
+     *
+     * @return array
+     */
+    public function getRenderingStack()
+    {
+        return $this->renderingStack;
+    }
+
+    /**
+     * Clear the rendering debug stack.
+     */
+    public function clearRenderingStack()
+    {
+        $this->renderingStack = [];
+        $this->renderingStackSize = 0;
     }
 
     /**
@@ -116,15 +161,19 @@ class Context
      *  * If the Context frame is an associative array which contains the key $id, returns the value of that element.
      *  * If the Context frame is an object, this will check first for a public method, then a public property named
      *    $id. Failing both of these, it will try `__isset` and `__get` magic methods.
-     *  * If a value named $id is not found in any Context frame, returns an empty string.
+     *  * If a value named $id is not found in any Context frame, returns an empty string (or throws an
+     *    UnknownVariableException if the relevant strict tag is enabled).
      *
-     * @param string $id Variable name
+     * @param string $id        Variable name
+     * @param int    $strictTag Strict tag responsible for this lookup (default: Engine::STRICT_INTERPOLATION)
      *
      * @return mixed Variable value, or '' if not found
+     *
+     * @throws UnknownVariableException if the relevant strict tag is enabled and the variable is not found
      */
-    public function find($id)
+    public function find($id, $strictTag = Engine::STRICT_INTERPOLATION)
     {
-        return $this->findVariableInStack($id, $this->stack, $this->stackSize);
+        return $this->findVariableInStack($id, $this->stack, $this->stackSize, $strictTag);
     }
 
     /**
@@ -150,14 +199,17 @@ class Context
      *
      * @param string $id              Dotted variable selector
      * @param bool   $strictCallables (default: false)
+     * @param int    $strictTag       Strict tag responsible for this lookup (default: Engine::STRICT_INTERPOLATION)
      *
      * @return mixed Variable value, or '' if not found
+     *
+     * @throws UnknownVariableException if the relevant strict tag is enabled and the variable is not found
      */
-    public function findDot($id, $strictCallables = false)
+    public function findDot($id, $strictCallables = false, $strictTag = Engine::STRICT_INTERPOLATION)
     {
         $chunks = explode('.', $id);
         $chunkCount = count($chunks);
-        $value = $this->findVariableInStack($chunks[0], $this->stack, $this->stackSize);
+        $value = $this->findVariableInStack($chunks[0], $this->stack, $this->stackSize, $strictTag);
 
         // This wasn't really a dotted name, so we can just return the value.
         if ($chunkCount === 1) {
@@ -173,7 +225,7 @@ class Context
                 return $value;
             }
 
-            $value = $this->findVariableInStack($chunks[$i], [$value], 1);
+            $value = $this->findVariableInStack($chunks[$i], [$value], 1, $strictTag);
         }
 
         return $value;
@@ -190,11 +242,15 @@ class Context
      *
      * @throws InvalidArgumentException if given an invalid anchored dot $id
      *
-     * @param string $id Dotted variable selector
+     * @param string $id              Dotted variable selector
+     * @param bool   $strictCallables (default: false)
+     * @param int    $strictTag       Strict tag responsible for this lookup (default: Engine::STRICT_INTERPOLATION)
      *
      * @return mixed Variable value, or '' if not found
+     *
+     * @throws UnknownVariableException if the relevant strict tag is enabled and the variable is not found
      */
-    public function findAnchoredDot($id)
+    public function findAnchoredDot($id, $strictCallables = false, $strictTag = Engine::STRICT_INTERPOLATION)
     {
         $chunks = explode('.', $id);
         if ($chunks[0] !== '') {
@@ -209,7 +265,7 @@ class Context
                 return $value;
             }
 
-            $value = $this->findVariableInStack($chunks[$i], [$value], 1);
+            $value = $this->findVariableInStack($chunks[$i], [$value], 1, $strictTag);
         }
 
         return $value;
@@ -224,13 +280,58 @@ class Context
      */
     public function findInBlock($id)
     {
-        foreach ($this->blockStack as $context) {
+        foreach ($this->blockScopes[$this->blockScopeIndex] as $context) {
             if (array_key_exists($id, $context)) {
                 return $context[$id];
             }
         }
 
         return '';
+    }
+
+    /**
+     * Get the block override names visible in the current block context scope,
+     * keyed by name for cheap lookup.
+     *
+     * @return bool[]
+     */
+    public function getBlockContextNames()
+    {
+        $names = [];
+        foreach ($this->blockScopes[$this->blockScopeIndex] as $context) {
+            foreach ($context as $id => $value) {
+                $names[$id] = true;
+            }
+        }
+
+        return $names;
+    }
+
+    /**
+     * Start an isolated block context scope.
+     *
+     * Block lookups inside a nested parent partial should not resolve against
+     * block contexts pushed by the surrounding block argument.
+     */
+    public function pushBlockContextScope()
+    {
+        $this->blockScopes[++$this->blockScopeIndex] = [];
+    }
+
+    /**
+     * End the current isolated block context scope, restoring visibility into
+     * the surrounding block context scope.
+     */
+    public function popBlockContextScope()
+    {
+        // The root scope is always kept; popping it would leave findInBlock
+        // with no scope to read.
+        if ($this->blockScopeIndex === 0) {
+            return;
+        }
+
+        unset($this->blockScopes[$this->blockScopeIndex]);
+        $this->blockScopeIndex--;
     }
 
     /**
@@ -241,10 +342,13 @@ class Context
      * @param string $id        Variable name
      * @param array  $stack     Context stack
      * @param int    $stackSize Number of frames in $stack
+     * @param int    $strictTag Strict tag responsible for this lookup
      *
      * @return mixed Variable value, or '' if not found
+     *
+     * @throws UnknownVariableException if the relevant strict tag is enabled and the variable is not found
      */
-    private function findVariableInStack($id, array $stack, $stackSize)
+    private function findVariableInStack($id, array $stack, $stackSize, $strictTag)
     {
         for ($i = $stackSize - 1; $i >= 0; $i--) {
             $frame = $stack[$i];
@@ -261,9 +365,7 @@ class Context
                 continue;
             }
 
-            // Note that is_callable() *will not work here*
-            // See https://github.com/bobthecow/mustache.php/wiki/Magic-Methods
-            if (method_exists($frame, $id)) {
+            if ($this->hasPublicMethod($frame, $id)) {
                 return $frame->$id();
             }
 
@@ -292,6 +394,34 @@ class Context
             }
         }
 
+        if (($this->strictTags & $strictTag) !== 0) {
+            throw new UnknownVariableException($id);
+        }
+
         return '';
+    }
+
+    /**
+     * Check whether an object exposes a named public method.
+     *
+     * This intentionally uses get_class_methods() rather than is_callable() so
+     * magic __call handlers do not change Mustache lookup semantics.
+     *
+     * @see https://github.com/bobthecow/mustache.php/wiki/Magic-Methods
+     *
+     * @param object $object
+     * @param string $method
+     *
+     * @return bool
+     */
+    private function hasPublicMethod($object, $method)
+    {
+        $class = get_class($object);
+
+        if (!isset(self::$publicMethods[$class])) {
+            self::$publicMethods[$class] = array_fill_keys(array_map('strtolower', get_class_methods($object)), true);
+        }
+
+        return isset(self::$publicMethods[$class][strtolower($method)]);
     }
 }

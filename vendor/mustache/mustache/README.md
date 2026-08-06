@@ -25,12 +25,14 @@ echo $m->render('Hello {{planet}}', ['planet' => 'World!']); // "Hello World!"
 
 And a more in-depth example -- this is the canonical Mustache template:
 
-```html+jinja
+```php
+<?php
+$template = '
 Hello {{name}}
 You have just won {{value}} dollars!
 {{#in_ca}}
 Well, {{taxed_value}} dollars, after taxes.
-{{/in_ca}}
+{{/in_ca}}';
 ```
 
 

@@ -1,11 +1,28 @@
 #!/usr/bin/env php
 <?php
 
+/**
+ * Find and load Composer autoloader.
+ */
+$autoload_paths = [
+	__DIR__ . '/../vendor/autoload.php',
+	__DIR__ . '/../../../autoload.php',
+];
+
+foreach ( $autoload_paths as $autoload_path ) {
+	if ( file_exists( $autoload_path ) ) {
+		require_once $autoload_path;
+
+		break;
+	}
+}
+
 $options = getopt(
 	'',
 	[
 		'dir::',
 		'exclude::',
+		'output::',
 		'search:',
 		'replace:',
 	]
@@ -26,6 +43,7 @@ if ( file_exists( $composer_file ) ) {
 // Start with composer.json values.
 $dir     = $composer_config['dir'] ?? getcwd();
 $exclude = $composer_config['exclude'] ?? [];
+$output  = $composer_config['output'] ?? null;
 $search  = $composer_config['search'] ?? null;
 $replace = $composer_config['replace'] ?? null;
 
@@ -36,6 +54,10 @@ if ( array_key_exists( 'dir', $options ) ) {
 
 if ( array_key_exists( 'exclude', $options ) ) {
 	$exclude = $options['exclude'];
+}
+
+if ( array_key_exists( 'output', $options ) ) {
+	$output = $options['output'];
 }
 
 if ( array_key_exists( 'search', $options ) ) {
@@ -69,8 +91,37 @@ if ( $replace === null ) {
 
 echo 'Working directory: ', $dir, PHP_EOL;
 echo 'Excluding directories: ', implode( ', ', $exclude ), PHP_EOL;
+
+if ( $output !== null ) {
+	echo 'Output directory: ', $output, PHP_EOL;
+}
+
 echo 'Search domains: ', implode( ', ', $search ), PHP_EOL;
 echo 'Replace domain: ', $replace, PHP_EOL;
+
+/**
+ * Get the output file path.
+ *
+ * @param SplFileInfo $file   File.
+ * @param string      $dir    Input directory.
+ * @param string|null $output Output directory.
+ * @return string
+ */
+function get_output_path( SplFileInfo $file, string $dir, ?string $output ): string {
+	if ( $output === null ) {
+		return $file->getPathname();
+	}
+
+	$relative    = substr( $file->getPathname(), strlen( rtrim( $dir, '/' ) ) + 1 );
+	$output_file = rtrim( $output, '/' ) . '/' . $relative;
+	$output_dir  = dirname( $output_file );
+
+	if ( ! is_dir( $output_dir ) ) {
+		mkdir( $output_dir, 0755, true );
+	}
+
+	return $output_file;
+}
 
 $directory_iterator = new RecursiveDirectoryIterator(
 	$dir,
@@ -117,34 +168,20 @@ foreach ( $block_json_files as $file ) {
 	);
 
 	if ( $replaced !== $contents ) {
-		file_put_contents( $file, $replaced );
+		$output_path = get_output_path( $file, $dir, $output );
 
-		echo "[SUCCESS] Text domain replaced in: ", $file->getPathname(), PHP_EOL;
+		file_put_contents( $output_path, $replaced );
+
+		echo "[SUCCESS] Text domain replaced in: ", $output_path, PHP_EOL;
 	} else {
+		if ( $output !== null ) {
+			$output_path = get_output_path( $file, $dir, $output );
+
+			file_put_contents( $output_path, $contents );
+		}
+
 		echo "[SKIP] No replacement needed for: ", $file->getPathname(), PHP_EOL;
 	}
-}
-
-/**
- * Helper.
- */
-function create_patterns( $functions ) {
-	$patterns = [];
-
-	foreach ( $functions as $function => $item ) {
-		$pattern = [];
-
-		$pattern[] = '(?<![a-zA-Z0-9_])';
-
-		$pattern[] = '(?<prefix>' . $function . '\s*\(' . str_repeat( '\s*[^,]+,', $item['position'] - 1 ) . '\s*)';
-		$pattern[] = '(?<quote>["\'])';
-		$pattern[] = '(?<domain>[a-zA-Z0-9_-]+)';
-		$pattern[] = '\k<quote>';
-
-		$patterns[] = '/' . implode( '', $pattern ) . '/';
-	}
-
-	return $patterns;
 }
 
 /**
@@ -279,56 +316,261 @@ $js_functions = [
 ];
 
 /**
- * Types
+ * PHP processing with nikic/php-parser.
+ *
+ * @link https://github.com/nikic/php-parser
  */
-$types = [
-	'js'  => $js_functions,
-	'php' => $php_functions,
-];
+$php_filter_iterator = new RecursiveCallbackFilterIterator(
+	$exclude_filter_iterator,
+	function ( $current ) {
+		if ( $current->isDir() ) {
+			return true;
+		}
 
-foreach ( $types as $type => $functions ) {
-	$patterns = create_patterns( $functions );
+		return $current->isFile() && $current->getExtension() === 'php';
+	}
+);
 
-	$filter_iterator = new RecursiveCallbackFilterIterator(
-		$exclude_filter_iterator,
-		function ( $current ) use ( $type ) {
-			if ( $current->isDir() ) {
-				return true;
+$php_files = new RecursiveIteratorIterator( $php_filter_iterator );
+
+$parser  = ( new PhpParser\ParserFactory() )->createForNewestSupportedVersion();
+$printer = new PhpParser\PrettyPrinter\Standard();
+
+foreach ( $php_files as $file ) {
+	echo "[INFO] Processing: ", $file->getPathname(), PHP_EOL;
+
+	$original = file_get_contents( $file );
+
+	try {
+		$old_stmts = $parser->parse( $original );
+	} catch ( PhpParser\Error $e ) {
+		echo "[ERROR] Parse error in: ", $file->getPathname(), " - ", $e->getMessage(), PHP_EOL;
+
+		continue;
+	}
+
+	$old_tokens = $parser->getTokens();
+
+	$traverser = new PhpParser\NodeTraverser(
+		new PhpParser\NodeVisitor\CloningVisitor()
+	);
+	$new_stmts = $traverser->traverse( $old_stmts );
+
+	$modifier = new PhpParser\NodeTraverser();
+
+	$modifier->addVisitor(
+		new class($search, $replace, $php_functions) extends PhpParser\NodeVisitorAbstract {
+			/**
+			 * Search domains.
+			 *
+			 * @var string[]
+			 */
+			private array $search;
+
+			/**
+			 * Replace domain.
+			 *
+			 * @var string
+			 */
+			private string $replace;
+
+			/**
+			 * Functions.
+			 *
+			 * @var array
+			 */
+			private array $functions;
+
+			/**
+			 * Construct.
+			 *
+			 * @param string[] $search    Search domains.
+			 * @param string   $replace   Replace domain.
+			 * @param array    $functions Functions.
+			 */
+			public function __construct( array $search, string $replace, array $functions ) {
+				$this->search    = $search;
+				$this->replace   = $replace;
+				$this->functions = $functions;
 			}
 
-			return $current->isFile() && $current->getExtension() === $type;
+			/**
+			 * Enter node.
+			 *
+			 * @param PhpParser\Node $node Node.
+			 * @return void
+			 */
+			public function enterNode( PhpParser\Node $node ) {
+				if ( !$node instanceof PhpParser\Node\Expr\FuncCall ) {
+					return;
+				}
+
+				if ( !$node->name instanceof PhpParser\Node\Name ) {
+					return;
+				}
+
+				// Directly use the unqualified name as global fallback.
+				$func_name = $node->name->toLowerString();
+
+				if ( ! isset( $this->functions[$func_name] ) ) {
+					return;
+				}
+
+				$position = $this->functions[$func_name]['position'];
+				$arg_index = $position - 1;
+
+				if ( ! isset( $node->args[$arg_index] ) ) {
+					return;
+				}
+
+				$arg = $node->args[$arg_index];
+
+				if ( !$arg->value instanceof PhpParser\Node\Scalar\String_ ) {
+					return;
+				}
+
+				if ( in_array( $arg->value->value, $this->search, true ) ) {
+					$arg->value->value = $this->replace;
+				}
+			}
 		}
 	);
 
-	$files = new RecursiveIteratorIterator( $filter_iterator );
+	$new_stmts = $modifier->traverse( $new_stmts );
+	$new_code  = $printer->printFormatPreserving( $new_stmts, $old_stmts, $old_tokens );
 
-	foreach ( $files as $file ) {
-		echo "[INFO] Processing: ", $file->getPathname(), PHP_EOL;
+	if ( $new_code !== $original ) {
+		$output_path = get_output_path( $file, $dir, $output );
 
-		$original = file_get_contents( $file );
+		file_put_contents( $output_path, $new_code );
 
-		$contents = $original;
+		echo "[SUCCESS] Text domain replaced in: ", $output_path, PHP_EOL;
+	} else {
+		if ( $output !== null ) {
+			$output_path = get_output_path( $file, $dir, $output );
 
-		foreach ( $patterns as $pattern ) {
-			$contents = preg_replace_callback(
-				$pattern,
-				function ( $matches ) use ( $search, $replace ) {
-					if ( in_array( $matches['domain'], $search, true ) ) {
-						return $matches['prefix'] . $matches['quote'] . $replace . $matches['quote'];
-					}
-
-					return $matches[0];
-				},
-				$contents
-			);
+			file_put_contents( $output_path, $original );
 		}
 
-		if ( $original !== $contents ) {
-			file_put_contents( $file, $contents );
+		echo "[SKIP] No replacement needed for: ", $file->getPathname(), PHP_EOL;
+	}
+}
 
-			echo "[SUCCESS] Text domain replaced in: ", $file->getPathname(), PHP_EOL;
-		} else {
-			echo "[SKIP] No replacement needed for: ", $file->getPathname(), PHP_EOL;
+/**
+ * JavaScript processing with mck89/peast.
+ *
+ * @link https://github.com/mck89/peast
+ */
+$js_filter_iterator = new RecursiveCallbackFilterIterator(
+	$exclude_filter_iterator,
+	function ( $current ) {
+		if ( $current->isDir() ) {
+			return true;
 		}
+
+		return $current->isFile() && $current->getExtension() === 'js';
+	}
+);
+
+$js_files = new RecursiveIteratorIterator( $js_filter_iterator );
+
+foreach ( $js_files as $file ) {
+	echo "[INFO] Processing: ", $file->getPathname(), PHP_EOL;
+
+	$original = file_get_contents( $file );
+
+	try {
+		$ast = Peast\Peast::latest( $original )->parse();
+	} catch ( Exception $e ) {
+		echo "[ERROR] Parse error in: ", $file->getPathname(), " - ", $e->getMessage(), PHP_EOL;
+
+		continue;
+	}
+
+	$replacements = [];
+
+	$ast->traverse( function ( $node ) use ( $js_functions, $search, $replace, $original, &$replacements ) {
+		if ( $node->getType() !== 'CallExpression' ) {
+			return;
+		}
+
+		$callee = $node->getCallee();
+
+		if ( $callee->getType() !== 'Identifier' ) {
+			return;
+		}
+
+		$func_name = $callee->getName();
+
+		if ( ! isset( $js_functions[ $func_name ] ) ) {
+			return;
+		}
+
+		$position  = $js_functions[ $func_name ]['position'];
+		$arg_index = $position - 1;
+
+		$arguments = $node->getArguments();
+
+		if ( ! isset( $arguments[ $arg_index ] ) ) {
+			return;
+		}
+
+		$arg = $arguments[ $arg_index ];
+
+		if ( ! $arg instanceof Peast\Syntax\Node\StringLiteral ) {
+			return;
+		}
+
+		$value = $arg->getValue();
+
+		if ( ! in_array( $value, $search, true ) ) {
+			return;
+		}
+
+		$location = $arg->getLocation();
+		$start    = $location->getStart()->getIndex();
+		$end      = $location->getEnd()->getIndex();
+
+		$replacements[] = [
+			'start' => $start,
+			'end'   => $end,
+			'quote' => $original[ $start ],
+		];
+	} );
+
+	if ( empty( $replacements ) ) {
+		if ( $output !== null ) {
+			$output_path = get_output_path( $file, $dir, $output );
+
+			file_put_contents( $output_path, $original );
+		}
+
+		echo "[SKIP] No replacement needed for: ", $file->getPathname(), PHP_EOL;
+
+		continue;
+	}
+
+	// Apply replacements in reverse order to preserve positions.
+	usort( $replacements, fn ( $a, $b ) => $b['start'] - $a['start'] );
+
+	$contents = $original;
+
+	foreach ( $replacements as $rep ) {
+		$contents = substr_replace(
+			$contents,
+			$rep['quote'] . $replace . $rep['quote'],
+			$rep['start'],
+			$rep['end'] - $rep['start']
+		);
+	}
+
+	if ( $contents !== $original ) {
+		$output_path = get_output_path( $file, $dir, $output );
+
+		file_put_contents( $output_path, $contents );
+
+		echo "[SUCCESS] Text domain replaced in: ", $output_path, PHP_EOL;
+	} else {
+		echo "[SKIP] No replacement needed for: ", $file->getPathname(), PHP_EOL;
 	}
 }

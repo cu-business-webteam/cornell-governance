@@ -99,7 +99,7 @@ namespace Cornell\Governance\Admin\Submenus {
 				}, $types );
 				$types = implode( ',', $types );
 
-				$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$types}) AND post_author=%d AND post_status IN ({$statuses}) GROUP BY m.post_id", $this->user );
+				$query = $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$types}) AND post_author=%d AND post_status IN ({$statuses}) GROUP BY ID", $this->user );
 
 				$ids = $wpdb->get_col( $query );
 

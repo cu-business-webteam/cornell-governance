@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 1.0.5  
+Stable tag: 1.0.7  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -458,6 +458,17 @@ Some of the reports available in the Liaison Dashboard](assets/screenshot-9.png)
 
 == Changelog ==
 
+= 1.0.7 =
+
+* Hides Compliance dashboard widget from users that have no editing permissions
+* Fixes incorrect SQL query in reports
+* Makes the plugin installable as a Composer package
+
+= 1.0.6 =
+
+* Fixes improperly escaped HTML in Revisions metabox
+* Fixes dependency vulnerability
+
 = 1.0.5 =
 
 * Update capability used to allow users to view Archive log page (since, in some prod environments, even Super Admins are not allowed to delete plugins)
@@ -746,6 +757,14 @@ Bug fixes:
 * 2022-12 - This is the first version
 
 == Upgrade Notice ==
+
+= 1.0.7 =
+
+Fixes incorrect SQL query in reports
+
+= 1.0.6 =
+
+Fixes dependency vulnerability
 
 = 1.0.5 =
 

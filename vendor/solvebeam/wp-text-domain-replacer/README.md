@@ -146,6 +146,46 @@ Then run with:
 composer update-text-domain
 ```
 
+## Limitations
+
+### PHP-Parser Namespace Resolution
+
+The text domain replacer uses PHP-Parser to analyze PHP code. However, PHP-Parser has a fundamental limitation when dealing with function calls inside namespaces:
+
+**Unqualified function names inside a namespace cannot be statically resolved.**
+
+For example, inside the `Test` namespace, a call to `__()` could refer to either:
+- The namespaced function `\Test\__()`
+- The global WordPress function `\__()`
+
+Because PHP-Parser lacks the runtime context to determine which one is intended, it **cannot statically resolve the fully qualified name (FQN)**.
+
+**Impact on this tool:**
+
+The text domain replacer conservatively assumes that unqualified translation function calls might be WordPress functions and modifies them accordingly. This means:
+
+- A custom namespaced `__()` function in your code **will have its calls modified** by the replacer, even though it's not the WordPress translation function
+- To prevent this, use fully qualified names: `\YourNamespace\__()` for custom functions or `\__()` for WordPress functions
+
+**Example:**
+
+```php
+namespace MyPlugin;
+
+function __( $text, $domain ) {
+    // Custom implementation
+    return "$text [$domain]";
+}
+
+// This WILL be modified by the replacer (treated as potential WordPress __() call):
+__( 'Test', 'old_domain' );  // Becomes: __( 'Test', 'new_domain' );
+
+// This will NOT be modified (explicitly namespaced):
+\MyPlugin\__( 'Test', 'old_domain' );  // Remains unchanged
+```
+
+For more details, see the [PHP-Parser Name Resolution documentation](https://github.com/nikic/PHP-Parser/blob/master/doc/component/Name_resolution.markdown).
+
 ## Configuration via composer.json
 
 Instead of passing all options via command line, you can also configure the text domain replacer in your `composer.json` file. This is useful for keeping your configuration in one place and simplifying your Composer scripts.
@@ -223,4 +263,4 @@ Here is a list of alternatives that we found:
 - https://github.com/wp-cli/i18n-command
 - https://github.com/WordPress/WordPress-Coding-Standards/blob/3.1.0/WordPress/Sniffs/Utils/I18nTextDomainFixerSniff.php
 - https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#wordpressutilsi18ntextdomainfixer-replace-a-text_domain
-- https://github.com/WordPress/gutenberg/blob/trunk/docs/how-to-guides/internationalization.md
+
