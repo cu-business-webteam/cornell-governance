@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
-        'name' => 'cornell/governance',
-        'pretty_version' => '1.0.6.2',
-        'version' => '1.0.6.2',
+        'name' => 'cornell/in-page-governance',
+        'pretty_version' => '1.0.8',
+        'version' => '1.0.8.0',
         'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -10,9 +10,9 @@
         'dev' => true,
     ),
     'versions' => array(
-        'cornell/governance' => array(
-            'pretty_version' => '1.0.6.2',
-            'version' => '1.0.6.2',
+        'cornell/in-page-governance' => array(
+            'pretty_version' => '1.0.8',
+            'version' => '1.0.8.0',
             'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
@@ -189,7 +189,7 @@
         'wp-cli/i18n-command' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '53ca3f59cc37b288a3df2776e9eca9fd092324c0',
+            'reference' => '1fc0ce651828dab4424029dbac21ebde0834fabf',
             'type' => 'wp-cli-package',
             'install_path' => __DIR__ . '/../wp-cli/i18n-command',
             'aliases' => array(
@@ -218,7 +218,7 @@
         'wp-cli/wp-cli' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '05fd7f2b1f9a7731423d27b7ad7de499c6c5ee56',
+            'reference' => '6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wp-cli/wp-cli',
             'aliases' => array(

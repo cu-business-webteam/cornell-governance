@@ -1,7 +1,7 @@
 {
-  "name": "cornell/governance",
+  "name": "cornell/in-page-governance",
   "description": "Cornell's In-Page Governance Plugin",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "authors": [
     {
       "name": "Curtiss Grymala",
@@ -10,10 +10,7 @@
   ],
   "config": {
     "vendor-dir": "vendor",
-    "preferred-install": "dist",
-    "platform": {
-      "php": "7.4"
-    }
+    "preferred-install": "dist"
   },
   "type": "wordpress-plugin",
   "license": "Proprietary",
@@ -40,6 +37,25 @@
       "vendor/{$name}": [
         "type:wordpress-plugin"
       ]
+    },
+    "phar-builder": {
+      "name": "cornell-governance.phar",
+      "output-dir": "./dist/",
+      "dev": false,
+      "skip-shebang": true,
+      "excluded": [
+        "node_modules",
+        "src",
+        "auth.json",
+        "credentials.ini",
+        "cornell-governance-config.php",
+        ".version",
+        "build.js",
+        "readme-converter.js",
+        ".env"
+      ],
+      "compression": "bz2",
+      "entry-point": "./cornell-governance.php"
     }
   },
   "autoload": {

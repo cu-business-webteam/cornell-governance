@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 1.0.7  
+Stable tag: 1.0.8  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -458,6 +458,12 @@ Some of the reports available in the Liaison Dashboard](assets/screenshot-9.png)
 
 == Changelog ==
 
+= 1.0.8 =
+
+* Patch NPM security vulnerabilities
+* Build composer package
+* Optimize screenshot images
+
 = 1.0.7 =
 
 * Hides Compliance dashboard widget from users that have no editing permissions
@@ -757,6 +763,10 @@ Bug fixes:
 * 2022-12 - This is the first version
 
 == Upgrade Notice ==
+
+= 1.0.8 =
+
+Patches NPM vulnerabilities
 
 = 1.0.7 =
 

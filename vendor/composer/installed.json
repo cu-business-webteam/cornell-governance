@@ -1195,12 +1195,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/wp-cli/i18n-command.git",
-                                "reference": "53ca3f59cc37b288a3df2776e9eca9fd092324c0"
+                                "reference": "1fc0ce651828dab4424029dbac21ebde0834fabf"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/53ca3f59cc37b288a3df2776e9eca9fd092324c0",
-                                "reference": "53ca3f59cc37b288a3df2776e9eca9fd092324c0",
+                                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/1fc0ce651828dab4424029dbac21ebde0834fabf",
+                                "reference": "1fc0ce651828dab4424029dbac21ebde0834fabf",
                                 "shasum": ""
                         },
                         "require": {
@@ -1217,7 +1217,7 @@
                                 "ext-json": "Used for reading and generating JSON translation files",
                                 "ext-mbstring": "Used for calculating include/exclude matches in code extraction"
                         },
-                        "time": "2026-08-06T09:31:00+00:00",
+                        "time": "2026-08-13T14:05:36+00:00",
                         "default-branch": true,
                         "type": "wp-cli-package",
                         "extra": {
@@ -1389,12 +1389,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/wp-cli/wp-cli.git",
-                                "reference": "05fd7f2b1f9a7731423d27b7ad7de499c6c5ee56"
+                                "reference": "6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/05fd7f2b1f9a7731423d27b7ad7de499c6c5ee56",
-                                "reference": "05fd7f2b1f9a7731423d27b7ad7de499c6c5ee56",
+                                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e",
+                                "reference": "6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e",
                                 "shasum": ""
                         },
                         "require": {
@@ -1418,7 +1418,7 @@
                                 "ext-readline": "Include for a better --prompt implementation",
                                 "ext-zip": "Needed to support extraction of ZIP archives when doing downloads or updates"
                         },
-                        "time": "2026-08-06T10:31:05+00:00",
+                        "time": "2026-08-13T14:06:19+00:00",
                         "default-branch": true,
                         "bin": [
                                 "bin/wp",

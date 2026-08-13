@@ -1,6 +1,6 @@
 {
   "name": "cornell-governance",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "dependencies": {
     "babel-loader": "^10.0.0",
     "normalize.css": "^8.0.1",
@@ -19,6 +19,8 @@
     "webpack-cli": "^7.0.3"
   },
   "scripts": {
+    "composer:build": "box compile",
+    "publish:phar": "cloudsmith push composer cornell-scj-marcom/cornell-composer-packages ./cornell-governance.phar",
     "scss-editor": "sass src/scss/editor-style.scss dist/css/cornell-governance/editor-style.css",
     "scss-charts": "sass src/scss/cornell-governance/charts.scss dist/css/cornell-governance/charts.css",
     "scss-main": "sass src/scss/cornell-governance.scss dist/css/cornell-governance.css && sass src/scss/cornell-governance-admin.scss dist/css/cornell-governance-admin.css",
@@ -36,6 +38,9 @@
     "composer:update": "composer install && composer update",
     "build:custom": "node build.js",
     "convert:readme": "node readme-converter.js",
-    "build": "npm run composer:update && npm run build:custom && npm run convert:readme && npm run build:css && npm run build:js"
+    "build": "npm run composer:update && npm run build:custom && npm run convert:readme && npm run build:css && npm run build:js && npm run composer:build"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.5.6": true
   }
 }

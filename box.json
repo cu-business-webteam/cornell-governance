@@ -1,0 +1,32 @@
+{
+  "blacklist": [
+    "./node_modules/",
+    "./src/",
+    "./auth.json",
+    "./credentials.ini",
+    "./cornell-governance-config.php",
+    "./.version",
+    "./build.js",
+    "./readme-converter.js",
+    "./.env"
+  ],
+  "compression": "GZ",
+  "directories": [
+    "./assets",
+    "./dist",
+    "./lang",
+    "./lib",
+    "./vendor"
+  ],
+  "files": [
+    "./LICENSE",
+    "./package.json",
+    "./package-lock.json",
+    "README.md",
+    "readme.txt"
+  ],
+  "exclude-composer-files": false,
+  "force-autodiscovery": true,
+  "main": "./cornell-governance.php",
+  "shebang": false
+}
