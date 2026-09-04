@@ -67,9 +67,9 @@
             'dev_requirement' => true,
         ),
         'graham-campbell/result-type' => array(
-            'pretty_version' => '1.1.x-dev',
-            'version' => '1.1.9999999.9999999-dev',
-            'reference' => 'af45ab35db4f5eb070fe9e66b25c7b5e546391d1',
+            'pretty_version' => '1.2.x-dev',
+            'version' => '1.2.9999999.9999999-dev',
+            'reference' => 'adccca3324eece92ca35463648c12b9e6293c05b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
@@ -78,11 +78,11 @@
         'mck89/peast' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '89ee39f81e82cb7ed36cc5abaf2edd43cef71770',
+            'reference' => 'ae6f534363f64743957dd6435f59fe29a56e1dd2',
             'type' => 'library',
             'install_path' => __DIR__ . '/../mck89/peast',
             'aliases' => array(
-                0 => '1.17.7.x-dev',
+                0 => '1.18.0.x-dev',
             ),
             'dev_requirement' => true,
         ),
@@ -98,7 +98,7 @@
         'nikic/php-parser' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'fbd47f7ebcbb450138d92642a0a53b72a5285dda',
+            'reference' => '1aa08bf07171e5237490f05e9db648f50abfce0a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../nikic/php-parser',
             'aliases' => array(
@@ -107,14 +107,12 @@
             'dev_requirement' => true,
         ),
         'phpoption/phpoption' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'c7c576f3b1245ee34fad8904fa6478c443c8e0bc',
+            'pretty_version' => '1.10.0',
+            'version' => '1.10.0.0',
+            'reference' => '67b192b6a42ec03944b972d6e633ddec78ad2c6d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoption/phpoption',
-            'aliases' => array(
-                0 => '1.9.x-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'salesforce/handlebars-php' => array(
@@ -176,20 +174,18 @@
             'dev_requirement' => true,
         ),
         'vlucas/phpdotenv' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '416df702837983f8d5ff48c9c3fee4f5f57b980b',
+            'pretty_version' => 'v5.7.0',
+            'version' => '5.7.0.0',
+            'reference' => '301c07936b16d88628b126b01d082ba153cf4c40',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vlucas/phpdotenv',
-            'aliases' => array(
-                0 => '5.6.x-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'wp-cli/i18n-command' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '1fc0ce651828dab4424029dbac21ebde0834fabf',
+            'reference' => '757cd82654575c10cc7b808b11b8b723da11ea00',
             'type' => 'wp-cli-package',
             'install_path' => __DIR__ . '/../wp-cli/i18n-command',
             'aliases' => array(
@@ -218,7 +214,7 @@
         'wp-cli/wp-cli' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e',
+            'reference' => '2fb37b616b583aae4202f4db6372107d60cbbdd7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wp-cli/wp-cli',
             'aliases' => array(

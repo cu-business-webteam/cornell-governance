@@ -1,6 +1,10 @@
 Changelog
 ==========
 
+#### 1.18.0
+* Added ES2026 parser with no additional features
+* Added ES2027 parser and implemented explicit resource management
+
 #### 1.17.7
 * Fixed deprecation warning about null array index on PHP 8.5 when parsing trailing comments
 

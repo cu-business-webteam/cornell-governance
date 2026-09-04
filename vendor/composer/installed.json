@@ -349,27 +349,27 @@
                 },
                 {
                         "name": "graham-campbell/result-type",
-                        "version": "1.1.x-dev",
-                        "version_normalized": "1.1.9999999.9999999-dev",
+                        "version": "1.2.x-dev",
+                        "version_normalized": "1.2.9999999.9999999-dev",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/GrahamCampbell/Result-Type.git",
-                                "reference": "af45ab35db4f5eb070fe9e66b25c7b5e546391d1"
+                                "reference": "adccca3324eece92ca35463648c12b9e6293c05b"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/af45ab35db4f5eb070fe9e66b25c7b5e546391d1",
-                                "reference": "af45ab35db4f5eb070fe9e66b25c7b5e546391d1",
+                                "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/adccca3324eece92ca35463648c12b9e6293c05b",
+                                "reference": "adccca3324eece92ca35463648c12b9e6293c05b",
                                 "shasum": ""
                         },
                         "require": {
                                 "php": "^7.2.5 || ^8.0",
-                                "phpoption/phpoption": "^1.9.5"
+                                "phpoption/phpoption": "^1.10"
                         },
                         "require-dev": {
                                 "phpunit/phpunit": "^8.5.52 || ^9.6.34 || ^10.5.63 || ^11.5.55 || ^12.5.14"
                         },
-                        "time": "2026-05-06T22:12:07+00:00",
+                        "time": "2026-08-24T09:06:52+00:00",
                         "default-branch": true,
                         "type": "library",
                         "installation-source": "source",
@@ -399,7 +399,7 @@
                         ],
                         "support": {
                                 "issues": "https://github.com/GrahamCampbell/Result-Type/issues",
-                                "source": "https://github.com/GrahamCampbell/Result-Type/tree/1.1"
+                                "source": "https://github.com/GrahamCampbell/Result-Type/tree/1.2"
                         },
                         "funding": [
                                 {
@@ -420,12 +420,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/mck89/peast.git",
-                                "reference": "89ee39f81e82cb7ed36cc5abaf2edd43cef71770"
+                                "reference": "ae6f534363f64743957dd6435f59fe29a56e1dd2"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/mck89/peast/zipball/89ee39f81e82cb7ed36cc5abaf2edd43cef71770",
-                                "reference": "89ee39f81e82cb7ed36cc5abaf2edd43cef71770",
+                                "url": "https://api.github.com/repos/mck89/peast/zipball/ae6f534363f64743957dd6435f59fe29a56e1dd2",
+                                "reference": "ae6f534363f64743957dd6435f59fe29a56e1dd2",
                                 "shasum": ""
                         },
                         "require": {
@@ -433,14 +433,15 @@
                                 "php": ">=5.4.0"
                         },
                         "require-dev": {
-                                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+                                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+                                "squizlabs/php_codesniffer": "^3.0"
                         },
-                        "time": "2026-07-21T11:56:06+00:00",
+                        "time": "2026-09-04T08:32:03+00:00",
                         "default-branch": true,
                         "type": "library",
                         "extra": {
                                 "branch-alias": {
-                                        "dev-master": "1.17.7-dev"
+                                        "dev-master": "1.18.0-dev"
                                 }
                         },
                         "installation-source": "dist",
@@ -529,12 +530,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/nikic/PHP-Parser.git",
-                                "reference": "fbd47f7ebcbb450138d92642a0a53b72a5285dda"
+                                "reference": "1aa08bf07171e5237490f05e9db648f50abfce0a"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/fbd47f7ebcbb450138d92642a0a53b72a5285dda",
-                                "reference": "fbd47f7ebcbb450138d92642a0a53b72a5285dda",
+                                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1aa08bf07171e5237490f05e9db648f50abfce0a",
+                                "reference": "1aa08bf07171e5237490f05e9db648f50abfce0a",
                                 "shasum": ""
                         },
                         "require": {
@@ -546,7 +547,7 @@
                                 "ircmaxell/php-yacc": "^0.0.7",
                                 "phpunit/phpunit": "^9.0"
                         },
-                        "time": "2026-07-11T16:03:13+00:00",
+                        "time": "2026-08-23T19:01:01+00:00",
                         "default-branch": true,
                         "bin": [
                                 "bin/php-parse"
@@ -585,17 +586,17 @@
                 },
                 {
                         "name": "phpoption/phpoption",
-                        "version": "dev-master",
-                        "version_normalized": "dev-master",
+                        "version": "1.10.0",
+                        "version_normalized": "1.10.0.0",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/schmittjoh/php-option.git",
-                                "reference": "c7c576f3b1245ee34fad8904fa6478c443c8e0bc"
+                                "reference": "67b192b6a42ec03944b972d6e633ddec78ad2c6d"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/c7c576f3b1245ee34fad8904fa6478c443c8e0bc",
-                                "reference": "c7c576f3b1245ee34fad8904fa6478c443c8e0bc",
+                                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/67b192b6a42ec03944b972d6e633ddec78ad2c6d",
+                                "reference": "67b192b6a42ec03944b972d6e633ddec78ad2c6d",
                                 "shasum": ""
                         },
                         "require": {
@@ -603,10 +604,9 @@
                         },
                         "require-dev": {
                                 "bamarni/composer-bin-plugin": "^1.8.2",
-                                "phpunit/phpunit": "^8.5.44 || ^9.6.25 || ^10.5.53 || ^11.5.34"
+                                "phpunit/phpunit": "^8.5.54 || ^9.6.36 || ^10.5.64 || ^11.5.56 || ^12.5.33"
                         },
-                        "time": "2025-12-27T19:43:39+00:00",
-                        "default-branch": true,
+                        "time": "2026-08-24T00:54:40+00:00",
                         "type": "library",
                         "extra": {
                                 "bamarni-bin": {
@@ -648,7 +648,7 @@
                         ],
                         "support": {
                                 "issues": "https://github.com/schmittjoh/php-option/issues",
-                                "source": "https://github.com/schmittjoh/php-option/tree/master"
+                                "source": "https://github.com/schmittjoh/php-option/tree/1.10.0"
                         },
                         "funding": [
                                 {
@@ -1102,24 +1102,24 @@
                 },
                 {
                         "name": "vlucas/phpdotenv",
-                        "version": "dev-master",
-                        "version_normalized": "dev-master",
+                        "version": "v5.7.0",
+                        "version_normalized": "5.7.0.0",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/vlucas/phpdotenv.git",
-                                "reference": "416df702837983f8d5ff48c9c3fee4f5f57b980b"
+                                "reference": "301c07936b16d88628b126b01d082ba153cf4c40"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/416df702837983f8d5ff48c9c3fee4f5f57b980b",
-                                "reference": "416df702837983f8d5ff48c9c3fee4f5f57b980b",
+                                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/301c07936b16d88628b126b01d082ba153cf4c40",
+                                "reference": "301c07936b16d88628b126b01d082ba153cf4c40",
                                 "shasum": ""
                         },
                         "require": {
                                 "ext-pcre": "*",
-                                "graham-campbell/result-type": "^1.1.4",
+                                "graham-campbell/result-type": "^1.2",
                                 "php": "^7.2.5 || ^8.0",
-                                "phpoption/phpoption": "^1.9.5",
+                                "phpoption/phpoption": "^1.10",
                                 "symfony/polyfill-ctype": "^1.26",
                                 "symfony/polyfill-mbstring": "^1.26",
                                 "symfony/polyfill-php80": "^1.26"
@@ -1132,8 +1132,7 @@
                         "suggest": {
                                 "ext-filter": "Required to use the boolean validator."
                         },
-                        "time": "2026-07-06T19:11:50+00:00",
-                        "default-branch": true,
+                        "time": "2026-08-24T18:07:49+00:00",
                         "type": "library",
                         "extra": {
                                 "bamarni-bin": {
@@ -1144,7 +1143,7 @@
                                         "dev-master": "5.6-dev"
                                 }
                         },
-                        "installation-source": "source",
+                        "installation-source": "dist",
                         "autoload": {
                                 "psr-4": {
                                         "Dotenv\\": "src/"
@@ -1166,7 +1165,7 @@
                                         "homepage": "https://github.com/vlucas"
                                 }
                         ],
-                        "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+                        "description": "Loads environment variables from `.env` to `$_ENV` and `$_SERVER` automagically, and optionally to `getenv()`.",
                         "keywords": [
                                 "dotenv",
                                 "env",
@@ -1174,7 +1173,7 @@
                         ],
                         "support": {
                                 "issues": "https://github.com/vlucas/phpdotenv/issues",
-                                "source": "https://github.com/vlucas/phpdotenv/tree/master"
+                                "source": "https://github.com/vlucas/phpdotenv/tree/v5.7.0"
                         },
                         "funding": [
                                 {
@@ -1195,12 +1194,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/wp-cli/i18n-command.git",
-                                "reference": "1fc0ce651828dab4424029dbac21ebde0834fabf"
+                                "reference": "757cd82654575c10cc7b808b11b8b723da11ea00"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/1fc0ce651828dab4424029dbac21ebde0834fabf",
-                                "reference": "1fc0ce651828dab4424029dbac21ebde0834fabf",
+                                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/757cd82654575c10cc7b808b11b8b723da11ea00",
+                                "reference": "757cd82654575c10cc7b808b11b8b723da11ea00",
                                 "shasum": ""
                         },
                         "require": {
@@ -1217,7 +1216,7 @@
                                 "ext-json": "Used for reading and generating JSON translation files",
                                 "ext-mbstring": "Used for calculating include/exclude matches in code extraction"
                         },
-                        "time": "2026-08-13T14:05:36+00:00",
+                        "time": "2026-09-01T11:59:25+00:00",
                         "default-branch": true,
                         "type": "wp-cli-package",
                         "extra": {
@@ -1389,12 +1388,12 @@
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/wp-cli/wp-cli.git",
-                                "reference": "6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e"
+                                "reference": "2fb37b616b583aae4202f4db6372107d60cbbdd7"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e",
-                                "reference": "6b970afe7a72b8b7d8ec8029bf1e51d6a38f779e",
+                                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/2fb37b616b583aae4202f4db6372107d60cbbdd7",
+                                "reference": "2fb37b616b583aae4202f4db6372107d60cbbdd7",
                                 "shasum": ""
                         },
                         "require": {
@@ -1418,7 +1417,7 @@
                                 "ext-readline": "Include for a better --prompt implementation",
                                 "ext-zip": "Needed to support extraction of ZIP archives when doing downloads or updates"
                         },
-                        "time": "2026-08-13T14:06:19+00:00",
+                        "time": "2026-09-03T09:30:48+00:00",
                         "default-branch": true,
                         "bin": [
                                 "bin/wp",

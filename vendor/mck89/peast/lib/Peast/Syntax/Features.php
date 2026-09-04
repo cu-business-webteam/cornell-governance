@@ -11,9 +11,9 @@ namespace Peast\Syntax;
 
 /**
  * Parser features class
- * 
+ *
  * @author Marco Marchiò <marco.mm89@gmail.com>
- * 
+ *
  * @codeCoverageIgnore
  */
 class Features
@@ -192,4 +192,11 @@ class Features
      * @var bool
      */
     public $importAttributes = false;
+
+    /**
+     * Explicit resource management
+     *
+     * @var bool
+     */
+    public $explicitResourceManagement = false;
 }

@@ -4,7 +4,7 @@ Donate link: https://cornell.edu
 Tags: governance, notes, admin  
 Requires at least: 6.4  
 Tested up to: 6.7.1  
-Stable tag: 1.0.8  
+Stable tag: 1.0.9  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
@@ -457,6 +457,10 @@ In addition, the following actions are run during import/export:
 Some of the reports available in the Liaison Dashboard](assets/screenshot-9.png)
 
 ## Changelog
+
+### 1.0.9
+
+* Patch NPM security vulnerabilities
 
 ### 1.0.8
 
